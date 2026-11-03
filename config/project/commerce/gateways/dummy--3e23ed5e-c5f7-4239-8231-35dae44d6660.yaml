@@ -3,7 +3,7 @@ billingAddressCondition:
   elementType: null
   fieldContext: global
 handle: dummy
-isFrontendEnabled: true
+isFrontendEnabled: '1'
 name: Dummy
 orderCondition:
   class: craft\commerce\elements\conditions\orders\GatewayOrderCondition

@@ -1,0 +1,21 @@
+defaultPlacement: end
+enableVersioning: true
+entryTypes:
+  -
+    uid: 4d4e98c2-fca0-4fdd-8ce1-2279af868c67 # Brand
+handle: brands
+maxAuthors: 1
+minAuthors: 1
+name: Brands
+previewTargets:
+  -
+    label: 'Primary entry page'
+    urlFormat: '{url}'
+propagationMethod: all
+siteSettings:
+  6e5bf3fd-5e1c-4a52-8612-8a9c82be728d: # WAUW
+    enabledByDefault: true
+    hasUrls: true
+    template: brands/_entry
+    uriFormat: 'brands/{slug}'
+type: channel

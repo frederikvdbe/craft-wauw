@@ -1,0 +1,67 @@
+altTranslationKeyFormat: null
+altTranslationMethod: none
+fieldLayouts:
+  4d4be2ac-a385-4ab9-b088-ebbdea26bfd5:
+    cardThumbAlignment: end
+    tabs:
+      -
+        elementCondition: null
+        elements:
+          -
+            autocapitalize: true
+            autocomplete: false
+            autocorrect: true
+            class: null
+            dateAdded: null
+            disabled: false
+            elementCondition: null
+            id: null
+            inputType: null
+            instructions: null
+            label: null
+            max: null
+            min: null
+            name: null
+            orientation: null
+            placeholder: null
+            readonly: false
+            requirable: false
+            size: null
+            step: null
+            tip: null
+            title: null
+            type: craft\fieldlayoutelements\assets\AssetTitleField
+            uid: b0f13504-af35-45d7-a4e9-fe11c0bd9d42
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: 505e28a0-aaf1-43d3-bf84-fce0f6aea14b # Lightspeed ID
+            handle: null
+            instructions: null
+            label: null
+            oldFieldUid: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 8d35bf4c-23ee-4d8f-a138-f7767711a725
+            userCondition: null
+            warning: null
+            width: 100
+        name: Content
+        uid: ab9ab48b-a954-4bfd-a382-1ac9d7afa7d9
+        userCondition: null
+    thumbFieldKey: null
+fs: productImages
+handle: productImages
+name: 'Product images'
+sortOrder: 1
+subpath: ''
+titleTranslationKeyFormat: null
+titleTranslationMethod: site
+transformFs: null
+transformSubpath: ''

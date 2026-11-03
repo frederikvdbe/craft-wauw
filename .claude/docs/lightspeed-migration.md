@@ -11,6 +11,23 @@
 - Craft 5.9, fresh install, DDEV
 - Commerce 5.7 installed (1 store, dummy gateway)
 
+## Commands
+- `ddev craft lightspeed/extract/counts` — records per resource
+- `ddev craft lightspeed/extract [resource]` — download all (or 1) to `storage/lightspeed/{lang}/*.json`
+- `ddev craft lightspeed/setup` — create content model + tax (safe to run again; tax is DB-only, run on every env)
+- `ddev craft lightspeed/import [categories|brands|products]` — import from JSON (safe to run again)
+- Code: `modules/lightspeed/`
+
+## Shop data (extract 2026-11-03)
+- Shop status `test`, language `en` only
+- 8 products, 1 variant each ("Default", no options), stock 1 each → one-off design/vintage items
+- 5 categories, all top level (VIP PREVIEW, ABOUT US, NEW ARRIVALS, THE ARCHIVE, AVAILABLE COLLECTION)
+- 8 brands, 14 text pages (many are system pages: cart, sitemap, …)
+- 224 tags, only 4 linked to products
+- 0 customers, orders, reviews, blogs, redirects
+- 2 tax rates: `1207657` (incl = excl, 0% / margin scheme?) and `868640` (21%)
+- Some variants have `oldPriceIncl` (sale price)
+
 ## Lightspeed API facts
 - Docs: https://developers.lightspeedhq.com/ecom/introduction/introduction/
 - Auth: Basic auth, API key + secret
@@ -55,21 +72,43 @@
 - **Rate limit:** big shop = many hours to extract. Ask Lightspeed for higher limits if needed
 
 ## Open questions
-- [ ] Which data must move? (products, categories, customers, orders, reviews, blog, text pages, redirects)
-- [ ] Order history: full import, archive, or skip?
-- [ ] Which languages / storefronts?
-- [ ] Size: products, variants, customers, orders?
-- [ ] API key + secret available?
-- [ ] Custom module (recommended) or Feed Me?
+- [ ] Content is Dutch but site language is `en` → change site to `nl-BE`?
+- [ ] Keep Lightspeed URL format (`/{slug}.html`) or redirect to `products/{slug}`?
+- [ ] Templates for products, categories, brands (not built yet)
+- [x] Which data must move? → categories, brands, products (rest is empty or skipped)
+- [x] Order history? → 0 orders, nothing to do
+- [x] Which languages / storefronts? → `en` only (for now)
+- [x] Size? → very small, see Shop data
+- [x] API key + secret available? → in `.env`
+- [x] Custom module or Feed Me? → custom module
+
+## Content model
+| Lightspeed | Craft |
+|---|---|
+| Category | Structure section `categories` (entry type `category`), URI `categories/{slug}` |
+| Brand | Channel section `brands` (entry type `brand`), URI `brands/{slug}` |
+| Product | Commerce product type `products`, max 1 variant, URI `products/{slug}` |
+| Variant | Variant: SKU = `sku` / `articleCode` / `LS-{id}`, price incl VAT, stock |
+| `oldPriceIncl` > `priceIncl` | price = old price, promotional price = current price |
+| Image | Asset in volume `productImages` (`web/uploads/products`) |
+| Tax `Marge` (1207657) | Tax category `marginScheme` (default, no rate) |
+| Tax 21% (868640) | Tax category `standard` + rate 21% included |
+
+- Fields: `lightspeedId`, `fullTitle`, `shortDescription`, `richText` (CKEditor), `productImages`, `productCategories`, `brand`
+- Store currency: EUR
 
 ## Decisions
-_None yet._
+- Categories → structure section (not category group)
+- Brands → channel section
+- Text pages → not imported
+- Tags → not imported (for now)
+- Tax: "Marge" = margin scheme
 
 ## Progress
-- [ ] Phase 0 — setup
-- [ ] Phase 1 — extract
-- [ ] Phase 2 — content model
-- [ ] Phase 3 — import
+- [x] Phase 0 — setup
+- [x] Phase 1 — extract (first run done)
+- [x] Phase 2 — content model
+- [x] Phase 3 — import categories, brands, products (first run done 2026-11-03)
 - [ ] Phase 4 — redirects
 - [ ] Phase 5 — delta sync
 - [ ] Phase 6 — checks

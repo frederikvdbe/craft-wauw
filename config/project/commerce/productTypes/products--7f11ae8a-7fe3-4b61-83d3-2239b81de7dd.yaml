@@ -1,0 +1,196 @@
+defaultPlacement: end
+descriptionFormat: '{product.title} - {title}'
+enableVersioning: false
+handle: products
+hasDimensions: false
+hasProductTitleField: true
+hasVariantTitleField: false
+isStructure: false
+maxLevels: null
+maxVariants: 1
+name: Products
+previewTargets:
+  -
+    __assoc__:
+      -
+        - label
+        - 'Primary product page'
+      -
+        - urlFormat
+        - '{url}'
+productFieldLayouts:
+  19fc3671-f233-43d0-ac1b-99935d9dfa43:
+    cardThumbAlignment: end
+    cardView:
+      - defaultSku
+      - defaultPrice
+    tabs:
+      -
+        elementCondition: null
+        elements:
+          -
+            attribute: variants
+            dateAdded: null
+            elementCondition: null
+            id: null
+            instructions: null
+            label: null
+            mandatory: true
+            orientation: null
+            requirable: false
+            required: false
+            tip: null
+            translatable: false
+            type: craft\commerce\fieldlayoutelements\VariantsField
+            uid: 52276937-1865-4de3-8957-c644d7b5ef46
+            userCondition: null
+            warning: null
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: 51d0d58c-7b4f-4197-9c64-0b0d6d57a085 # Full title
+            handle: null
+            instructions: null
+            label: null
+            oldFieldUid: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 8fdcf297-e216-48cb-b9bc-7348987fed7c
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: 86ac5424-b08e-4c43-b203-dda2ce4318e3 # Short description
+            handle: null
+            instructions: null
+            label: null
+            oldFieldUid: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 1a4cebba-cae5-44a9-93ca-54273e4cfdf3
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: 934a4695-ef0e-40a2-8e3c-aa126a626e87 # Text
+            handle: null
+            instructions: null
+            label: null
+            oldFieldUid: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: a57041af-7d2d-4cc7-8358-7b8ec53c7a22
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: 4a0a43e5-9908-4d63-9932-ffe768ba759f # Images
+            handle: null
+            instructions: null
+            label: null
+            oldFieldUid: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 814c4fa0-9623-4b59-b592-ac45544022fa
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: 09747a1d-81b5-43e9-9217-a3b2e06beb89 # Categories
+            handle: null
+            instructions: null
+            label: null
+            oldFieldUid: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 91039085-baa2-4d0b-b99e-4fc3909012a5
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: ba7f6370-bf87-4b80-8ed1-8d53cf300b28 # Brand
+            handle: null
+            instructions: null
+            label: null
+            oldFieldUid: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 8c8add5b-34ba-4bfd-8f59-383df2b52660
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: 505e28a0-aaf1-43d3-bf84-fce0f6aea14b # Lightspeed ID
+            handle: null
+            instructions: null
+            label: null
+            oldFieldUid: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: adac0e42-862a-4466-8a23-958800cb50eb
+            userCondition: null
+            warning: null
+            width: 100
+        name: Variants
+        uid: 000642b6-58cf-49cc-b2f7-497b1f620249
+        userCondition: null
+    thumbFieldKey: null
+productTitleFormat: ''
+productTitleTranslationKeyFormat: null
+productTitleTranslationMethod: site
+productUiLabelFormat: '{title}'
+propagationMethod: all
+showSlugField: true
+siteSettings:
+  6e5bf3fd-5e1c-4a52-8612-8a9c82be728d: # WAUW
+    enabledByDefault: true
+    hasUrls: true
+    template: products/_entry
+    uriFormat: 'products/{slug}'
+skuFormat: null
+slugTranslationKeyFormat: null
+slugTranslationMethod: site
+variantFieldLayouts:
+  9b5697cc-51fa-4f66-a9cf-91e4803a38cb:
+    cardThumbAlignment: end
+    cardView:
+      - sku
+      - priceView
+    thumbFieldKey: null
+variantTitleFormat: '{product.title}'
+variantTitleTranslationKeyFormat: null
+variantTitleTranslationMethod: site
+variantUiLabelFormat: '{title}'

@@ -1,19 +1,49 @@
-dateModified: 1793689693
+dateModified: 1793691095
 email:
   fromEmail: hello@frederikvd.be
   fromName: WAUW
   transportType: craft\mail\transportadapters\Sendmail
+fs:
+  productImages:
+    hasUrls: true
+    name: 'Product images'
+    settings:
+      path: '@webroot/uploads/products'
+    type: craft\fs\Local
+    url: '@web/uploads/products'
+graphql:
+  publicToken:
+    enabled: false
+    expiryDate: null
 meta:
   __names__:
     2fadce9e-2b41-4b72-ad1a-4af393eda366: New # New
     3e23ed5e-c5f7-4239-8231-35dae44d6660: Dummy # Dummy
+    4a0a43e5-9908-4d63-9932-ffe768ba759f: Images # Images
+    4d4e98c2-fca0-4fdd-8ce1-2279af868c67: Brand # Brand
     6e5bf3fd-5e1c-4a52-8612-8a9c82be728d: WAUW # WAUW
+    7f11ae8a-7fe3-4b61-83d3-2239b81de7dd: Products # Products
+    7f1122a8-64c1-450d-9ac3-63cfad4e623d: Category # Category
+    8da35481-725f-47fa-8876-76c117309522: Categories # Categories
+    51d0d58c-7b4f-4197-9c64-0b0d6d57a085: 'Full title' # Full title
+    86ac5424-b08e-4c43-b203-dda2ce4318e3: 'Short description' # Short description
+    505e28a0-aaf1-43d3-bf84-fce0f6aea14b: 'Lightspeed ID' # Lightspeed ID
+    900c896d-0e56-4089-93bf-b658cff2b95f: Brands # Brands
+    934a4695-ef0e-40a2-8e3c-aa126a626e87: Text # Text
     8694ab8e-0843-4dd6-a487-9c714713b5fa: WAUW # WAUW
+    09747a1d-81b5-43e9-9217-a3b2e06beb89: Categories # Categories
     12957444-6e55-49bf-acc1-494d6c90f761: Primary # Primary
+    aa81478e-752d-4fbd-b670-ea469cfe058c: 'Product images' # Product images
+    ba7f6370-bf87-4b80-8ed1-8d53cf300b28: Brand # Brand
 plugins:
+  ckeditor:
+    edition: standard
+    enabled: true
+    schemaVersion: 5.6.0.0
   commerce:
     edition: pro
     enabled: true
+    licenseKey: E83IO957TYOAVYOK2G1AV4PV
     schemaVersion: 5.7.0.0
 system:
   edition: solo
