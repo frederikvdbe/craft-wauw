@@ -1,0 +1,23 @@
+dateModified: 1793689693
+email:
+  fromEmail: hello@frederikvd.be
+  fromName: WAUW
+  transportType: craft\mail\transportadapters\Sendmail
+meta:
+  __names__:
+    2fadce9e-2b41-4b72-ad1a-4af393eda366: New # New
+    3e23ed5e-c5f7-4239-8231-35dae44d6660: Dummy # Dummy
+    6e5bf3fd-5e1c-4a52-8612-8a9c82be728d: WAUW # WAUW
+    8694ab8e-0843-4dd6-a487-9c714713b5fa: WAUW # WAUW
+    12957444-6e55-49bf-acc1-494d6c90f761: Primary # Primary
+plugins:
+  commerce:
+    edition: pro
+    enabled: true
+    schemaVersion: 5.7.0.0
+system:
+  edition: solo
+  live: true
+  name: WAUW
+  schemaVersion: 5.11.0.2
+  timeZone: America/Los_Angeles
