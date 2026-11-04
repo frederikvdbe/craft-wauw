@@ -12,7 +12,9 @@ use craft\commerce\models\TaxRate;
 use craft\commerce\Plugin as Commerce;
 use craft\commerce\records\TaxRate as TaxRateRecord;
 use craft\console\Controller;
+use craft\fieldlayoutelements\BaseField;
 use craft\fieldlayoutelements\CustomField;
+use craft\fieldlayoutelements\entries\EntryTitleField;
 use craft\fields\Assets as AssetsField;
 use craft\fields\Entries as EntriesField;
 use craft\fields\PlainText;
@@ -55,11 +57,13 @@ class SetupController extends Controller
             'sources' => ["section:$brands->uid"],
             'maxRelations' => 1,
         ]);
+        // One folder per product: Craft moves related assets into it on every product save.
         $productImages = $this->field(AssetsField::class, 'productImages', 'Images', [
-            'sources' => ["volume:$volume->uid"],
+            'restrictLocation' => true,
+            'restrictedLocationSource' => "volume:$volume->uid",
+            'restrictedLocationSubpath' => '{slug}',
             'restrictFiles' => true,
             'allowedKinds' => ['image'],
-            'defaultUploadLocationSource' => "volume:$volume->uid",
         ]);
 
         $this->productType([$fullTitle, $shortDescription, $richText, $productImages, $productCategories, $brand, $lightspeedId]);
@@ -151,11 +155,13 @@ class SetupController extends Controller
         $fields = Craft::$app->getFields();
         $field = $fields->getFieldByHandle($handle);
 
-        if (!$field) {
+        if ($field) {
+            Craft::configure($field, $settings);
+        } else {
             $field = $fields->createField(['type' => $type, 'handle' => $handle, 'name' => $name] + $settings);
-            $fields->saveField($field) || $this->fail($field);
         }
 
+        $fields->saveField($field) || $this->fail($field);
         return $field;
     }
 
@@ -168,7 +174,8 @@ class SetupController extends Controller
 
         $entryType = $entries->getEntryTypeByHandle($entryTypeHandle)
             ?? new EntryType(['handle' => $entryTypeHandle, 'name' => ucfirst($entryTypeHandle)]);
-        $this->addToLayout($entryType->getFieldLayout(), $fields);
+        // Craft sets hasTitleField from the layout, so the title field must be in it.
+        $this->addToLayout($entryType->getFieldLayout(), [new EntryTitleField(), ...$fields]);
         $entries->saveEntryType($entryType) || $this->fail($entryType);
 
         $section = $entries->getSectionByHandle($handle);
@@ -234,9 +241,9 @@ class SetupController extends Controller
     }
 
     /**
-     * Adds fields to the first tab; mandatory fields are added by setTabs().
+     * Adds fields to the first tab (native fields on top); mandatory fields are added by setTabs().
      *
-     * @param FieldInterface[] $fields
+     * @param array<FieldInterface|BaseField> $fields custom fields or native layout fields
      */
     private function addToLayout(FieldLayout $layout, array $fields): void
     {
@@ -245,9 +252,12 @@ class SetupController extends Controller
         $elements = $tab->getElements();
 
         foreach ($fields as $field) {
-            if (!$layout->isFieldIncluded($field->handle)) {
-                $elements[] = new CustomField($field);
+            $isNative = $field instanceof BaseField;
+            $element = $isNative ? $field : new CustomField($field);
+            if ($layout->isFieldIncluded($element->attribute())) {
+                continue;
             }
+            $isNative ? array_unshift($elements, $element) : $elements[] = $element;
         }
 
         $tab->setElements($elements);

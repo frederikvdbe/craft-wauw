@@ -90,12 +90,26 @@
 | Product | Commerce product type `products`, max 1 variant, URI `products/{slug}` |
 | Variant | Variant: SKU = `sku` / `articleCode` / `LS-{id}`, price incl VAT, stock |
 | `oldPriceIncl` > `priceIncl` | price = old price, promotional price = current price |
-| Image | Asset in volume `productImages` (`web/uploads/products`) |
+| Image | Asset in volume `productImages`, folder per product: `web/uploads/products/{slug}/` |
 | Tax `Marge` (1207657) | Tax category `marginScheme` (default, no rate) |
 | Tax 21% (868640) | Tax category `standard` + rate 21% included |
 
 - Fields: `lightspeedId`, `fullTitle`, `shortDescription`, `richText` (CKEditor), `productImages`, `productCategories`, `brand`
 - Store currency: EUR
+
+## Architecture research (2026-11-03)
+- Craft: categories + tags deprecated in 5.9 → entries (Structure/Channel) = official way ([blog](https://craftcms.com/blog/2025-in-review))
+- Commerce: no own taxonomy; one product type is enough; product type structure = CP ordering only
+- Unique items: sold = keep live, stock 0 / "Available for purchase" off (keeps SEO)
+- Plugins to consider: SEOmatic, Retour (redirects), Sprig (filters, search, cart)
+- Margin scheme invoice text (BE): "Bijzondere regeling – Gebruikte goederen", no VAT amount shown → confirm with accountant
+
+To decide:
+- [ ] NEW ARRIVALS / AVAILABLE COLLECTION / THE ARCHIVE → dynamic queries instead of manual links?
+- [ ] VIP PREVIEW → user group gate?
+- [ ] ABOUT US → Single section, not a category?
+- [ ] Facet fields: material, era, condition, dimensions?
+- [ ] Install SEOmatic + Retour + Sprig?
 
 ## Decisions
 - Categories → structure section (not category group)
@@ -103,6 +117,8 @@
 - Text pages → not imported
 - Tags → not imported (for now)
 - Tax: "Marge" = margin scheme
+- Images: restricted upload location `{slug}` → Craft moves product images into the product folder on every save
+- GraphQL disabled (`enableGql(false)`)
 
 ## Progress
 - [x] Phase 0 — setup

@@ -18,10 +18,10 @@ settings:
   minRelations: null
   previewMode: full
   restrictFiles: true
-  restrictLocation: false
+  restrictLocation: true
   restrictedDefaultUploadSubpath: null
   restrictedLocationSource: 'volume:aa81478e-752d-4fbd-b670-ea469cfe058c' # Product images
-  restrictedLocationSubpath: null
+  restrictedLocationSubpath: '{slug}'
   selectionLabel: null
   showSearchInput: true
   showSiteMenu: true
