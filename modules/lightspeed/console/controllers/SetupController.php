@@ -3,6 +3,7 @@
 namespace modules\lightspeed\console\controllers;
 
 use Craft;
+use craft\base\Field;
 use craft\base\FieldInterface;
 use craft\ckeditor\Field as CkeditorField;
 use craft\commerce\models\ProductType;
@@ -17,6 +18,8 @@ use craft\fieldlayoutelements\CustomField;
 use craft\fieldlayoutelements\entries\EntryTitleField;
 use craft\fields\Assets as AssetsField;
 use craft\fields\Entries as EntriesField;
+use craft\fields\Lightswitch;
+use craft\fields\Link;
 use craft\fields\PlainText;
 use craft\fs\Local;
 use craft\models\EntryType;
@@ -24,7 +27,9 @@ use craft\models\FieldLayout;
 use craft\models\FieldLayoutTab;
 use craft\models\Section;
 use craft\models\Section_SiteSettings;
+use craft\models\Site;
 use craft\models\Volume;
+use modules\lightspeed\Module;
 use yii\base\Exception;
 use yii\console\ExitCode;
 
@@ -35,6 +40,7 @@ class SetupController extends Controller
 {
     public function actionIndex(): int
     {
+        $this->setupSites();
         $this->setupStore();
         $this->setupTax();
 
@@ -43,9 +49,10 @@ class SetupController extends Controller
         $this->addToLayout($volume->getFieldLayout(), [$lightspeedId]);
         Craft::$app->getVolumes()->saveVolume($volume) || $this->fail($volume);
 
-        $fullTitle = $this->field(PlainText::class, 'fullTitle', 'Full title');
-        $shortDescription = $this->field(PlainText::class, 'shortDescription', 'Short description', ['multiline' => true, 'initialRows' => 3]);
-        $richText = $this->field(CkeditorField::class, 'richText', 'Text');
+        $translatable = ['translationMethod' => Field::TRANSLATION_METHOD_SITE];
+        $fullTitle = $this->field(PlainText::class, 'fullTitle', 'Full title', $translatable);
+        $shortDescription = $this->field(PlainText::class, 'shortDescription', 'Short description', ['multiline' => true, 'initialRows' => 3] + $translatable);
+        $richText = $this->field(CkeditorField::class, 'richText', 'Text', $translatable);
 
         $categories = $this->section('categories', 'Categories', 'category', Section::TYPE_STRUCTURE, 'categories/{slug}', [$fullTitle, $richText, $lightspeedId]);
         $brands = $this->section('brands', 'Brands', 'brand', Section::TYPE_CHANNEL, 'brands/{slug}', [$richText, $lightspeedId]);
@@ -58,18 +65,50 @@ class SetupController extends Controller
             'maxRelations' => 1,
         ]);
         // One folder per product: Craft moves related assets into it on every product save.
+        // ID, not slug: the slug differs per site, so the folder would change on every site save.
         $productImages = $this->field(AssetsField::class, 'productImages', 'Images', [
             'restrictLocation' => true,
             'restrictedLocationSource' => "volume:$volume->uid",
-            'restrictedLocationSubpath' => '{slug}',
+            'restrictedLocationSubpath' => '{id}',
             'restrictFiles' => true,
             'allowedKinds' => ['image'],
         ]);
 
-        $this->productType([$fullTitle, $shortDescription, $richText, $productImages, $productCategories, $brand, $lightspeedId]);
+        $featured = $this->field(Lightswitch::class, 'featured', 'Featured (TOP 50)');
+        $vipPreview = $this->field(Lightswitch::class, 'vipPreview', 'VIP preview');
+        $priceOnRequest = $this->field(Lightswitch::class, 'priceOnRequest', 'Price on request');
+        $video = $this->field(Link::class, 'video', 'Video', ['types' => ['url']]);
+        $viewerUrl = $this->field(Link::class, 'viewerUrl', '3D / interactive viewer', ['types' => ['url']]);
+        $ean = $this->field(PlainText::class, 'ean', 'EAN');
+
+        $this->productType(
+            [$fullTitle, $shortDescription, $richText, $productImages, $video, $viewerUrl, $productCategories, $brand, $featured, $vipPreview, $priceOnRequest, $lightspeedId],
+            [$ean, $lightspeedId],
+        );
 
         $this->stdout("Setup done\n");
         return ExitCode::OK;
+    }
+
+    /**
+     * Creates a site per language; the first one in Module::SITES is the primary site.
+     */
+    private function setupSites(): void
+    {
+        $sites = Craft::$app->getSites();
+        $groupId = $sites->getPrimarySite()->groupId;
+        $sortOrder = 1;
+
+        foreach (Module::SITES as $handle => $config) {
+            $site = $sites->getSiteByHandle($handle) ?? new Site(['groupId' => $groupId, 'handle' => $handle]);
+            $site->primary = $sortOrder === 1;
+            $site->setName($config['name']);
+            $site->setBaseUrl($config['baseUrl']);
+            $site->language = $config['language'];
+            $site->hasUrls = true;
+            $site->sortOrder = $sortOrder++;
+            $sites->saveSite($site) || $this->fail($site);
+        }
     }
 
     private function setupStore(): void
@@ -178,26 +217,23 @@ class SetupController extends Controller
         $this->addToLayout($entryType->getFieldLayout(), [new EntryTitleField(), ...$fields]);
         $entries->saveEntryType($entryType) || $this->fail($entryType);
 
-        $section = $entries->getSectionByHandle($handle);
-        if ($section) {
-            return $section;
-        }
-
-        $section = new Section([
+        $section = $entries->getSectionByHandle($handle) ?? new Section([
             'handle' => $handle,
             'name' => $name,
             'type' => $type,
         ]);
         $section->setEntryTypes([$entryType]);
-        $siteId = Craft::$app->getSites()->getPrimarySite()->id;
-        $section->setSiteSettings([
-            $siteId => new Section_SiteSettings([
+
+        $siteSettings = [];
+        foreach (Craft::$app->getSites()->getAllSiteIds() as $siteId) {
+            $siteSettings[$siteId] = new Section_SiteSettings([
                 'siteId' => $siteId,
                 'hasUrls' => true,
                 'uriFormat' => $uriFormat,
                 'template' => "$handle/_entry",
-            ]),
-        ]);
+            ]);
+        }
+        $section->setSiteSettings($siteSettings);
         $entries->saveSection($section) || $this->fail($section);
 
         return $section;
@@ -205,30 +241,29 @@ class SetupController extends Controller
 
     /**
      * @param FieldInterface[] $fields
+     * @param FieldInterface[] $variantFields
      */
-    private function productType(array $fields): void
+    private function productType(array $fields, array $variantFields): void
     {
         $productTypes = Commerce::getInstance()->getProductTypes();
-        $productType = $productTypes->getProductTypeByHandle('products');
+        $productType = $productTypes->getProductTypeByHandle('products')
+            ?? new ProductType(['handle' => 'products', 'name' => 'Products']);
 
-        if (!$productType) {
-            $productType = new ProductType([
-                'handle' => 'products',
-                'name' => 'Products',
-                'maxVariants' => 1,
-                'hasVariantTitleField' => false,
-                'variantTitleFormat' => '{product.title}',
-            ]);
-            $siteId = Craft::$app->getSites()->getPrimarySite()->id;
-            $productType->setSiteSettings([
-                $siteId => new ProductTypeSite([
-                    'siteId' => $siteId,
-                    'hasUrls' => true,
-                    'uriFormat' => 'products/{slug}',
-                    'template' => 'products/_entry',
-                ]),
+        // Most products are one-off items with 1 variant; a few have options (colour, set of 2).
+        $productType->maxVariants = null;
+        $productType->hasVariantTitleField = true;
+        $productType->hasDimensions = true;
+
+        $siteSettings = [];
+        foreach (Craft::$app->getSites()->getAllSiteIds() as $siteId) {
+            $siteSettings[$siteId] = new ProductTypeSite([
+                'siteId' => $siteId,
+                'hasUrls' => true,
+                'uriFormat' => 'products/{slug}',
+                'template' => 'products/_entry',
             ]);
         }
+        $productType->setSiteSettings($siteSettings);
 
         $taxCategories = Commerce::getInstance()->getTaxCategories();
         $productType->setTaxCategories([
@@ -237,6 +272,7 @@ class SetupController extends Controller
         ]);
 
         $this->addToLayout($productType->getFieldLayout(), $fields);
+        $this->addToLayout($productType->getVariantFieldLayout(), $variantFields);
         $productTypes->saveProductType($productType) || $this->fail($productType);
     }
 

@@ -2,12 +2,12 @@ defaultPlacement: end
 descriptionFormat: '{product.title} - {title}'
 enableVersioning: false
 handle: products
-hasDimensions: false
+hasDimensions: true
 hasProductTitleField: true
-hasVariantTitleField: false
+hasVariantTitleField: true
 isStructure: false
 maxLevels: null
-maxVariants: 1
+maxVariants: null
 name: Products
 previewTargets:
   -
@@ -164,6 +164,91 @@ productFieldLayouts:
             userCondition: null
             warning: null
             width: 100
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: 96747e9b-bba0-4c0b-bf51-99c294068b93 # Video
+            handle: null
+            instructions: null
+            label: null
+            oldFieldUid: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 4c0625c4-bc30-40fe-93bf-f884e5ec094c
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: a1470400-45d3-415d-b060-870a544144a2 # 3D / interactive viewer
+            handle: null
+            instructions: null
+            label: null
+            oldFieldUid: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 35dd0d80-9c3b-4d38-b578-207178e44f89
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: 4a14e1b0-65f1-4e1e-85f0-e781c189785d # Featured (TOP 50)
+            handle: null
+            instructions: null
+            label: null
+            oldFieldUid: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 34c4be98-c126-4d17-a969-4fd9dcad2d57
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: f816c1da-9def-4a30-83e2-57f81960eec9 # VIP preview
+            handle: null
+            instructions: null
+            label: null
+            oldFieldUid: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 7bf997e6-11b6-491a-8396-68e99d1d7999
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: fcc04824-66bf-4fc5-911b-fe6ab7f2b6f3 # Price on request
+            handle: null
+            instructions: null
+            label: null
+            oldFieldUid: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 89666906-4ead-4555-bb77-bededd400835
+            userCondition: null
+            warning: null
+            width: 100
         name: Variants
         uid: 000642b6-58cf-49cc-b2f7-497b1f620249
         userCondition: null
@@ -175,7 +260,17 @@ productUiLabelFormat: '{title}'
 propagationMethod: all
 showSlugField: true
 siteSettings:
-  6e5bf3fd-5e1c-4a52-8612-8a9c82be728d: # WAUW
+  0b3110ba-6ae7-4004-9171-46aff8f33209: # English
+    enabledByDefault: true
+    hasUrls: true
+    template: products/_entry
+    uriFormat: 'products/{slug}'
+  6e5bf3fd-5e1c-4a52-8612-8a9c82be728d: # Nederlands
+    enabledByDefault: true
+    hasUrls: true
+    template: products/_entry
+    uriFormat: 'products/{slug}'
+  7af71e61-e230-4285-b866-ec48801856d5: # Français
     enabledByDefault: true
     hasUrls: true
     template: products/_entry
@@ -189,6 +284,47 @@ variantFieldLayouts:
     cardView:
       - sku
       - priceView
+    tabs:
+      -
+        elementCondition: null
+        elements:
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: d6ca0115-c4d6-401d-86df-d9c4e0c5b090 # EAN
+            handle: null
+            instructions: null
+            label: null
+            oldFieldUid: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 392a8e21-2752-4b60-b6d7-60cf0836178c
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: 505e28a0-aaf1-43d3-bf84-fce0f6aea14b # Lightspeed ID
+            handle: null
+            instructions: null
+            label: null
+            oldFieldUid: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: be7feb57-e110-49ea-9674-51e31d558bee
+            userCondition: null
+            warning: null
+            width: 100
+        name: Content
+        uid: 53931de6-fe6c-4200-a6cb-eecaef1b0e67
+        userCondition: null
     thumbFieldKey: null
 variantTitleFormat: '{product.title}'
 variantTitleTranslationKeyFormat: null

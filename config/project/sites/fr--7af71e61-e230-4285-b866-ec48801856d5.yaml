@@ -1,0 +1,9 @@
+baseUrl: '${PRIMARY_SITE_URL}/fr'
+enabled: '1'
+handle: fr
+hasUrls: true
+language: fr-BE
+name: Français
+primary: false
+siteGroup: 8694ab8e-0843-4dd6-a487-9c714713b5fa # WAUW
+sortOrder: 3

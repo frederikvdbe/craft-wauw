@@ -12,6 +12,15 @@ use modules\lightspeed\services\Store;
  */
 class Module extends \yii\base\Module
 {
+    /**
+     * Craft sites, primary first. The handle in upper case is the column prefix in the CSV export (`NL_Title_Short`).
+     */
+    public const SITES = [
+        'en' => ['name' => 'English', 'language' => 'en', 'baseUrl' => '$PRIMARY_SITE_URL'],
+        'nl' => ['name' => 'Nederlands', 'language' => 'nl-BE', 'baseUrl' => '${PRIMARY_SITE_URL}/nl'],
+        'fr' => ['name' => 'Français', 'language' => 'fr-BE', 'baseUrl' => '${PRIMARY_SITE_URL}/fr'],
+    ];
+
     public function init(): void
     {
         Craft::setAlias('@modules/lightspeed', __DIR__);

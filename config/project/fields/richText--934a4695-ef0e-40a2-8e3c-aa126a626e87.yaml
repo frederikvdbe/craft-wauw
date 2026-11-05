@@ -42,5 +42,5 @@ settings:
     - link
   wordLimit: null
 translationKeyFormat: null
-translationMethod: none
+translationMethod: site
 type: craft\ckeditor\Field

@@ -9,26 +9,44 @@ use craft\commerce\elements\Variant;
 use craft\commerce\Plugin as Commerce;
 use craft\elements\Asset;
 use craft\elements\Entry;
+use craft\helpers\Db;
+use craft\helpers\ElementHelper;
 use craft\helpers\FileHelper;
+use GuzzleHttp\Exception\GuzzleException;
+use modules\lightspeed\Module;
 use yii\base\Component;
 use yii\base\Exception;
 
 /**
- * Imports the local Lightspeed JSON into Craft. Finds existing elements by `lightspeedId`, so it is safe to run again.
+ * Imports the Lightspeed product CSV export into Craft, for every site. Safe to run again:
+ * products and variants are matched on `lightspeedId`, categories and brands on their primary-site title.
  */
 class Importer extends Component
 {
-    /**
-     * Lightspeed tax ID => Commerce tax category handle.
-     */
     private const TAX_CATEGORIES = [
-        1207657 => 'marginScheme',
-        868640 => 'standard',
+        '0' => 'marginScheme',
+        '21' => 'standard',
     ];
 
+    /**
+     * Lightspeed has no "price on request" or "sold" flag: the shop sets the price to 0–2 instead.
+     */
+    private const PRICE_HACK_MAX = 2;
+
+    private const COLLECTION_CATEGORY = 'collection in stock';
+    private const FEATURED_CATEGORY = 'TOP 50';
+    private const VIP_PREVIEW_CATEGORY = 'PREVIEW';
+
+    /**
+     * @var string[] image URLs that could not be downloaded
+     */
+    public array $failedImages = [];
+
+    /**
+     * @param array<string, array<int, array<string, string>>> $products CSV rows grouped by product
+     */
     public function __construct(
-        private readonly Store $store,
-        private readonly string $language,
+        private readonly array $products,
         array $config = [],
     ) {
         parent::__construct($config);
@@ -36,156 +54,219 @@ class Importer extends Component
 
     public function importCategories(): int
     {
-        $categories = $this->store->read($this->language, 'categories');
-        usort($categories, fn(array $a, array $b) => [$a['depth'], $a['sortOrder']] <=> [$b['depth'], $b['sortOrder']]);
-
-        foreach ($categories as $data) {
-            $entry = $this->findEntry('categories', $data['id']) ?? $this->newEntry('categories', 'category');
-            $entry->title = trim($data['title']);
-            $entry->slug = $data['url'];
-            $entry->enabled = $data['isVisible'];
-            $entry->setFieldValues([
-                'fullTitle' => $data['fulltitle'],
-                'richText' => $data['content'] ?: null,
-                'lightspeedId' => (string)$data['id'],
-            ]);
-
-            $parentId = $data['parent']['resource']['id'] ?? null;
-            $entry->setParentId($parentId ? $this->findEntry('categories', $parentId)?->id : null);
-
-            $this->save($entry);
+        $rows = [];
+        foreach ($this->products as [$row]) {
+            if ($row['NL_Category_1'] === self::COLLECTION_CATEGORY && $row['NL_Category_2'] !== '') {
+                $rows[$this->translated($row, $this->primaryLang(), 'Category_2')] ??= $row;
+            }
         }
 
-        return count($categories);
+        foreach ($rows as $title => $row) {
+            $entry = $this->findEntryByTitle('categories', $title) ?? $this->newEntry('categories', 'category');
+            $this->saveForAllSites($entry, function(Entry $entry, string $lang) use ($row) {
+                $entry->title = $this->translated($row, $lang, 'Category_2');
+                $entry->slug = ElementHelper::generateSlug($entry->title);
+            });
+        }
+
+        return count($rows);
     }
 
     public function importBrands(): int
     {
-        $brands = $this->store->read($this->language, 'brands');
+        $titles = array_unique(array_filter(array_map(fn(array $rows) => $rows[0]['Brand'], $this->products)));
 
-        foreach ($brands as $data) {
-            $entry = $this->findEntry('brands', $data['id']) ?? $this->newEntry('brands', 'brand');
-            $entry->title = trim($data['title']);
-            $entry->slug = $data['url'];
-            $entry->enabled = $data['isVisible'];
-            $entry->setFieldValues([
-                'richText' => $data['content'] ?: null,
-                'lightspeedId' => (string)$data['id'],
-            ]);
-
-            $this->save($entry);
+        foreach ($titles as $title) {
+            $entry = $this->findEntryByTitle('brands', $title) ?? $this->newEntry('brands', 'brand');
+            $this->saveForAllSites($entry, function(Entry $entry) use ($title) {
+                $entry->title = $title;
+                $entry->slug = ElementHelper::generateSlug($title);
+            });
         }
 
-        return count($brands);
-    }
-
-    public function importProducts(): int
-    {
-        $products = $this->store->read($this->language, 'products');
-        $variants = $this->groupByRelation($this->store->read($this->language, 'variants'), 'product');
-        $categoryLinks = $this->groupByRelation($this->store->read($this->language, 'categories-products'), 'product');
-        $images = $this->store->read($this->language, 'products-images');
-
-        foreach ($products as $data) {
-            $product = Product::find()->type('products')->lightspeedId($data['id'])->status(null)->one()
-                ?? new Product(['typeId' => Commerce::getInstance()->getProductTypes()->getProductTypeByHandle('products')->id]);
-
-            $product->title = trim($data['title']);
-            $product->slug = $data['url'];
-            $product->enabled = $data['isVisible'];
-            $product->setFieldValues([
-                'fullTitle' => $data['fulltitle'],
-                'shortDescription' => $data['description'],
-                'richText' => $data['content'] ?: null,
-                'lightspeedId' => (string)$data['id'],
-                'brand' => $this->brandIds($data),
-                'productCategories' => $this->categoryIds($categoryLinks[$data['id']] ?? []),
-                'productImages' => $this->imageIds($images[$data['id']] ?? []),
-            ]);
-
-            $variantData = $variants[$data['id']][0] ?? throw new Exception("Product {$data['id']} has no variant");
-            $variant = $product->getVariants(true)[0] ?? new Variant();
-            $this->fillVariant($variant, $variantData);
-            $product->setVariants([$variant]);
-            // Commerce only saves variants when this attribute is dirty.
-            $product->setDirtyAttributes(['variants']);
-
-            $this->save($product);
-
-            // Reload: the inventory item only exists after the save.
-            $savedVariant = Variant::find()->productId($product->id)->status(null)->one();
-            Commerce::getInstance()->getInventory()->updatePurchasableInventoryLevel($savedVariant, (int)$variantData['stockLevel']);
-        }
-
-        return count($products);
+        return count($titles);
     }
 
     /**
-     * Lightspeed shows a sale as oldPrice (before) + price (now). Commerce uses price + promotionalPrice.
+     * @param callable(int $done, int $total): void|null $onProgress
      */
-    private function fillVariant(Variant $variant, array $data): void
+    public function importProducts(?callable $onProgress = null): int
     {
-        $price = (float)$data['priceIncl'];
-        $oldPrice = (float)$data['oldPriceIncl'];
-        $onSale = $oldPrice > $price;
+        $productTypeId = Commerce::getInstance()->getProductTypes()->getProductTypeByHandle('products')->id;
+        $done = 0;
 
-        $variant->setSku($data['sku'] ?: $data['articleCode'] ?: "LS-{$data['id']}");
-        $variant->setBasePrice($onSale ? $oldPrice : $price);
+        foreach ($this->products as $id => $rows) {
+            $product = Product::find()->type('products')->site($this->primarySite())->lightspeedId($id)->status(null)->one()
+                ?? new Product(['typeId' => $productTypeId]);
+            $fieldValues = $this->productFieldValues($rows);
+
+            $this->saveForAllSites($product, function(Product $product, string $lang) use ($rows, $fieldValues) {
+                $this->fillProduct($product, $rows, $lang, $fieldValues);
+            });
+            $this->updateStock($product, $rows);
+
+            $onProgress && $onProgress(++$done, count($this->products));
+        }
+
+        return count($this->products);
+    }
+
+    /**
+     * Field values that are the same on every site.
+     */
+    private function productFieldValues(array $rows): array
+    {
+        $row = $rows[0];
+        $media = $this->media($row);
+
+        return [
+            'lightspeedId' => $row['Internal_ID'],
+            'brand' => $this->entryIds('brands', $row['Brand']),
+            'productCategories' => $row['NL_Category_1'] === self::COLLECTION_CATEGORY
+                ? $this->entryIds('categories', $row['NL_Category_2'] !== '' ? $this->translated($row, $this->primaryLang(), 'Category_2') : '')
+                : [],
+            'featured' => $row['NL_Category_1'] === self::FEATURED_CATEGORY,
+            'vipPreview' => $row['NL_Category_1'] === self::VIP_PREVIEW_CATEGORY,
+            'priceOnRequest' => (float)$row['Price'] <= self::PRICE_HACK_MAX,
+            'productImages' => array_values(array_filter(array_map(fn(string $url) => $this->findOrDownloadImage($url)?->id, $media['images']))),
+            'video' => $media['video'] ? ['type' => 'url', 'value' => $media['video']] : null,
+            'viewerUrl' => $media['viewer'] ? ['type' => 'url', 'value' => $media['viewer']] : null,
+        ];
+    }
+
+    private function fillProduct(Product $product, array $rows, string $lang, array $fieldValues): void
+    {
+        $row = $rows[0];
+        $product->title = $this->translated($row, $lang, 'Title_Short');
+        $product->slug = $this->translated($row, $lang, 'URL');
+        $product->enabled = $row['Visible'] === 'Y';
+        $product->setEnabledForSite($row["{$lang}_Title_Short"] !== '');
+        $product->setFieldValues($fieldValues + [
+            'fullTitle' => $this->translated($row, $lang, 'Title_Long'),
+            'shortDescription' => $this->translated($row, $lang, 'Description_Short'),
+            'richText' => $this->translated($row, $lang, 'Description_Long') ?: null,
+        ]);
+
+        $existing = [];
+        foreach ($product->getVariants(true) as $variant) {
+            $existing[$variant->getFieldValue('lightspeedId')] = $variant;
+        }
+
+        $variants = [];
+        foreach ($rows as $i => $variantRow) {
+            $variant = $existing[$this->variantId($variantRow)] ?? new Variant();
+            $variantTitle = $this->translated($variantRow, $lang, 'Variant');
+            $variant->title = strcasecmp($variantTitle, 'default') === 0 ? $product->title : $variantTitle;
+            $variant->isDefault = $i === 0;
+            $this->fillVariant($variant, $variantRow);
+            $variants[] = $variant;
+        }
+
+        $product->setVariants($variants);
+        // Commerce only saves variants when this attribute is dirty.
+        $product->setDirtyAttributes(['variants']);
+    }
+
+    private function fillVariant(Variant $variant, array $row): void
+    {
+        $price = (float)$row['Price'];
+        $oldPrice = (float)$row['Price_Old'];
+        $onSale = $price > self::PRICE_HACK_MAX && $oldPrice > $price;
+
+        $variant->setSku($row['SKU'] ?: "LS-{$this->variantId($row)}");
+        // With the price hack, the real price is in the old price.
+        $variant->setBasePrice($price <= self::PRICE_HACK_MAX || $onSale ? $oldPrice : $price);
         $variant->setBasePromotionalPrice($onSale ? $price : null);
-        $variant->inventoryTracked = $data['stockTracking'] === 'enabled';
-        $variant->isDefault = true;
+        $variant->inventoryTracked = $row['Stock_Track'] === 'Y';
+        $variant->length = (float)$row['Size_X_Value'] ?: null;
+        $variant->width = (float)$row['Size_Y_Value'] ?: null;
+        $variant->height = (float)$row['Size_Z_Value'] ?: null;
+        $variant->weight = (float)$row['Weight_Value'] ?: null;
+        $variant->setFieldValues([
+            'lightspeedId' => $this->variantId($row),
+            'ean' => $row['EAN'] ?: null,
+        ]);
 
-        $taxHandle = self::TAX_CATEGORIES[$data['tax']['resource']['id'] ?? null] ?? 'marginScheme';
+        $taxHandle = self::TAX_CATEGORIES[$row['Tax']] ?? 'marginScheme';
         $variant->setTaxCategoryId(Commerce::getInstance()->getTaxCategories()->getTaxCategoryByHandle($taxHandle)->id);
     }
 
-    private function brandIds(array $product): array
+    /**
+     * Inventory items only exist after the first save, so stock is set afterwards.
+     */
+    private function updateStock(Product $product, array $rows): void
     {
-        $brandId = $product['brand']['resource']['id'] ?? null;
-        $brand = $brandId ? $this->findEntry('brands', $brandId) : null;
+        $inventory = Commerce::getInstance()->getInventory();
+        $variants = Variant::find()->productId($product->id)->site($this->primarySite())->status(null)->all();
 
-        return $brand ? [$brand->id] : [];
+        foreach ($rows as $row) {
+            foreach ($variants as $variant) {
+                if ($variant->getFieldValue('lightspeedId') === $this->variantId($row)) {
+                    $inventory->updatePurchasableInventoryLevel($variant, max(0, (int)$row['Stock_Level']));
+                }
+            }
+        }
     }
 
-    private function categoryIds(array $links): array
+    /**
+     * Sorts the product images and the custom data fields (Data_01–03) into images, a video and an interactive viewer.
+     *
+     * @return array{images: string[], video: ?string, viewer: ?string}
+     */
+    private function media(array $row): array
     {
-        usort($links, fn(array $a, array $b) => $a['sortOrder'] <=> $b['sortOrder']);
+        $images = array_filter(array_map('trim', explode(',', $row['Images'])));
+        $video = $viewer = null;
 
-        return array_values(array_filter(array_map(
-            fn(array $link) => $this->findEntry('categories', $link['category']['resource']['id'])?->id,
-            $links,
-        )));
+        // Data_02 first: it is the dedicated viewer field.
+        foreach ([$row['Data_02'], $row['Data_01'], $row['Data_03']] as $url) {
+            if ($url === '') {
+                continue;
+            }
+            $path = parse_url($url, PHP_URL_PATH) ?? '';
+            if (preg_match('/\.(jpe?g|png|gif|webp)$/i', $path)) {
+                $images[] = $url;
+            } elseif (preg_match('/\.mp4$/i', $path) || preg_match('/youtu\.?be/', $url)) {
+                $video ??= $url;
+            } else {
+                $viewer ??= $url;
+            }
+        }
+
+        return ['images' => array_values(array_unique($images)), 'video' => $video, 'viewer' => $viewer];
     }
 
-    private function imageIds(array $images): array
+    private function findOrDownloadImage(string $url): ?Asset
     {
-        usort($images, fn(array $a, array $b) => $a['sortOrder'] <=> $b['sortOrder']);
-
-        return array_map(fn(array $image) => $this->findOrDownloadImage($image)->id, $images);
-    }
-
-    private function findOrDownloadImage(array $image): Asset
-    {
-        $asset = Asset::find()->volume('productImages')->lightspeedId($image['id'])->one();
+        // Lightspeed CDN URLs contain a file ID; other hosts get a hash of the URL.
+        $id = preg_match('#/files/(\d+)/#', $url, $m) ? $m[1] : 'url-' . md5($url);
+        $asset = Asset::find()->volume('productImages')->lightspeedId($id)->one();
         if ($asset) {
             return $asset;
         }
 
-        $filename = basename(parse_url($image['src'], PHP_URL_PATH));
+        $filename = basename(parse_url($url, PHP_URL_PATH));
         $tempPath = Craft::$app->getPath()->getTempPath() . '/' . uniqid('ls-', true) . "-$filename";
-        Craft::createGuzzleClient()->get($image['src'], ['sink' => $tempPath]);
+
+        try {
+            Craft::createGuzzleClient()->get($url, ['sink' => $tempPath]);
+        } catch (GuzzleException $e) {
+            Craft::warning("Image download failed: $url ({$e->getMessage()})", __METHOD__);
+            $this->failedImages[] = $url;
+            FileHelper::unlink($tempPath);
+            return null;
+        }
 
         $volume = Craft::$app->getVolumes()->getVolumeByHandle('productImages');
         $asset = new Asset([
             'tempFilePath' => $tempPath,
             'filename' => $filename,
-            'title' => $image['title'],
             'newFolderId' => Craft::$app->getAssets()->getRootFolderByVolumeId($volume->id)->id,
             'volumeId' => $volume->id,
             'avoidFilenameConflicts' => true,
         ]);
         $asset->setScenario(Asset::SCENARIO_CREATE);
-        $asset->setFieldValue('lightspeedId', (string)$image['id']);
+        $asset->setFieldValue('lightspeedId', $id);
 
         $this->save($asset);
         FileHelper::unlink($tempPath);
@@ -193,9 +274,56 @@ class Importer extends Component
         return $asset;
     }
 
-    private function findEntry(string $section, int|string $lightspeedId): ?Entry
+    /**
+     * Saves the element on the primary site first, then fills and saves it on every other site.
+     *
+     * @param callable(Element $element, string $lang): void $fill $lang = CSV column prefix, e.g. `NL`
+     */
+    private function saveForAllSites(Element $element, callable $fill): void
     {
-        return Entry::find()->section($section)->lightspeedId($lightspeedId)->status(null)->one();
+        foreach (array_keys(Module::SITES) as $handle) {
+            $siteId = Craft::$app->getSites()->getSiteByHandle($handle)->id;
+            if ($element->id && $element->siteId !== $siteId) {
+                $element = $element::find()->id($element->id)->siteId($siteId)->status(null)->one();
+            }
+
+            $fill($element, strtoupper($handle));
+            $this->save($element);
+        }
+    }
+
+    /**
+     * Value in the given language, with the primary language as fallback (French is missing for some products).
+     */
+    private function translated(array $row, string $lang, string $column): string
+    {
+        return $row["{$lang}_$column"] ?: $row["{$this->primaryLang()}_$column"] ?: $row["NL_$column"];
+    }
+
+    private function primaryLang(): string
+    {
+        return strtoupper($this->primarySite());
+    }
+
+    private function variantId(array $row): string
+    {
+        return str_replace('!ID:', '', $row['Internal_Variant_ID']);
+    }
+
+    private function primarySite(): string
+    {
+        return array_key_first(Module::SITES);
+    }
+
+    private function findEntryByTitle(string $section, string $title): ?Entry
+    {
+        return Entry::find()->section($section)->site($this->primarySite())->title(Db::escapeParam($title))->status(null)->one();
+    }
+
+    private function entryIds(string $section, string $title): array
+    {
+        $entry = $title !== '' ? $this->findEntryByTitle($section, $title) : null;
+        return $entry ? [$entry->id] : [];
     }
 
     private function newEntry(string $section, string $entryType): Entry
@@ -204,18 +332,6 @@ class Importer extends Component
             'sectionId' => Craft::$app->getEntries()->getSectionByHandle($section)->id,
             'typeId' => Craft::$app->getEntries()->getEntryTypeByHandle($entryType)->id,
         ]);
-    }
-
-    /**
-     * Groups list items by a related resource ID, e.g. variants by product.
-     */
-    private function groupByRelation(array $items, string $relation): array
-    {
-        $grouped = [];
-        foreach ($items as $item) {
-            $grouped[$item[$relation]['resource']['id']][] = $item;
-        }
-        return $grouped;
     }
 
     private function save(Element $element): void

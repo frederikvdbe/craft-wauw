@@ -1,0 +1,9 @@
+baseUrl: '${PRIMARY_SITE_URL}/nl'
+enabled: '1'
+handle: nl
+hasUrls: true
+language: nl-BE
+name: Nederlands
+primary: false
+siteGroup: 8694ab8e-0843-4dd6-a487-9c714713b5fa # WAUW
+sortOrder: 2

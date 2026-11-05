@@ -2,18 +2,29 @@
 
 namespace modules\lightspeed\console\controllers;
 
+use Craft;
 use craft\console\Controller;
-use modules\lightspeed\Module;
 use modules\lightspeed\services\Importer;
+use modules\lightspeed\services\ProductExport;
 use yii\console\ExitCode;
 
 /**
- * Imports the downloaded Lightspeed JSON into Craft. Run `lightspeed/extract` first.
- *
- * @property Module $module
+ * Imports the Lightspeed product CSV export into Craft. Run `lightspeed/setup` first.
  */
 class ImportController extends Controller
 {
+    public string $file = '@storage/lightspeed/products.csv';
+
+    /**
+     * @var int|null only import the first X products (for testing)
+     */
+    public ?int $limit = null;
+
+    public function options($actionID): array
+    {
+        return [...parent::options($actionID), 'file', 'limit'];
+    }
+
     /**
      * Imports everything in dependency order.
      */
@@ -36,12 +47,24 @@ class ImportController extends Controller
 
     public function actionProducts(): int
     {
-        $this->stdout('Products: ' . $this->importer()->importProducts() . "\n");
+        $importer = $this->importer();
+        $count = $importer->importProducts(function(int $done, int $total) {
+            if ($done % 50 === 0) {
+                $this->stdout("$done / $total\n");
+            }
+        });
+
+        $this->stdout("Products: $count\n");
+        foreach ($importer->failedImages as $url) {
+            $this->stderr("Image not downloaded: $url\n");
+        }
+
         return ExitCode::OK;
     }
 
     private function importer(): Importer
     {
-        return new Importer($this->module->store, $this->module->client->getLanguages()[0]);
+        $products = ProductExport::read(Craft::getAlias($this->file));
+        return new Importer($this->limit ? array_slice($products, 0, $this->limit, true) : $products);
     }
 }

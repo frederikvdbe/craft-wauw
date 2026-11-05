@@ -1,0 +1,13 @@
+columnSuffix: null
+handle: featured
+instructions: null
+name: 'Featured (TOP 50)'
+searchable: false
+settings:
+  default: false
+  offLabel: null
+  onLabel: null
+  showLabelsInCards: false
+translationKeyFormat: null
+translationMethod: none
+type: craft\fields\Lightswitch
