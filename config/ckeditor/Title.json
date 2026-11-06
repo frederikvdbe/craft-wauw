@@ -1,0 +1,22 @@
+{
+	"htmlSupport": {
+		"allow": [
+			{
+				"name": "abbr",
+				"attributes": ["title"]
+			}
+		],
+		"disallow": [
+			{
+				"name": "span",
+				"attributes": {
+					"style": true
+				}
+			},
+			{
+				"name": "span",
+				"classes": true
+			}
+		]
+	}
+}

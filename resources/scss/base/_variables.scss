@@ -1,0 +1,91 @@
+@use "../base/breakpoints" as *;
+
+// =======================
+// COLORS & GRADIENTS
+// =======================
+:root {
+	--clr-primary: ;
+	--clr-secondary: ;
+	--clr-accent: ;
+
+	--clr-black: hsl(213, 31%, 11%);
+	--clr-grey-300: rgb(183, 183, 183);
+	--clr-grey-100: rgb(238, 238, 238);
+	--clr-white: hsl(0, 0%, 100%);
+}
+
+// =======================
+// TYPOGRAPHY
+// =======================
+
+// FONTS
+:root {
+	--font-primary: sans-serif;
+	--font-secondary: sans-serif;
+}
+
+// FONT SIZES
+:root {
+	$font-size-values: (12, 14, 16, 18, 20, 24, 32, 48, 56, 72);
+
+	@each $size in $font-size-values {
+		--fs-#{$size}: #{calc($size / 16)}rem;
+	}
+}
+
+// FONT WEIGHTS
+:root {
+	$font-weight-values: (400, 500, 700);
+
+	@each $weight in $font-weight-values {
+		--fw-#{$weight}: #{$weight};
+	}
+}
+
+// =======================
+// SPACING
+// =======================
+:root {
+	$spacing-values: (1, 4, 8, 12, 16, 20, 24, 32, 48, 64, 96, 160);
+
+	@each $value in $spacing-values {
+		--space-#{$value}: #{calc($value / 16)}rem;
+	}
+}
+
+// =======================
+// CONTAINER
+// =======================
+:root {
+	--container-width: 1400px;
+	--container-bound: 1rem;
+
+	@include styles-above(tablet) {
+		--container-bound: 1.5rem;
+	}
+
+	@include styles-above(desktopS) {
+		--container-bound: 2rem;
+	}
+}
+
+// =======================
+// EXTRA
+// =======================
+
+// BORDER RADIUS VALUES
+:root {
+	$border-radius-values: (5, 10, 15);
+
+	@each $value in $border-radius-values {
+		--border-radius-#{$value}: #{$value}px;
+	}
+}
+
+// BOX SHADOWS
+:root {
+}
+
+// TRANSITIONS
+:root {
+}

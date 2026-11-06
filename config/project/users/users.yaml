@@ -1,0 +1,6 @@
+allowPublicRegistration: false
+defaultGroup: null
+photoSubpath: null
+photoVolumeUid: 78f386d8-ccbe-4fa9-b24b-f527005175e6 # Uploads
+require2fa: false
+requireEmailVerification: true

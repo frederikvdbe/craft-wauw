@@ -1,0 +1,66 @@
+allowLineBreaksInTitles: false
+color: null
+description: null
+fieldLayouts:
+  3053f7ed-f04f-4f24-bd03-7a1dccd1388c:
+    cardThumbAlignment: end
+    cardView:
+      - 'layoutElement:7b6b8d88-d146-4b44-87b7-d226061a4ba2'
+    tabs:
+      -
+        elementCondition: null
+        elements:
+          -
+            dateAdded: '2024-12-20T15:52:24+00:00'
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: a3045613-418c-483e-a666-fb4269b18c80 # URL
+            handle: null
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 7b6b8d88-d146-4b44-87b7-d226061a4ba2
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: '2026-01-14T09:28:48+00:00'
+            elementCondition: null
+            type: craft\fieldlayoutelements\HorizontalRule
+            uid: 26c5ac5c-c9d5-495c-8082-2dd2775687e0
+            userCondition: null
+          -
+            dateAdded: '2026-05-29T14:43:49+00:00'
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: 7eabb132-a190-4ec0-8eb5-43613fe902ed # Navigation links
+            handle: menuField
+            instructions: null
+            label: Menu
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 59a07b5c-4497-429d-aab5-8ef9f430082b
+            userCondition: null
+            warning: null
+            width: 100
+        name: Content
+        uid: 8a293e0e-f3b3-42fe-a621-30fb3ffc255e
+        userCondition: null
+    thumbFieldKey: null
+handle: linkMenu
+hasTitleField: false
+icon: circle-chevron-down
+name: 'Navigation link + menu'
+showSlugField: false
+showStatusField: true
+slugTranslationKeyFormat: null
+slugTranslationMethod: site
+titleFormat: null
+titleTranslationKeyFormat: null
+titleTranslationMethod: site
+uiLabelFormat: '{title}'

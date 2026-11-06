@@ -1,0 +1,9 @@
+baseUrl: $PRIMARY_SITE_URL
+enabled: true
+handle: wauwEn
+hasUrls: true
+language: en-US
+name: 'WAUW (EN)'
+primary: true
+siteGroup: 8ec97a19-2e28-4350-b8a9-78fc2b8a06e2 # WAUW
+sortOrder: 1

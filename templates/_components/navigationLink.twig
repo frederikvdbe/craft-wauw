@@ -1,0 +1,34 @@
+{# ======================= #}
+{# PROPERTIES              #}
+{# ======================= #}
+{% set data = link.urlField|default("") %}
+
+{% set url = data.url|default("") %}
+{% set label = label|default(data.label|default("")) %}
+{% set target = data.target|default("_self") %}
+{% set download = data.download|default(false) %}
+
+{% set iconAfter = iconAfter|default("") %}
+{% set class = class|default("") %}
+{% set attributes = attributes|default({}) %}
+
+{# ======================= #}
+{# TEMPLATE                #}
+{# ======================= #}
+{% if label %}
+    <a
+        {{ attr({
+            class: "c-navigation-link #{class}",
+            title: label,
+            href: url,
+            target: target,
+            download: download,
+        }|merge(attributes)) }}
+    >
+        <span>{{ label|raw }}</span>
+
+        {% if iconAfter %}
+            {% include "_components/icon" with { icon: iconAfter } only %}
+        {% endif %}
+    </a>
+{% endif %}

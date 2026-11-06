@@ -1,0 +1,18 @@
+{# ======================= #}
+{# PROPERTIES              #}
+{# ======================= #}
+{% cache using key block.id %}
+    
+{% set text = block.richTextField|default("") %}
+
+{# ======================= #}
+{# TEMPLATE                #}
+{# ======================= #}
+<section class="b-text container">
+    <div class="b-text-content">
+        {% include "_components/richText" with { text } only %}
+    </div>
+</section>
+
+{% endcache %}
+

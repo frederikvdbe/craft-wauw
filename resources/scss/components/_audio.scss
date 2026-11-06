@@ -1,0 +1,164 @@
+@use "../base/breakpoints" as *;
+@use "../base/typography" as *;
+
+.c-audio {
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-12);
+
+	audio-player,
+	audio-skin {
+		display: block;
+		width: 100%;
+	}
+}
+
+.c-audio-container {
+	display: block;
+	width: 100%;
+}
+
+.c-audio-controls {
+	display: block;
+}
+
+.c-audio-controls-group {
+	display: flex;
+	align-items: center;
+	gap: var(--space-8);
+	width: 100%;
+	padding: var(--space-8) var(--space-12);
+	background-color: var(--clr-grey-100);
+	border-radius: var(--border-radius-5);
+}
+
+.c-audio-control {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: var(--space-8);
+	color: var(--clr-black);
+	cursor: pointer;
+	background: none;
+	border: none;
+	border-radius: var(--border-radius-5);
+	transition: all ease-out 100ms;
+
+	&:hover {
+		background-color: var(--clr-black);
+		color: white;
+	}
+
+	.c-audio-icon {
+		display: none;
+	}
+}
+
+.c-audio-control.play {
+	&[data-paused]:not([data-ended]) .c-audio-icon.paused {
+		display: block;
+	}
+
+	&:not([data-paused]) .c-audio-icon.playing {
+		display: block;
+	}
+
+	&[data-ended] .c-audio-icon.ended {
+		display: block;
+	}
+}
+
+.c-audio-control.mute {
+	&[data-volume-level="off"] .c-audio-icon.off {
+		display: block;
+	}
+
+	&[data-volume-level="low"] .c-audio-icon.low {
+		display: block;
+	}
+
+	&[data-volume-level="medium"] .c-audio-icon.high,
+	&[data-volume-level="high"] .c-audio-icon.high {
+		display: block;
+	}
+}
+
+.c-audio-icon,
+.c-audio-icon svg {
+	display: block;
+	width: var(--space-20);
+	height: var(--space-20);
+}
+
+.c-audio-time {
+	display: flex;
+	align-items: center;
+	gap: var(--space-4);
+	white-space: nowrap;
+	font-variant-numeric: tabular-nums;
+
+	@include typo-body-sm;
+}
+
+.c-audio-time-slider {
+	position: relative;
+	display: flex;
+	flex: 1 1 auto;
+	align-items: center;
+	height: var(--space-20);
+	cursor: pointer;
+}
+
+.c-audio-slider-track {
+	position: absolute;
+	right: 0;
+	left: 0;
+	height: 3px;
+	background-color: var(--clr-grey-300);
+	border-radius: 999px;
+}
+
+.c-audio-slider-buffer {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: var(--media-slider-buffer);
+	height: 100%;
+	background-color: var(--clr-grey-300);
+	border-radius: 999px;
+}
+
+.c-audio-slider-fill {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: var(--media-slider-fill);
+	height: 100%;
+	background-color: var(--clr-black);
+	border-radius: 999px;
+}
+
+.c-audio-slider-thumb {
+	position: absolute;
+	left: var(--media-slider-fill);
+	width: 10px;
+	height: 10px;
+	background-color: var(--clr-black);
+	border-radius: 50%;
+	transform: translateX(-50%) scale(0);
+	transition: transform 0.15s ease;
+
+	.c-audio-time-slider[data-interactive] & {
+		transform: translateX(-50%) scale(1);
+	}
+}
+
+.c-audio-time-slider[data-dragging] {
+	.c-audio-slider-thumb {
+		left: var(--media-slider-pointer);
+	}
+
+	.c-audio-slider-fill {
+		width: var(--media-slider-pointer);
+	}
+}

@@ -1,0 +1,19 @@
+{# ======================= #}
+{# TEMPLATE                #}
+{# ======================= #}
+
+<!-- Window object -->
+<script type="module">
+    window.site = {
+        id: {{ currentSite.id }},
+        handle: `{{ currentSite.handle }}`,
+        name: `{{ currentSite.name }}`,
+        csrfTokenValue: `{{ craft.app.request.getCsrfToken() }}`
+    }
+</script>
+
+<!-- Scripts -->
+{{ craft.vite.script('resources/js/index.js', false) }}
+
+<!-- Structured data graph -->
+{{ craft.coreSeoGeo.graph.render()|raw }}

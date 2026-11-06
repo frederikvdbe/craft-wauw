@@ -1,0 +1,78 @@
+columnSuffix: null
+handle: richTextField
+instructions: null
+name: 'Rich Text'
+searchable: false
+settings:
+  advancedLinkFields:
+    - urlSuffix
+    - target
+    - download
+  availableTransforms: ''
+  availableVolumes: ''
+  characterLimit: null
+  css: null
+  cssFile: RichText.css
+  defaultTransform: null
+  defaultUploadLocationSubpath: null
+  defaultUploadLocationVolume: null
+  entryTypes:
+    -
+      __assoc__:
+        -
+          - uid
+          - 2b8c096e-8810-4a19-8e7d-f66703ed0052 # Buttons
+        -
+          - expanded
+          - false
+    -
+      __assoc__:
+        -
+          - uid
+          - b6eaa061-d417-41eb-8ec0-acc8c19d1378 # Media
+        -
+          - expanded
+          - false
+  fullGraphqlData: true
+  headingLevels:
+    - '2'
+    - '3'
+    - '4'
+    - '5'
+    - '6'
+  imageEntryTypeUid: b6eaa061-d417-41eb-8ec0-acc8c19d1378 # Media
+  imageFieldUid: eb5f24ee-955b-4c7a-8363-64159b9e8cc0
+  imageMode: img
+  js: null
+  jsFile: RichText.json
+  options: null
+  parseEmbeds: false
+  purifierConfig: null
+  purifyHtml: true
+  showUnpermittedFiles: false
+  showUnpermittedVolumes: false
+  showWordCount: false
+  sourceEditingGroups:
+    - __ADMINS__
+  toolbar:
+    - heading
+    - style
+    - '|'
+    - bold
+    - italic
+    - underline
+    - strikethrough
+    - link
+    - '|'
+    - bulletedList
+    - numberedList
+    - insertTable
+    - '|'
+    - createEntry
+    - sourceEditing
+  wordLimit: null
+tip: null
+translationKeyFormat: null
+translationMethod: site
+type: craft\ckeditor\Field
+warning: null

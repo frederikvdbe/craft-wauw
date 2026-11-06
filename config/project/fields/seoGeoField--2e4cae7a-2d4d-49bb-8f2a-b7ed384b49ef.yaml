@@ -1,0 +1,24 @@
+columnSuffix: null
+handle: seoGeoField
+instructions: null
+name: SEO/GEO
+searchable: false
+settings:
+  enabledInputFields:
+    - image
+    - title
+    - description
+    - previews
+  enabledPreviewPlatforms:
+    - google
+    - facebook
+    - twitter
+    - linkedin
+    - whatsapp
+    - messenger
+    - discord
+tip: null
+translationKeyFormat: null
+translationMethod: site
+type: digitalastronaut\craftcoreseogeo\fields\SeoField
+warning: null

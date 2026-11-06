@@ -1,0 +1,21 @@
+@use "../base/breakpoints" as *;
+@use "../base/typography" as *;
+
+.page {
+	a.skip-link {
+		position: fixed;
+		top: var(--space-12);
+		left: 50%;
+		transform: translateX(-50%);
+		z-index: 9999;
+
+		opacity: 0;
+		pointer-events: none;
+		white-space: nowrap;
+
+		&:focus-visible {
+			opacity: 1;
+			pointer-events: all;
+		}
+	}
+}

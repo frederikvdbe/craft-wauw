@@ -1,0 +1,9 @@
+baseUrl: $PRIMARY_SITE_URL/nl
+enabled: '1'
+handle: wauwNl
+hasUrls: true
+language: nl
+name: 'WAUW (NL)'
+primary: false
+siteGroup: 8ec97a19-2e28-4350-b8a9-78fc2b8a06e2 # WAUW
+sortOrder: 2

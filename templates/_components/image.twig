@@ -1,0 +1,60 @@
+{# ======================= #}
+{# PROPERTIES              #}
+{# ======================= #}
+{% set class = class|default("") %}
+{% set attributes = attributes|default({}) %}
+
+{% set image = image|default("") %}
+{% set type = image.mimeType|default("") %}
+
+{% set targetWidths = targetWidths|default([]) %}
+{% set sizes = sizes|default("100vw") %}
+{% set aboveFold = aboveFold|default(false) %}
+{% set aspectRatio = aspectRatio|default(null) %}
+{% set transformConfig = {} %}
+
+{# ======================= #}
+{# TEMPLATE                #}
+{# ======================= #}
+{% if image and type == "image/svg+xml" %}
+
+    {{ svg(image)|attr({ class: "c-icon c-image c-media " ~ class }|merge(attributes)) }}
+
+{% elseif image %}
+    {% if targetWidths is empty %}
+        {% set targetWidths = [image.width] %}
+    {% endif %}
+
+    {% if aspectRatio %}
+        {% set transformWidth = targetWidths|first %}
+        {% set transformHeight = targetWidths|first / aspectRatio %}
+
+        {% set transformConfig = {
+            width: transformWidth,
+            height: transformHeight,
+            mode: "crop",
+            position: "center-center"
+        } %}
+    {% endif %}
+
+    {% set legacySrcset = image.getSrcset(targetWidths, transformConfig|merge({ format: "webp" })) %}
+    {% set modernSrcset = image.getSrcset(targetWidths, transformConfig|merge({ format: "avif" })) %}
+
+    {% set alt = image.alt ? image.alt : image.title|default("") %}
+    {% set loading = aboveFold ? "eager" : "lazy" %}
+    {% set fetchpriority = aboveFold ? "high" : "auto" %}
+
+    <picture class="c-image c-media {{ class }}">
+        <source type="image/avif" srcset="{{ modernSrcset }}">
+        <source type="image/webp" srcset="{{ legacySrcset }}">
+
+        <img
+            sizes="{{ sizes }}"
+            alt="{{ alt }}"
+            loading="{{ loading }}"
+            fetchpriority="{{ fetchpriority }}"
+            width="{{ transformWidth ?? image.width }}"
+            height="{{ transformHeight ?? image.height }}"
+        >
+    </picture>
+{% endif %}

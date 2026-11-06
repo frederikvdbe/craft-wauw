@@ -1,0 +1,14 @@
+columnSuffix: null
+handle: organizationAddress
+instructions: null
+name: 'Organization Address'
+searchable: false
+settings:
+  maxAddresses: 1
+  minAddresses: null
+  viewMode: cards
+tip: null
+translationKeyFormat: null
+translationMethod: site
+type: craft\fields\Addresses
+warning: null

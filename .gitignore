@@ -1,0 +1,25 @@
+# GENERAL
+.idea
+.DS_Store
+.project
+.settings
+*.sublime-workspace
+*.sublime-project
+
+# CRAFT ENV
+/storage/*
+!/storage/rebrand
+/vendor
+/.env
+/.env.example.dev
+/.env.example.production
+/.env.example.staging
+
+# UPLOADS
+/web/uploads/*
+
+# DEVELOPMENT
+.sass-cache
+/node_modules
+/web/dist
+/web/temp

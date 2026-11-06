@@ -1,0 +1,33 @@
+.ck-content td,
+.ck-content th,
+.ck-content block-contentquote,
+.ck-content li,
+.ck-content p {
+	font-size: 14px;
+}
+
+.ck-content figure {
+	margin-inline: 0;
+}
+
+.ck-content ul,
+.ck-content ol {
+	padding-left: 16px;
+}
+
+.cke-entry-card:last-child,
+.cke-entry-card:has(+ .ck-fake-selection-container:last-child) {
+	margin-bottom: 0;
+}
+
+.ck-content :first-child {
+	margin-top: 0;
+}
+
+.ck-content :last-child {
+	margin-bottom: 0;
+}
+
+.ck-content :first-child {
+	margin-top: 0;
+}

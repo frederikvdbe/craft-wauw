@@ -1,0 +1,6 @@
+@use "../base/breakpoints" as *;
+@use "../base/typography" as *;
+
+.c-rich-text-media {
+	margin-block: var(--space-32);
+}

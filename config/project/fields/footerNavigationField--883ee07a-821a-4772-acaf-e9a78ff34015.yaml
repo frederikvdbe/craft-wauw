@@ -1,0 +1,31 @@
+columnSuffix: null
+handle: footerNavigationField
+instructions: null
+name: 'Footer navigation'
+searchable: false
+settings:
+  createButtonLabel: 'New footer navigation links list'
+  defaultIndexViewMode: cards
+  enableVersioning: false
+  entryTypes:
+    -
+      __assoc__:
+        -
+          - uid
+          - 52649fa3-85e6-4725-9f40-699b1f061dd4 # Navigation links list
+        -
+          - group
+          - General
+  includeTableView: false
+  maxEntries: null
+  minEntries: null
+  pageSize: 50
+  propagationKeyFormat: null
+  propagationMethod: none
+  showCardsInGrid: true
+  viewMode: cards-grid
+tip: null
+translationKeyFormat: null
+translationMethod: site
+type: craft\fields\Matrix
+warning: null

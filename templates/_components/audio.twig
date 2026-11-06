@@ -1,0 +1,18 @@
+{# ======================= #}
+{# PROPERTIES              #}
+{# ======================= #}
+{% set attributes = attributes|default({}) %}
+
+{% set src = audio.url|default("") %}
+
+{# ======================= #}
+{# TEMPLATE                #}
+{# ======================= #}
+{% embed "_components/audioPlayer" %}
+    {% block media %}
+        <audio {{ attr(attributes) }}>
+            <source src="{{ src }}" type="{{ audio.mimeType|default('audio/mpeg') }}">
+            {{ "Your browser does not support audio"|t }}
+        </audio>
+    {% endblock %}
+{% endembed %}

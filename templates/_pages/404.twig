@@ -1,0 +1,11 @@
+{# ======================= #}
+{# TEMPLATE                #}
+{# ======================= #}
+{% extends "_base/layout" %}
+
+{% block content %}
+    {% include "_blocks/error" with {
+        title: "Pagina niet gevonden"|t,
+        text: "De pagina die u zocht kon helaas niet worden geladen. Mogelijk is de URL gewijzigd, verplaatst of niet langer beschikbaar."|t,
+    } %}
+{% endblock %}

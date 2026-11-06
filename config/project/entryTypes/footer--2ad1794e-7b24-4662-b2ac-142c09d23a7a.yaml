@@ -1,0 +1,59 @@
+color: null
+description: null
+fieldLayouts:
+  6fd14e6f-4cce-47aa-90b0-18aeacd2d7a8:
+    cardThumbAlignment: end
+    tabs:
+      -
+        elementCondition: null
+        elements:
+          -
+            dateAdded: '2025-09-19T13:04:22+00:00'
+            editCondition: null
+            elementCondition: null
+            fieldUid: 883ee07a-821a-4772-acaf-e9a78ff34015 # Footer navigation
+            handle: null
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: ec6b12b1-0fb9-4255-96c1-098e4563665b
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: '2026-01-13T15:23:03+00:00'
+            elementCondition: null
+            type: craft\fieldlayoutelements\HorizontalRule
+            uid: 75423fae-6d87-4a41-8a3a-c8aa8c63b53f
+            userCondition: null
+          -
+            dateAdded: '2026-01-13T15:23:03+00:00'
+            editCondition: null
+            elementCondition: null
+            fieldUid: e7c8d162-2de2-4ce8-bf03-5b10772f250b # Legal navigation
+            handle: null
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 4dfc9d92-30a7-4dd4-b093-a1dbadd3649c
+            userCondition: null
+            warning: null
+            width: 100
+        name: Content
+        uid: fc0e5bcb-cadf-42dc-9194-612feebb182c
+        userCondition: null
+handle: footer
+hasTitleField: false
+icon: border-bottom
+name: Footer
+showSlugField: false
+showStatusField: true
+slugTranslationKeyFormat: null
+slugTranslationMethod: site
+titleFormat: null
+titleTranslationKeyFormat: null
+titleTranslationMethod: site

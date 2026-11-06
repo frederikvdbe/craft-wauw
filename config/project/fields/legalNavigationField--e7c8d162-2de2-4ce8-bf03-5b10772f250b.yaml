@@ -1,0 +1,31 @@
+columnSuffix: null
+handle: legalNavigationField
+instructions: null
+name: 'Legal navigation'
+searchable: false
+settings:
+  createButtonLabel: 'New legal navigation link'
+  defaultIndexViewMode: cards
+  enableVersioning: false
+  entryTypes:
+    -
+      __assoc__:
+        -
+          - uid
+          - 325e4201-c4d6-48f3-9d0c-86102d4741e3 # Navigation link
+        -
+          - group
+          - General
+  includeTableView: false
+  maxEntries: null
+  minEntries: null
+  pageSize: 50
+  propagationKeyFormat: null
+  propagationMethod: none
+  showCardsInGrid: true
+  viewMode: cards-grid
+tip: null
+translationKeyFormat: null
+translationMethod: site
+type: craft\fields\Matrix
+warning: null

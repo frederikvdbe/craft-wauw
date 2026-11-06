@@ -1,0 +1,32 @@
+defaultPlacement: end
+enableVersioning: true
+entryTypes:
+  -
+    uid: a6ca9637-b600-4055-806f-e672ad03c6e0 # Header
+handle: header
+maxAuthors: 1
+minAuthors: 1
+name: Header
+previewTargets:
+  -
+    label: 'Primary entry page'
+    refresh: '1'
+    urlFormat: '{url}'
+propagationMethod: all
+siteSettings:
+  4de84ea3-180c-4d03-90dd-66f9b62af009: # WAUW (NL)
+    enabledByDefault: true
+    hasUrls: false
+    template: null
+    uriFormat: null
+  de28930f-f004-4939-b720-6b892545b8f6: # WAUW (FR)
+    enabledByDefault: true
+    hasUrls: false
+    template: null
+    uriFormat: null
+  e1acd264-0533-4dd7-8cfa-183423e1c25e: # WAUW (EN)
+    enabledByDefault: true
+    hasUrls: false
+    template: null
+    uriFormat: null
+type: single

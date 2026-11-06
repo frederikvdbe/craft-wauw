@@ -1,0 +1,36 @@
+{# ======================= #}
+{# PROPERTIES              #}
+{# ======================= #}
+{% set pageClass = pageClass|default("") %}
+
+{% set hero = entry.heroField.one|default(null) %}
+{% set body = entry.blocksField.all|default([]) %}
+{% set content = hero ? [hero, ...body] : body %}
+
+{# ======================= #}
+{# TEMPLATE                #}
+{# ======================= #}
+<!DOCTYPE html>
+<html lang="{{ craft.app.language }}">
+
+{% include "_base/head" %}
+
+<body x-data="site()" class="page {{ pageClass }}">
+    <a href="#main" class="c-button skip-link">{{ "Skip to main content"|t }}</a>
+
+    {% include "_components/header" %}
+    {% include "_components/mobileMenu" %}
+
+    {% llmContent %}
+
+    <main id="main">
+        {% block content %}{% endblock %}
+    </main>
+
+    {% endllmContent %}
+
+    {% include "_components/footer" %}
+
+    {% include "_base/scripts" %}
+</body>
+</html>

@@ -1,0 +1,22 @@
+name: wauw
+type: craftcms
+docroot: web
+php_version: "8.5"
+webserver_type: nginx-fpm
+xdebug_enabled: false
+additional_hostnames: []
+additional_fqdns: []
+database:
+    type: mysql
+    version: "8.0"
+use_dns_when_possible: true
+composer_version: "2"
+web_environment: []
+corepack_enable: false
+nodejs_version: "24"
+web_extra_exposed_ports:
+    - name: craft-vite
+      container_port: 3000
+      http_port: 3000
+      https_port: 3001
+upload_dirs: ["./uploads"]

@@ -1,0 +1,42 @@
+{# ======================= #}
+{# PROPERTIES              #}
+{# ======================= #}
+{% set data = button.urlField|default("") %}
+
+{% set url = data.url|default("") %}
+{% set label = label|default(data.label|default("")) %}
+{% set target = data.target|default("_self") %}
+{% set download = data.download|default(false) %}
+
+{% set variant = button.buttonVariantConfig|default("primary") %}
+
+{% set tag = url ? "a" : "button" %}
+{% set iconBefore = iconBefore|default("") %}
+{% set iconAfter = iconAfter|default("") %}
+{% set attributes = attributes|default({}) %}
+
+{# ======================= #}
+{# TEMPLATE                #}
+{# ======================= #}
+{% if label %}
+    <{{ tag }}
+        {{ attr({
+            class: "c-button #{variant}",
+            title: label,
+            href: tag == "a" ? url : null,
+            target: tag == "a" ? target : null,
+            type: tag == "button" ? "button" : null,
+            download: download,
+        }|merge(attributes)) }}
+    >
+        {% if iconBefore %}
+            {% include "_components/icon" with { icon: iconBefore } only %}
+        {% endif %}
+
+        <span>{{ label|raw }}</span>
+
+        {% if iconAfter %}
+            {% include "_components/icon" with { icon: iconAfter } only %}
+        {% endif %}
+    </{{ tag }}>
+{% endif %}

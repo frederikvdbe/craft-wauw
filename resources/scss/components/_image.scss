@@ -1,0 +1,15 @@
+@use "../base/breakpoints" as *;
+@use "../base/typography" as *;
+
+.c-image {
+	display: flex;
+	overflow: hidden;
+	display: flex;
+	width: 100%;
+
+	img {
+		width: 100%;
+		height: auto;
+		object-fit: cover;
+	}
+}

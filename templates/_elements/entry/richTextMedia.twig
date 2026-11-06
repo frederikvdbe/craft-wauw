@@ -1,0 +1,16 @@
+{# ======================= #}
+{# PROPERTIES              #}
+{# ======================= #}
+{% set media = entry.mediaFileField.one|default([]) %}
+
+{# ======================= #}
+{# TEMPLATE                #}
+{# ======================= #}
+<div class="c-rich-text-media">
+    {% include "_components/media" with {
+        media,
+        sizes: "100vw",
+        targetWidths: [1024, 1920],
+        preload: "metadata"
+    } only %}
+</div>

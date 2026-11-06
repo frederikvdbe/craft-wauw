@@ -1,0 +1,43 @@
+{# ======================= #}
+{# PROPERTIES              #}
+{# ======================= #}
+{% set src = video.url|default("") %}
+{% set aboveFold = aboveFold|default(false) %}
+{% set background = background|default(false) %}
+{% set aspectRatio = video.aspectRatio|default("16/9") %}
+
+{% set width = video.width|default("") %}
+{% set height = video.height|default("") %}
+{% set loading = aboveFold ? "eager" : "lazy" %}
+{% set fetchpriority = aboveFold ? "high" : "auto" %}
+
+{# ======================= #}
+{# TEMPLATE                #}
+{# ======================= #}
+{% if background %}
+
+<background-video 
+    class="c-media" 
+    src="{{ src }}" 
+    style="aspect-ratio: {{ aspectRatio }};">
+</background-video>
+
+{% else %}
+
+{% set posterImage = video.poster.one() %}
+
+{% embed "_components/videoPlayer" %}
+    {% block media %}
+        <video
+            playsinline
+            width="{{ width }}"
+            height="{{ height }}"
+            loading="{{ loading }}"
+            fetchpriority="{{ fetchpriority }}"
+        >
+            <source src="{{ src }}" type="{{ video.mimeType|default('video/webm') }}">
+        </video>
+    {% endblock %}
+{% endembed %}
+
+{% endif %}

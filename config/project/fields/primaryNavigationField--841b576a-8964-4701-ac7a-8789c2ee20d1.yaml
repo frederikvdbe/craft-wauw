@@ -1,0 +1,39 @@
+columnSuffix: null
+handle: primaryNavigationField
+instructions: null
+name: 'Primary navigation'
+searchable: false
+settings:
+  createButtonLabel: 'New primary navigation item'
+  defaultIndexViewMode: cards
+  enableVersioning: false
+  entryTypes:
+    -
+      __assoc__:
+        -
+          - uid
+          - 72688bf2-9dcf-4032-9899-7d39ab1986f0 # Navigation link + menu
+        -
+          - group
+          - General
+    -
+      __assoc__:
+        -
+          - uid
+          - 325e4201-c4d6-48f3-9d0c-86102d4741e3 # Navigation link
+        -
+          - group
+          - General
+  includeTableView: false
+  maxEntries: null
+  minEntries: null
+  pageSize: 50
+  propagationKeyFormat: null
+  propagationMethod: none
+  showCardsInGrid: true
+  viewMode: cards-grid
+tip: null
+translationKeyFormat: null
+translationMethod: site
+type: craft\fields\Matrix
+warning: null

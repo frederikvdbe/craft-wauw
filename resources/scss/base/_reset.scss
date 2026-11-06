@@ -1,0 +1,54 @@
+// =======================
+// RESET
+// =======================
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+}
+
+html {
+	scroll-behavior: smooth;
+	scroll-padding-top: var(--space-64);
+}
+
+body {
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	text-rendering: optimizeLegibility;
+}
+
+button,
+input,
+textarea,
+select {
+	border: none;
+	outline: none;
+	background: transparent;
+
+	&:not([type="checkbox"]):not([type="radio"]) {
+		-webkit-appearance: none;
+		-moz-appearance: none;
+		appearance: none;
+	}
+}
+
+fieldset {
+	border: 0;
+}
+
+textarea {
+	resize: none;
+}
+
+ul,
+ol {
+	list-style: none;
+}
+
+a {
+	text-decoration: none;
+	color: unset;
+}

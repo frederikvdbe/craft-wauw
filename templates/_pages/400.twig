@@ -1,0 +1,11 @@
+{# ======================= #}
+{# TEMPLATE                #}
+{# ======================= #}
+{% extends "_base/layout" %}
+
+{% block content %}
+    {% include "_blocks/error" with {
+        title: "Ongeldige aanvraag"|t,
+        text: "De aanvraag kon niet worden verwerkt omdat deze ongeldig of onvolledig is. Controleer de ingevoerde gegevens en probeer het opnieuw."|t,
+    } %}
+{% endblock %}
