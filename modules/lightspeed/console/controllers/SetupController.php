@@ -6,30 +6,42 @@ use Craft;
 use craft\base\Field;
 use craft\base\FieldInterface;
 use craft\ckeditor\Field as CkeditorField;
+use craft\commerce\elements\Order;
+use craft\commerce\gateways\Manual;
+use craft\commerce\models\OrderStatus;
 use craft\commerce\models\ProductType;
 use craft\commerce\models\ProductTypeSite;
 use craft\commerce\models\TaxCategory;
 use craft\commerce\models\TaxRate;
 use craft\commerce\Plugin as Commerce;
 use craft\commerce\records\TaxRate as TaxRateRecord;
+use craft\commerce\services\Orders;
 use craft\console\Controller;
+use craft\elements\User;
 use craft\fieldlayoutelements\BaseField;
 use craft\fieldlayoutelements\CustomField;
 use craft\fieldlayoutelements\entries\EntryTitleField;
 use craft\fields\Assets as AssetsField;
+use craft\fields\Date;
+use craft\fields\Dropdown;
 use craft\fields\Entries as EntriesField;
 use craft\fields\Lightswitch;
 use craft\fields\Link;
 use craft\fields\PlainText;
 use craft\fs\Local;
+use craft\helpers\StringHelper;
 use craft\models\EntryType;
 use craft\models\FieldLayout;
 use craft\models\FieldLayoutTab;
 use craft\models\Section;
 use craft\models\Section_SiteSettings;
 use craft\models\Site;
+use craft\models\UserGroup;
 use craft\models\Volume;
+use craft\services\ProjectConfig;
 use modules\lightspeed\Module;
+use modules\lightspeed\services\CustomerImporter;
+use modules\lightspeed\services\OrderImporter;
 use yii\base\Exception;
 use yii\console\ExitCode;
 
@@ -86,8 +98,103 @@ class SetupController extends Controller
             [$ean, $lightspeedId],
         );
 
+        $this->setupCustomers($lightspeedId);
+        $this->setupOrders($lightspeedId);
+
         $this->stdout("Setup done\n");
         return ExitCode::OK;
+    }
+
+    /**
+     * Customer data from Lightspeed: extra fields on users and on addresses.
+     */
+    private function setupCustomers(FieldInterface $lightspeedId): void
+    {
+        $customerType = $this->field(Dropdown::class, 'customerType', 'Customer type', [
+            'options' => $this->dropdownOptions(['' => '', 'private' => 'Private', 'company' => 'Company']),
+        ]);
+        $cocNumber = $this->field(PlainText::class, 'cocNumber', 'Company number');
+        $birthdate = $this->field(Date::class, 'birthdate', 'Birthdate', ['showDate' => true, 'showTime' => false]);
+        $gender = $this->field(Dropdown::class, 'gender', 'Gender', [
+            'options' => $this->dropdownOptions(['' => '', 'male' => 'Male', 'female' => 'Female']),
+        ]);
+        $emailConfirmed = $this->field(Lightswitch::class, 'emailConfirmed', 'Email confirmed in Lightspeed');
+
+        $userGroups = Craft::$app->getUserGroups();
+        foreach (CustomerImporter::GROUPS as $handle => $name) {
+            $group = $userGroups->getGroupByHandle($handle) ?? new UserGroup(['handle' => $handle]);
+            $group->name = $name;
+            $userGroups->saveGroup($group) || $this->fail($group);
+        }
+        // New sign-ups on the site are VIP members.
+        Craft::$app->getProjectConfig()->set(ProjectConfig::PATH_USERS . '.defaultGroup', $userGroups->getGroupByHandle('vipMembers')->uid);
+
+        $users = Craft::$app->getUsers();
+        $userLayout = Craft::$app->getFields()->getLayoutByType(User::class);
+        $this->addToLayout($userLayout, [$customerType, $cocNumber, $birthdate, $gender, $emailConfirmed, $lightspeedId]);
+        $users->saveLayout($userLayout) || $this->fail($userLayout);
+
+        $phone = $this->field(PlainText::class, 'phone', 'Phone');
+        $mobile = $this->field(PlainText::class, 'mobile', 'Mobile');
+
+        $addresses = Craft::$app->getAddresses();
+        $addressLayout = $addresses->getFieldLayout();
+        $this->addToLayout($addressLayout, [$phone, $mobile]);
+        $addresses->saveFieldLayout($addressLayout) || $this->fail($addressLayout);
+    }
+
+    /**
+     * Old Lightspeed orders: statuses, a gateway for their payments, and the order data Commerce has no place for.
+     */
+    private function setupOrders(FieldInterface $lightspeedId): void
+    {
+        $commerce = Commerce::getInstance();
+        $storeId = $commerce->getStores()->getPrimaryStore()->id;
+        $statuses = $commerce->getOrderStatuses();
+
+        foreach (['new' => ['New', 'green'], 'shipped' => ['Shipped', 'blue'], 'cancelled' => ['Cancelled', 'red']] as $handle => [$name, $color]) {
+            if (!$statuses->getOrderStatusByHandle($handle, $storeId)) {
+                $status = new OrderStatus(['storeId' => $storeId, 'handle' => $handle, 'name' => $name, 'color' => $color]);
+                $statuses->saveOrderStatus($status) || $this->fail($status);
+            }
+        }
+
+        $gateways = $commerce->getGateways();
+        if (!$gateways->getGatewayByHandle(OrderImporter::GATEWAY)) {
+            $gateway = $gateways->createGateway([
+                'type' => Manual::class,
+                'name' => 'Lightspeed (old orders)',
+                'handle' => OrderImporter::GATEWAY,
+                'isFrontendEnabled' => false,
+            ]);
+            $gateways->saveGateway($gateway) || $this->fail($gateway);
+        }
+
+        $fields = [
+            $this->field(PlainText::class, 'invoiceNumbers', 'Invoice numbers'),
+            $this->field(PlainText::class, 'creditNotes', 'Credit notes'),
+            $this->field(PlainText::class, 'paymentMethod', 'Payment method'),
+            $this->field(PlainText::class, 'discountCode', 'Discount code'),
+            $this->field(PlainText::class, 'customerComment', 'Customer comment', ['multiline' => true]),
+            $this->field(PlainText::class, 'memo', 'Memo', ['multiline' => true]),
+            $lightspeedId,
+        ];
+        $layout = Craft::$app->getFields()->getLayoutByType(Order::class);
+        $this->addToLayout($layout, $fields);
+        $layout->uid ??= StringHelper::UUID();
+        Craft::$app->getProjectConfig()->set(Orders::CONFIG_FIELDLAYOUT_KEY, [$layout->uid => $layout->getConfig()]);
+    }
+
+    /**
+     * @param array<string, string> $options value => label
+     */
+    private function dropdownOptions(array $options): array
+    {
+        return array_map(
+            fn(string $value, string $label) => ['label' => $label, 'value' => $value, 'default' => false],
+            array_keys($options),
+            $options,
+        );
     }
 
     /**

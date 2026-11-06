@@ -1,4 +1,4 @@
-dateModified: 1793860971
+dateModified: 1793980434
 email:
   fromEmail: hello@frederikvd.be
   fromName: WAUW
@@ -18,31 +18,51 @@ graphql:
 meta:
   __names__:
     0b3110ba-6ae7-4004-9171-46aff8f33209: English # English
+    0bc16e16-73a2-43b3-9929-9c7b600b2b62: Memo # Memo
+    1ecf5792-e5a0-4ab8-b08b-4e305679144a: 'Email confirmed in Lightspeed' # Email confirmed in Lightspeed
     2fadce9e-2b41-4b72-ad1a-4af393eda366: New # New
+    3a4636ce-ae5f-41b6-a380-04d42765f6a7: Customers # Customers
+    3c92137f-80db-453b-ab81-b93722ac4ab2: Phone # Phone
     3e23ed5e-c5f7-4239-8231-35dae44d6660: Dummy # Dummy
     4a0a43e5-9908-4d63-9932-ffe768ba759f: Images # Images
     4a14e1b0-65f1-4e1e-85f0-e781c189785d: 'Featured (TOP 50)' # Featured (TOP 50)
     4d4e98c2-fca0-4fdd-8ce1-2279af868c67: Brand # Brand
+    5da1261c-a4aa-4c7a-b935-e6b11559a8d3: 'Gewaardeerde klanten' # Gewaardeerde klanten
     6e5bf3fd-5e1c-4a52-8612-8a9c82be728d: Nederlands # Nederlands
     7af71e61-e230-4285-b866-ec48801856d5: Français # Français
     7f11ae8a-7fe3-4b61-83d3-2239b81de7dd: Products # Products
     7f1122a8-64c1-450d-9ac3-63cfad4e623d: Category # Category
+    8c994610-9c3a-4b18-8ab5-8e1e5334089b: 'Lightspeed (old orders)' # Lightspeed (old orders)
     8da35481-725f-47fa-8876-76c117309522: Categories # Categories
+    9da47733-7d57-41a1-a8d2-21647c21bf1d: 'Company number' # Company number
+    09f7d6ab-0b18-4d59-8648-cb375e04007a: Shipped # Shipped
+    33d8854e-fe4a-4f83-a6b1-57cc2f3125a0: Birthdate # Birthdate
+    48db8f35-32dc-4acd-985d-1895e5dc6eaa: Guests # Guests
     51d0d58c-7b4f-4197-9c64-0b0d6d57a085: 'Full title' # Full title
     86ac5424-b08e-4c43-b203-dda2ce4318e3: 'Short description' # Short description
+    263a5658-820c-41a2-9395-b554e4953bce: 'Customer type' # Customer type
     505e28a0-aaf1-43d3-bf84-fce0f6aea14b: 'Lightspeed ID' # Lightspeed ID
     900c896d-0e56-4089-93bf-b658cff2b95f: Brands # Brands
     934a4695-ef0e-40a2-8e3c-aa126a626e87: Text # Text
     8694ab8e-0843-4dd6-a487-9c714713b5fa: WAUW # WAUW
     09747a1d-81b5-43e9-9217-a3b2e06beb89: Categories # Categories
+    75069bbd-1332-4c8e-ac47-28324d336d36: 'Invoice numbers' # Invoice numbers
     96747e9b-bba0-4c0b-bf51-99c294068b93: Video # Video
     12957444-6e55-49bf-acc1-494d6c90f761: Primary # Primary
+    a5a2f1d3-acc2-4a33-a038-a46d733df2d3: 'Discount code' # Discount code
+    a41c652a-eb3b-48a1-8a47-f9e2f617e3d1: Cancelled # Cancelled
+    a297f69a-7938-4b9d-8142-16f72d8e05bf: 'Credit notes' # Credit notes
     a1470400-45d3-415d-b060-870a544144a2: '3D / interactive viewer' # 3D / interactive viewer
     aa81478e-752d-4fbd-b670-ea469cfe058c: 'Product images' # Product images
+    af60e1a9-5a4f-44f7-bddd-9cd08c16a81a: Mobile # Mobile
     ba7f6370-bf87-4b80-8ed1-8d53cf300b28: Brand # Brand
+    c49989a6-437b-4760-bf96-1a5f55ec3ce3: Gender # Gender
     d6ca0115-c4d6-401d-86df-d9c4e0c5b090: EAN # EAN
+    f00a70c6-aa1e-4071-8916-4d0c690c5c66: 'Customer comment' # Customer comment
     f816c1da-9def-4a30-83e2-57f81960eec9: 'VIP preview' # VIP preview
+    fc61cd9e-3c29-43ee-a4d0-ebbdab8cd7e5: 'Payment method' # Payment method
     fcc04824-66bf-4fc5-911b-fe6ab7f2b6f3: 'Price on request' # Price on request
+    fff6fb9b-173c-4adf-a139-9bc40669780d: 'VIP Members' # VIP Members
 plugins:
   ckeditor:
     edition: standard
@@ -54,8 +74,8 @@ plugins:
     licenseKey: E83IO957TYOAVYOK2G1AV4PV
     schemaVersion: 5.7.0.0
 system:
-  edition: solo
+  edition: pro
   live: true
   name: WAUW
   schemaVersion: 5.11.0.2
-  timeZone: America/Los_Angeles
+  timeZone: Europe/Brussels

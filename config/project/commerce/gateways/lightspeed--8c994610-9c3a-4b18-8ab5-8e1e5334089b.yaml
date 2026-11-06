@@ -1,0 +1,20 @@
+billingAddressCondition:
+  class: craft\commerce\elements\conditions\addresses\GatewayAddressCondition
+  elementType: null
+  fieldContext: global
+handle: lightspeed
+isFrontendEnabled: false
+name: 'Lightspeed (old orders)'
+orderCondition:
+  class: craft\commerce\elements\conditions\orders\GatewayOrderCondition
+  elementType: craft\commerce\elements\Order
+  fieldContext: global
+paymentType: purchase
+settings:
+  onlyAllowForZeroPriceOrders: false
+shippingAddressCondition:
+  class: craft\commerce\elements\conditions\addresses\GatewayAddressCondition
+  elementType: null
+  fieldContext: global
+sortOrder: 99
+type: craft\commerce\gateways\Manual

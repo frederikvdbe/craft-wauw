@@ -15,14 +15,15 @@ use craft\helpers\FileHelper;
 use GuzzleHttp\Exception\GuzzleException;
 use modules\lightspeed\Module;
 use yii\base\Component;
-use yii\base\Exception;
 
 /**
  * Imports the Lightspeed product CSV export into Craft, for every site. Safe to run again:
  * products and variants are matched on `lightspeedId`, categories and brands on their primary-site title.
  */
-class Importer extends Component
+class ProductImporter extends Component
 {
+    use SavesElements;
+
     private const TAX_CATEGORIES = [
         '0' => 'marginScheme',
         '21' => 'standard',
@@ -332,17 +333,5 @@ class Importer extends Component
             'sectionId' => Craft::$app->getEntries()->getSectionByHandle($section)->id,
             'typeId' => Craft::$app->getEntries()->getEntryTypeByHandle($entryType)->id,
         ]);
-    }
-
-    private function save(Element $element): void
-    {
-        if (!Craft::$app->getElements()->saveElement($element)) {
-            throw new Exception(sprintf(
-                'Could not save %s "%s": %s',
-                $element::class,
-                $element->title,
-                implode(', ', $element->getErrorSummary(true)),
-            ));
-        }
     }
 }

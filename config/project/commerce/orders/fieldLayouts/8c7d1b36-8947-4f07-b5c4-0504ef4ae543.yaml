@@ -1,0 +1,132 @@
+cardThumbAlignment: end
+cardView:
+  - reference
+  - orderStatus
+  - totalPrice
+tabs:
+  -
+    elementCondition: null
+    elements:
+      -
+        dateAdded: null
+        editCondition: null
+        elementCondition: null
+        elementEditCondition: null
+        fieldUid: 75069bbd-1332-4c8e-ac47-28324d336d36 # Invoice numbers
+        handle: null
+        instructions: null
+        label: null
+        oldFieldUid: null
+        required: false
+        tip: null
+        type: craft\fieldlayoutelements\CustomField
+        uid: 8dde05f1-2f4a-4d41-937a-e6acce58111c
+        userCondition: null
+        warning: null
+        width: 100
+      -
+        dateAdded: null
+        editCondition: null
+        elementCondition: null
+        elementEditCondition: null
+        fieldUid: a297f69a-7938-4b9d-8142-16f72d8e05bf # Credit notes
+        handle: null
+        instructions: null
+        label: null
+        oldFieldUid: null
+        required: false
+        tip: null
+        type: craft\fieldlayoutelements\CustomField
+        uid: 82291da7-ab3d-43dc-ac55-886f67def41a
+        userCondition: null
+        warning: null
+        width: 100
+      -
+        dateAdded: null
+        editCondition: null
+        elementCondition: null
+        elementEditCondition: null
+        fieldUid: fc61cd9e-3c29-43ee-a4d0-ebbdab8cd7e5 # Payment method
+        handle: null
+        instructions: null
+        label: null
+        oldFieldUid: null
+        required: false
+        tip: null
+        type: craft\fieldlayoutelements\CustomField
+        uid: 42fc1fb4-6d6d-4a43-be10-911551175e2f
+        userCondition: null
+        warning: null
+        width: 100
+      -
+        dateAdded: null
+        editCondition: null
+        elementCondition: null
+        elementEditCondition: null
+        fieldUid: a5a2f1d3-acc2-4a33-a038-a46d733df2d3 # Discount code
+        handle: null
+        instructions: null
+        label: null
+        oldFieldUid: null
+        required: false
+        tip: null
+        type: craft\fieldlayoutelements\CustomField
+        uid: 0fda7e7b-8407-4bcc-9737-6a87bed88948
+        userCondition: null
+        warning: null
+        width: 100
+      -
+        dateAdded: null
+        editCondition: null
+        elementCondition: null
+        elementEditCondition: null
+        fieldUid: f00a70c6-aa1e-4071-8916-4d0c690c5c66 # Customer comment
+        handle: null
+        instructions: null
+        label: null
+        oldFieldUid: null
+        required: false
+        tip: null
+        type: craft\fieldlayoutelements\CustomField
+        uid: 2a1f0dc3-6050-4a0d-87c5-a14c823f1d3e
+        userCondition: null
+        warning: null
+        width: 100
+      -
+        dateAdded: null
+        editCondition: null
+        elementCondition: null
+        elementEditCondition: null
+        fieldUid: 0bc16e16-73a2-43b3-9929-9c7b600b2b62 # Memo
+        handle: null
+        instructions: null
+        label: null
+        oldFieldUid: null
+        required: false
+        tip: null
+        type: craft\fieldlayoutelements\CustomField
+        uid: aebda7aa-26d0-405c-b038-c2fe95c6c527
+        userCondition: null
+        warning: null
+        width: 100
+      -
+        dateAdded: null
+        editCondition: null
+        elementCondition: null
+        elementEditCondition: null
+        fieldUid: 505e28a0-aaf1-43d3-bf84-fce0f6aea14b # Lightspeed ID
+        handle: null
+        instructions: null
+        label: null
+        oldFieldUid: null
+        required: false
+        tip: null
+        type: craft\fieldlayoutelements\CustomField
+        uid: 08ead713-d807-4632-8d2d-826def002ff2
+        userCondition: null
+        warning: null
+        width: 100
+    name: Content
+    uid: 1dd28a9d-8866-469d-9971-b31c58a2b42c
+    userCondition: null
+thumbFieldKey: null

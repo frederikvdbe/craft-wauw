@@ -8,25 +8,27 @@ use craft\helpers\Json;
 use yii\base\Component;
 
 /**
- * Local JSON copy of the Lightspeed data: storage/lightspeed/{language}/{name}.json
+ * Local JSON copy of the Lightspeed API data: `{dir}/{name}.json`, or `{dir}/{language}/{name}.json` for translated data.
  */
 class Store extends Component
 {
-    public function write(string $language, string $name, array $data): string
+    public string $dir = '@storage/lightspeed/api';
+
+    public function write(string $name, array $data, ?string $language = null): string
     {
-        $path = $this->path($language, $name);
+        $path = $this->path($name, $language);
         FileHelper::writeToFile($path, Json::encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
         return $path;
     }
 
-    public function read(string $language, string $name): array
+    public function read(string $name, ?string $language = null): ?array
     {
-        $path = $this->path($language, $name);
-        return file_exists($path) ? Json::decode(file_get_contents($path)) : [];
+        $path = $this->path($name, $language);
+        return file_exists($path) ? Json::decode(file_get_contents($path)) : null;
     }
 
-    private function path(string $language, string $name): string
+    private function path(string $name, ?string $language): string
     {
-        return Craft::getAlias("@storage/lightspeed/$language/$name.json");
+        return Craft::getAlias($this->dir . ($language ? "/$language" : '') . "/$name.json");
     }
 }
