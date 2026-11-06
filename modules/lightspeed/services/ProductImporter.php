@@ -45,9 +45,11 @@ class ProductImporter extends Component
 
     /**
      * @param array<string, array<int, array<string, string>>> $products CSV rows grouped by product
+     * @param array<string, array> $brands API brands per site handle
      */
     public function __construct(
         private readonly array $products,
+        private readonly array $brands = [],
         array $config = [],
     ) {
         parent::__construct($config);
@@ -73,19 +75,57 @@ class ProductImporter extends Component
         return count($rows);
     }
 
+    /**
+     * From the API: the product CSV only has the brand name.
+     */
     public function importBrands(): int
     {
-        $titles = array_unique(array_filter(array_map(fn(array $rows) => $rows[0]['Brand'], $this->products)));
+        $translations = array_map(fn(array $brands) => array_column($brands, null, 'id'), $this->brands);
+        $groups = $this->brandGroups();
 
-        foreach ($titles as $title) {
-            $entry = $this->findEntryByTitle('brands', $title) ?? $this->newEntry('brands', 'brand');
-            $this->saveForAllSites($entry, function(Entry $entry) use ($title) {
-                $entry->title = $title;
-                $entry->slug = ElementHelper::generateSlug($title);
+        foreach ($groups as $group) {
+            $brand = $group[0];
+            $image = $brand['image'] ? $this->findOrDownloadImage($brand['image']['src'], 'brandImages') : null;
+            $entry = $this->findEntry('brands', $brand['id'], $brand['title']) ?? $this->newEntry('brands', 'brand');
+
+            $this->saveForAllSites($entry, function(Entry $entry, string $lang) use ($brand, $group, $translations, $image) {
+                $translated = $translations[strtolower($lang)][$brand['id']] ?? $brand;
+                $entry->title = $translated['title'];
+                $entry->slug = $translated['url'];
+                $entry->enabled = in_array(true, array_column($group, 'isVisible'), true);
+                $entry->setFieldValues([
+                    'lightspeedId' => (string)$brand['id'],
+                    'brandImage' => $image ? [$image->id] : [],
+                    'richText' => $translated['content'] ?: null,
+                ]);
             });
+
+            foreach (array_slice($group, 1) as $duplicate) {
+                $entry = Entry::find()->section('brands')->lightspeedId($duplicate['id'])->status(null)->one();
+                $entry && Craft::$app->getElements()->deleteElement($entry, true);
+            }
         }
 
-        return count($titles);
+        return count($groups);
+    }
+
+    /**
+     * Lightspeed has duplicate brands (e.g. "Fontana Arte" twice): 1 entry per title.
+     * The first brand of a group is kept: the one with an image, else the oldest.
+     *
+     * @return array<string, array[]> title => brands
+     */
+    private function brandGroups(): array
+    {
+        $brands = $this->brands[$this->primarySite()];
+        usort($brands, fn(array $a, array $b) => [!$a['image'], $a['id']] <=> [!$b['image'], $b['id']]);
+
+        $groups = [];
+        foreach ($brands as $brand) {
+            $groups[mb_strtolower(trim($brand['title']))][] = $brand;
+        }
+
+        return $groups;
     }
 
     /**
@@ -237,11 +277,11 @@ class ProductImporter extends Component
         return ['images' => array_values(array_unique($images)), 'video' => $video, 'viewer' => $viewer];
     }
 
-    private function findOrDownloadImage(string $url): ?Asset
+    private function findOrDownloadImage(string $url, string $volumeHandle = 'productImages'): ?Asset
     {
         // Lightspeed CDN URLs contain a file ID; other hosts get a hash of the URL.
         $id = preg_match('#/files/(\d+)/#', $url, $m) ? $m[1] : 'url-' . md5($url);
-        $asset = Asset::find()->volume('productImages')->lightspeedId($id)->one();
+        $asset = Asset::find()->volume($volumeHandle)->lightspeedId($id)->one();
         if ($asset) {
             return $asset;
         }
@@ -258,7 +298,7 @@ class ProductImporter extends Component
             return null;
         }
 
-        $volume = Craft::$app->getVolumes()->getVolumeByHandle('productImages');
+        $volume = Craft::$app->getVolumes()->getVolumeByHandle($volumeHandle);
         $asset = new Asset([
             'tempFilePath' => $tempPath,
             'filename' => $filename,
@@ -319,6 +359,16 @@ class ProductImporter extends Component
     private function findEntryByTitle(string $section, string $title): ?Entry
     {
         return Entry::find()->section($section)->site($this->primarySite())->title(Db::escapeParam($title))->status(null)->one();
+    }
+
+    /**
+     * By Lightspeed ID; entries from before the ID was imported by title.
+     */
+    private function findEntry(string $section, int|string $lightspeedId, string $title): ?Entry
+    {
+        $query = Entry::find()->section($section)->site($this->primarySite())->status(null);
+        return (clone $query)->lightspeedId($lightspeedId)->one()
+            ?? $query->lightspeedId(':empty:')->title(Db::escapeParam($title))->one();
     }
 
     private function entryIds(string $section, string $title): array

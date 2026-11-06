@@ -67,7 +67,17 @@ class SetupController extends Controller
         $richText = $this->field(CkeditorField::class, 'richText', 'Text', $translatable);
 
         $categories = $this->section('categories', 'Categories', 'category', Section::TYPE_STRUCTURE, 'categories/{slug}', [$fullTitle, $richText, $lightspeedId]);
-        $brands = $this->section('brands', 'Brands', 'brand', Section::TYPE_CHANNEL, 'brands/{slug}', [$richText, $lightspeedId]);
+        $brandVolume = $this->volume('brandImages', 'Brand images', 'uploads/brands');
+        $this->addToLayout($brandVolume->getFieldLayout(), [$lightspeedId]);
+        Craft::$app->getVolumes()->saveVolume($brandVolume) || $this->fail($brandVolume);
+        $brandImage = $this->field(AssetsField::class, 'brandImage', 'Image', [
+            'restrictLocation' => true,
+            'restrictedLocationSource' => "volume:$brandVolume->uid",
+            'restrictFiles' => true,
+            'allowedKinds' => ['image'],
+            'maxRelations' => 1,
+        ]);
+        $brands = $this->section('brands', 'Brands', 'brand', Section::TYPE_CHANNEL, 'brands/{slug}', [$brandImage, $richText, $lightspeedId]);
 
         $productCategories = $this->field(EntriesField::class, 'productCategories', 'Categories', [
             'sources' => ["section:$categories->uid"],

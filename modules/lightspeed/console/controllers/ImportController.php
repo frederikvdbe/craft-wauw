@@ -4,6 +4,7 @@ namespace modules\lightspeed\console\controllers;
 
 use Craft;
 use craft\console\Controller;
+use modules\lightspeed\Module;
 use modules\lightspeed\services\CsvExport;
 use modules\lightspeed\services\CustomerImporter;
 use modules\lightspeed\services\OrderImporter;
@@ -65,7 +66,7 @@ class ImportController extends Controller
 
     public function actionBrands(): int
     {
-        $this->stdout('Brands: ' . $this->productImporter()->importBrands() . "\n");
+        $this->stdout('Brands: ' . $this->productImporter($this->apiBrands())->importBrands() . "\n");
         return ExitCode::OK;
     }
 
@@ -107,9 +108,22 @@ class ImportController extends Controller
         return ExitCode::OK;
     }
 
-    private function productImporter(): ProductImporter
+    private function productImporter(array $brands = []): ProductImporter
     {
-        return new ProductImporter($this->data()['products']);
+        return new ProductImporter($this->data()['products'], $brands);
+    }
+
+    /**
+     * @return array<string, array> brands per site handle, from `lightspeed/extract brands`
+     */
+    private function apiBrands(): array
+    {
+        $brands = [];
+        foreach (array_keys(Module::SITES) as $handle) {
+            $brands[$handle] = (new Store())->read('brands', $handle) ?? throw new Exception('Run lightspeed/extract brands first.');
+        }
+
+        return $brands;
     }
 
     private function orderImporter(): OrderImporter

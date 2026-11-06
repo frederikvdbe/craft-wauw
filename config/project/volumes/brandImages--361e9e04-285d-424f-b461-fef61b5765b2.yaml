@@ -1,0 +1,67 @@
+altTranslationKeyFormat: null
+altTranslationMethod: none
+fieldLayouts:
+  6fa8ffa8-81d7-4f82-886f-c54aa7d200d5:
+    cardThumbAlignment: end
+    tabs:
+      -
+        elementCondition: null
+        elements:
+          -
+            autocapitalize: true
+            autocomplete: false
+            autocorrect: true
+            class: null
+            dateAdded: null
+            disabled: false
+            elementCondition: null
+            id: null
+            inputType: null
+            instructions: null
+            label: null
+            max: null
+            min: null
+            name: null
+            orientation: null
+            placeholder: null
+            readonly: false
+            requirable: false
+            size: null
+            step: null
+            tip: null
+            title: null
+            type: craft\fieldlayoutelements\assets\AssetTitleField
+            uid: 20b67f57-f7d1-4aa0-b176-cc9221ecf8fc
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: 505e28a0-aaf1-43d3-bf84-fce0f6aea14b # Lightspeed ID
+            handle: null
+            instructions: null
+            label: null
+            oldFieldUid: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 58159298-33cc-42f6-a6d9-f6f0ac99440d
+            userCondition: null
+            warning: null
+            width: 100
+        name: Content
+        uid: b768b441-b035-4dcd-ae38-a67815c59a6b
+        userCondition: null
+    thumbFieldKey: null
+fs: brandImages
+handle: brandImages
+name: 'Brand images'
+sortOrder: 2
+subpath: ''
+titleTranslationKeyFormat: null
+titleTranslationMethod: site
+transformFs: null
+transformSubpath: ''

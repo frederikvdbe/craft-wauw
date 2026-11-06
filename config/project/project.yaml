@@ -1,9 +1,16 @@
-dateModified: 1793980434
+dateModified: 1793980948
 email:
   fromEmail: hello@frederikvd.be
   fromName: WAUW
   transportType: craft\mail\transportadapters\Sendmail
 fs:
+  brandImages:
+    hasUrls: true
+    name: 'Brand images'
+    settings:
+      path: '@webroot/uploads/brands'
+    type: craft\fs\Local
+    url: '@web/uploads/brands'
   productImages:
     hasUrls: true
     name: 'Product images'
@@ -41,6 +48,8 @@ meta:
     51d0d58c-7b4f-4197-9c64-0b0d6d57a085: 'Full title' # Full title
     86ac5424-b08e-4c43-b203-dda2ce4318e3: 'Short description' # Short description
     263a5658-820c-41a2-9395-b554e4953bce: 'Customer type' # Customer type
+    280aeab8-8a93-4580-a007-3eb8823f9513: Image # Image
+    361e9e04-285d-424f-b461-fef61b5765b2: 'Brand images' # Brand images
     505e28a0-aaf1-43d3-bf84-fce0f6aea14b: 'Lightspeed ID' # Lightspeed ID
     900c896d-0e56-4089-93bf-b658cff2b95f: Brands # Brands
     934a4695-ef0e-40a2-8e3c-aa126a626e87: Text # Text

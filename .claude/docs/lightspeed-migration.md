@@ -119,7 +119,9 @@
 | `SOLD` | no category: stock 0, product stays live |
 | `TOP 50` | lightswitch `featured` |
 | `PREVIEW` | lightswitch `vipPreview` |
-| Brand | Channel section `brands` |
+| Brand | Channel section `brands`, from the **API** (`lightspeed/extract brands`): 19 brands (18 after merge), `lightspeedId`, slug per language, visibility |
+| Brand image (9 of 19) | field `brandImage`, volume `brandImages` (`uploads/brands`) |
+| Brand text | none in Lightspeed (API `content` empty) |
 | Product | Commerce product type `products`, variants on |
 | `Internal_ID` / `Internal_Variant_ID` | `lightspeedId` on product / variant |
 | Title_Short / Title_Long | title / `fullTitle` (per site) |
@@ -162,7 +164,8 @@
 
 - Store currency: EUR; units cm / kg (`config/commerce.php`)
 - Missing translation (FR) → EN text, product disabled on that site
-- Categories + brands matched on EN title (CSV has no IDs for them)
+- Categories matched on EN title (CSV has no IDs for them); brands on `lightspeedId`
+- Duplicate brands (same title, e.g. "Fontana Arte" ×2) → merged into 1 entry (keeps the one with image, else oldest ID)
 - CSV has only 1 category path per product → a TOP 50 product has no collection category
 
 ## Architecture notes
