@@ -1,7 +1,7 @@
 columnSuffix: null
-handle: brandImage
+handle: productImagesField
 instructions: null
-name: Image
+name: Images
 searchable: false
 settings:
   allowSelfRelations: false
@@ -11,26 +11,29 @@ settings:
     - image
   branchLimit: null
   defaultPlacement: end
-  defaultUploadLocationSource: null
+  defaultUploadLocationSource: 'volume:aa81478e-752d-4fbd-b670-ea469cfe058c' # Product images
   defaultUploadLocationSubpath: null
   maintainHierarchy: false
-  maxRelations: 1
+  maxRelations: null
   minRelations: null
   previewMode: full
   restrictFiles: true
   restrictLocation: true
   restrictedDefaultUploadSubpath: null
-  restrictedLocationSource: 'volume:361e9e04-285d-424f-b461-fef61b5765b2' # Brand images
-  restrictedLocationSubpath: null
+  restrictedLocationSource: 'volume:aa81478e-752d-4fbd-b670-ea469cfe058c' # Product images
+  restrictedLocationSubpath: '{{ object.id }}-{{ (object.site.primary ? object : object.getLocalized().site(craft.app.sites.primarySite.handle).status(null).one() ?? object).slug }}'
   selectionLabel: null
   showSearchInput: true
-  showSiteMenu: false
+  showSiteMenu: true
   showUnpermittedFiles: false
   showUnpermittedVolumes: false
-  sources: '*'
+  sources:
+    - 'volume:aa81478e-752d-4fbd-b670-ea469cfe058c' # Product images
   targetSiteId: null
   validateRelatedElements: false
-  viewMode: list
+  viewMode: thumbs
+tip: null
 translationKeyFormat: null
 translationMethod: none
 type: craft\fields\Assets
+warning: null

@@ -110,7 +110,7 @@ class CustomerImporter extends Component
 
     private function findUser(array $customer): ?User
     {
-        return User::find()->lightspeedId($customer['id'])->status(null)->one()
+        return User::find()->lightspeedIdField($customer['id'])->status(null)->one()
             ?? User::find()->email(Db::escapeParam($customer['email']))->status(null)->one();
     }
 
@@ -132,12 +132,12 @@ class CustomerImporter extends Component
         $user->firstName = $customer['firstname'] ?: null;
         $user->lastName = AddressMapper::lastName($customer) ?: null;
         $user->setFieldValues([
-            'lightspeedId' => (string)$customer['id'],
-            'customerType' => $customer['isCompany'] ? 'company' : 'private',
-            'cocNumber' => $customer['companyCoCNumber'] ?: null,
-            'birthdate' => $customer['birthDate'] ? new DateTime($customer['birthDate']) : null,
-            'gender' => in_array($customer['gender'], self::GENDERS, true) ? $customer['gender'] : null,
-            'emailConfirmed' => $customer['isConfirmed'],
+            'lightspeedIdField' => (string)$customer['id'],
+            'customerTypeField' => $customer['isCompany'] ? 'company' : 'private',
+            'cocNumberField' => $customer['companyCoCNumber'] ?: null,
+            'birthdateField' => $customer['birthDate'] ? new DateTime($customer['birthDate']) : null,
+            'genderField' => in_array($customer['gender'], self::GENDERS, true) ? $customer['gender'] : null,
+            'emailConfirmedField' => $customer['isConfirmed'],
         ]);
         $this->save($user);
 

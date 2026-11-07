@@ -1,7 +1,7 @@
 columnSuffix: null
-handle: birthdate
+handle: dateField
 instructions: null
-name: Birthdate
+name: Date
 searchable: false
 settings:
   max: null
@@ -10,6 +10,8 @@ settings:
   showDate: true
   showTime: false
   showTimeZone: false
+tip: null
 translationKeyFormat: null
 translationMethod: none
 type: craft\fields\Date
+warning: null

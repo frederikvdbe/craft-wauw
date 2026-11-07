@@ -3,9 +3,7 @@
 namespace modules\lightspeed\console\controllers;
 
 use Craft;
-use craft\base\Field;
 use craft\base\FieldInterface;
-use craft\ckeditor\Field as CkeditorField;
 use craft\commerce\elements\Order;
 use craft\commerce\gateways\Manual;
 use craft\commerce\models\OrderStatus;
@@ -26,7 +24,6 @@ use craft\fields\Date;
 use craft\fields\Dropdown;
 use craft\fields\Entries as EntriesField;
 use craft\fields\Lightswitch;
-use craft\fields\Link;
 use craft\fields\PlainText;
 use craft\fs\Local;
 use craft\helpers\StringHelper;
@@ -58,22 +55,22 @@ class SetupController extends Controller
         $this->setupSites();
         $this->setupStore();
         $this->setupTax();
+        $this->setupBaseFields();
 
         $volume = $this->volume('productImages', 'Product images', 'uploads/products');
-        $lightspeedId = $this->field(PlainText::class, 'lightspeedId', 'Lightspeed ID');
+        $lightspeedId = $this->field(PlainText::class, 'lightspeedIdField', 'Lightspeed ID');
         $this->addToLayout($volume->getFieldLayout(), [$lightspeedId]);
         Craft::$app->getVolumes()->saveVolume($volume) || $this->fail($volume);
 
-        $translatable = ['translationMethod' => Field::TRANSLATION_METHOD_SITE];
-        $fullTitle = $this->field(PlainText::class, 'fullTitle', 'Full title', $translatable);
-        $shortDescription = $this->field(PlainText::class, 'shortDescription', 'Short description', ['multiline' => true, 'initialRows' => 3] + $translatable);
-        $richText = $this->field(CkeditorField::class, 'richText', 'Text', $translatable);
+        $fullTitle = $this->instance('singleLineTextField', 'fullTitleField', 'Full title');
+        $shortDescription = $this->instance('multilineTextField', 'shortDescriptionField', 'Short description');
+        $richText = $this->instance('richTextField', 'richTextField', 'Text');
 
         $categories = $this->section('productCategories', 'Product categories', 'category', Section::TYPE_STRUCTURE, "{parent ? parent.uri ~ '/' : ''}{slug}", [$fullTitle, $shortDescription, $richText, $lightspeedId]);
         $brandVolume = $this->volume('brandImages', 'Brand images', 'uploads/brands');
         $this->addToLayout($brandVolume->getFieldLayout(), [$lightspeedId]);
         Craft::$app->getVolumes()->saveVolume($brandVolume) || $this->fail($brandVolume);
-        $brandImage = $this->field(AssetsField::class, 'brandImage', 'Image', [
+        $brandImage = $this->field(AssetsField::class, 'brandImageField', 'Image', [
             'restrictLocation' => true,
             'restrictedLocationSource' => "volume:$brandVolume->uid",
             'restrictFiles' => true,
@@ -82,16 +79,16 @@ class SetupController extends Controller
         ]);
         $brands = $this->section('brands', 'Brands', 'brand', Section::TYPE_CHANNEL, 'brands/{slug}', [$brandImage, $richText, $lightspeedId]);
 
-        $productCategories = $this->field(EntriesField::class, 'productCategories', 'Categories', [
+        $productCategories = $this->field(EntriesField::class, 'productCategoriesField', 'Categories', [
             'sources' => ["section:$categories->uid"],
         ]);
-        $brand = $this->field(EntriesField::class, 'brand', 'Brand', [
+        $brand = $this->field(EntriesField::class, 'brandField', 'Brand', [
             'sources' => ["section:$brands->uid"],
             'maxRelations' => 1,
         ]);
         // One folder per product (`{Craft ID}-{slug}`): Craft moves related assets into it on every product save.
         // Always the primary site slug: the slug differs per site, so the folder would change on every site save.
-        $productImages = $this->field(AssetsField::class, 'productImages', 'Images', [
+        $productImages = $this->field(AssetsField::class, 'productImagesField', 'Images', [
             'restrictLocation' => true,
             'restrictedLocationSource' => "volume:$volume->uid",
             'restrictedLocationSubpath' => self::PRODUCT_FOLDER,
@@ -99,10 +96,10 @@ class SetupController extends Controller
             'allowedKinds' => ['image'],
         ]);
 
-        $priceOnRequest = $this->field(Lightswitch::class, 'priceOnRequest', 'Price on request');
-        $video = $this->field(Link::class, 'video', 'Video', ['types' => ['url']]);
-        $viewerUrl = $this->field(Link::class, 'viewerUrl', '3D / interactive viewer', ['types' => ['url']]);
-        $ean = $this->field(PlainText::class, 'ean', 'EAN');
+        $priceOnRequest = $this->instance('lightswitchField', 'priceOnRequestField', 'Price on request');
+        $video = $this->instance('urlField', 'videoField', 'Video');
+        $viewerUrl = $this->instance('urlField', 'viewerUrlField', '3D / interactive viewer');
+        $ean = $this->instance('singleLineTextField', 'eanField', 'EAN');
 
         $this->productType(
             [$fullTitle, $shortDescription, $richText, $productImages, $video, $viewerUrl, $productCategories, $brand, $priceOnRequest, $lightspeedId],
@@ -117,19 +114,39 @@ class SetupController extends Controller
     }
 
     /**
+     * Generic fields next to the boilerplate ones (singleLineTextField, …), reused in layouts with their own handle.
+     */
+    private function setupBaseFields(): void
+    {
+        $this->field(Lightswitch::class, 'lightswitchField', 'Lightswitch');
+        $this->field(Date::class, 'dateField', 'Date', ['showDate' => true, 'showTime' => false]);
+    }
+
+    /**
+     * A base field in a layout under its own handle and label.
+     */
+    private function instance(string $baseHandle, string $handle, string $label): CustomField
+    {
+        $field = Craft::$app->getFields()->getFieldByHandle($baseHandle)
+            ?? throw new Exception("Base field $baseHandle is missing");
+
+        return new CustomField($field, ['handle' => $handle, 'label' => $label]);
+    }
+
+    /**
      * Customer data from Lightspeed: extra fields on users and on addresses.
      */
     private function setupCustomers(FieldInterface $lightspeedId): void
     {
-        $customerType = $this->field(Dropdown::class, 'customerType', 'Customer type', [
+        $customerType = $this->field(Dropdown::class, 'customerTypeField', 'Customer type', [
             'options' => $this->dropdownOptions(['' => '', 'private' => 'Private', 'company' => 'Company']),
         ]);
-        $cocNumber = $this->field(PlainText::class, 'cocNumber', 'Company number');
-        $birthdate = $this->field(Date::class, 'birthdate', 'Birthdate', ['showDate' => true, 'showTime' => false]);
-        $gender = $this->field(Dropdown::class, 'gender', 'Gender', [
+        $cocNumber = $this->instance('singleLineTextField', 'cocNumberField', 'Company number');
+        $birthdate = $this->instance('dateField', 'birthdateField', 'Birthdate');
+        $gender = $this->field(Dropdown::class, 'genderField', 'Gender', [
             'options' => $this->dropdownOptions(['' => '', 'male' => 'Male', 'female' => 'Female']),
         ]);
-        $emailConfirmed = $this->field(Lightswitch::class, 'emailConfirmed', 'Email confirmed in Lightspeed');
+        $emailConfirmed = $this->instance('lightswitchField', 'emailConfirmedField', 'Email confirmed in Lightspeed');
 
         $userGroups = Craft::$app->getUserGroups();
         foreach (CustomerImporter::GROUPS as $handle => $name) {
@@ -145,8 +162,8 @@ class SetupController extends Controller
         $this->addToLayout($userLayout, [$customerType, $cocNumber, $birthdate, $gender, $emailConfirmed, $lightspeedId]);
         $users->saveLayout($userLayout) || $this->fail($userLayout);
 
-        $phone = $this->field(PlainText::class, 'phone', 'Phone');
-        $mobile = $this->field(PlainText::class, 'mobile', 'Mobile');
+        $phone = $this->instance('singleLineTextField', 'phoneField', 'Phone');
+        $mobile = $this->instance('singleLineTextField', 'mobileField', 'Mobile');
 
         $addresses = Craft::$app->getAddresses();
         $addressLayout = $addresses->getFieldLayout();
@@ -187,15 +204,15 @@ class SetupController extends Controller
         }
 
         $fields = [
-            $this->field(Dropdown::class, 'shipmentStatus', 'Shipment status', [
+            $this->field(Dropdown::class, 'shipmentStatusField', 'Shipment status', [
                 'options' => $this->dropdownOptions(['' => '', ...OrderImporter::SHIPMENT_STATUSES]),
             ]),
-            $this->field(PlainText::class, 'invoiceNumbers', 'Invoice numbers'),
-            $this->field(PlainText::class, 'creditNotes', 'Credit notes'),
-            $this->field(PlainText::class, 'paymentMethod', 'Payment method'),
-            $this->field(PlainText::class, 'discountCode', 'Discount code'),
-            $this->field(PlainText::class, 'customerComment', 'Customer comment', ['multiline' => true]),
-            $this->field(PlainText::class, 'memo', 'Memo', ['multiline' => true]),
+            $this->instance('singleLineTextField', 'invoiceNumbersField', 'Invoice numbers'),
+            $this->instance('singleLineTextField', 'creditNotesField', 'Credit notes'),
+            $this->instance('singleLineTextField', 'paymentMethodField', 'Payment method'),
+            $this->instance('singleLineTextField', 'discountCodeField', 'Discount code'),
+            $this->instance('multilineTextField', 'customerCommentField', 'Customer comment'),
+            $this->instance('multilineTextField', 'memoField', 'Memo'),
             $lightspeedId,
         ];
         $layout = Craft::$app->getFields()->getLayoutByType(Order::class);
@@ -248,9 +265,6 @@ class SetupController extends Controller
         }
     }
 
-    /**
-     * Lightspeed has "Marge" (margin scheme, 0%, default) and 21% VAT. Prices include VAT.
-     */
     /**
      * Lightspeed tax rates: margin scheme (0%, default), reduced (6%) and standard (21%), included in the price.
      */
@@ -338,7 +352,7 @@ class SetupController extends Controller
     }
 
     /**
-     * @param FieldInterface[] $fields
+     * @param array<FieldInterface|BaseField> $fields
      */
     private function section(string $handle, string $name, string $entryTypeHandle, string $type, string $uriFormat, array $fields): Section
     {
@@ -373,8 +387,8 @@ class SetupController extends Controller
     }
 
     /**
-     * @param FieldInterface[] $fields
-     * @param FieldInterface[] $variantFields
+     * @param array<FieldInterface|BaseField> $fields
+     * @param array<FieldInterface|BaseField> $variantFields
      */
     private function productType(array $fields, array $variantFields): void
     {
@@ -412,7 +426,7 @@ class SetupController extends Controller
     /**
      * Adds fields to the first tab (native fields on top); mandatory fields are added by setTabs().
      *
-     * @param array<FieldInterface|BaseField> $fields custom fields or native layout fields
+     * @param array<FieldInterface|BaseField> $fields custom fields, base field instances or native layout fields
      */
     private function addToLayout(FieldLayout $layout, array $fields): void
     {
@@ -421,8 +435,9 @@ class SetupController extends Controller
         $elements = $tab->getElements();
 
         foreach ($fields as $field) {
-            $isNative = $field instanceof BaseField;
-            $element = $isNative ? $field : new CustomField($field);
+            $isNative = $field instanceof BaseField && !$field instanceof CustomField;
+            // Layout elements are cloned: the same instance can go in several layouts.
+            $element = $field instanceof BaseField ? clone $field : new CustomField($field);
             if ($layout->isFieldIncluded($element->attribute())) {
                 continue;
             }

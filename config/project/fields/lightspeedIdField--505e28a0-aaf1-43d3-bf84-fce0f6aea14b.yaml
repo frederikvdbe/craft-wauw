@@ -1,7 +1,7 @@
 columnSuffix: null
-handle: fullTitle
+handle: lightspeedIdField
 instructions: null
-name: 'Full title'
+name: 'Lightspeed ID'
 searchable: false
 settings:
   byteLimit: null
@@ -11,6 +11,8 @@ settings:
   multiline: false
   placeholder: null
   uiMode: normal
+tip: null
 translationKeyFormat: null
-translationMethod: site
+translationMethod: none
 type: craft\fields\PlainText
+warning: null

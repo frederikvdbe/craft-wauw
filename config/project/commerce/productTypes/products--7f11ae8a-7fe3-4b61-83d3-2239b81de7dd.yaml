@@ -50,7 +50,7 @@ productFieldLayouts:
             editCondition: null
             elementCondition: null
             elementEditCondition: null
-            fieldUid: 51d0d58c-7b4f-4197-9c64-0b0d6d57a085 # Full title
+            fieldUid: 51d0d58c-7b4f-4197-9c64-0b0d6d57a085
             handle: null
             instructions: null
             label: null
@@ -67,7 +67,7 @@ productFieldLayouts:
             editCondition: null
             elementCondition: null
             elementEditCondition: null
-            fieldUid: 86ac5424-b08e-4c43-b203-dda2ce4318e3 # Short description
+            fieldUid: 86ac5424-b08e-4c43-b203-dda2ce4318e3
             handle: null
             instructions: null
             label: null
@@ -84,7 +84,7 @@ productFieldLayouts:
             editCondition: null
             elementCondition: null
             elementEditCondition: null
-            fieldUid: 934a4695-ef0e-40a2-8e3c-aa126a626e87 # Text
+            fieldUid: 934a4695-ef0e-40a2-8e3c-aa126a626e87
             handle: null
             instructions: null
             label: null
@@ -169,7 +169,7 @@ productFieldLayouts:
             editCondition: null
             elementCondition: null
             elementEditCondition: null
-            fieldUid: 96747e9b-bba0-4c0b-bf51-99c294068b93 # Video
+            fieldUid: 96747e9b-bba0-4c0b-bf51-99c294068b93
             handle: null
             instructions: null
             label: null
@@ -186,7 +186,7 @@ productFieldLayouts:
             editCondition: null
             elementCondition: null
             elementEditCondition: null
-            fieldUid: a1470400-45d3-415d-b060-870a544144a2 # 3D / interactive viewer
+            fieldUid: a1470400-45d3-415d-b060-870a544144a2
             handle: null
             instructions: null
             label: null
@@ -237,7 +237,7 @@ productFieldLayouts:
             editCondition: null
             elementCondition: null
             elementEditCondition: null
-            fieldUid: fcc04824-66bf-4fc5-911b-fe6ab7f2b6f3 # Price on request
+            fieldUid: fcc04824-66bf-4fc5-911b-fe6ab7f2b6f3
             handle: null
             instructions: null
             label: null
@@ -246,6 +246,108 @@ productFieldLayouts:
             tip: null
             type: craft\fieldlayoutelements\CustomField
             uid: 89666906-4ead-4555-bb77-bededd400835
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: 4381ddb2-8940-4d25-8e42-5a770b533b71 # Single line text
+            handle: fullTitleField
+            instructions: null
+            label: 'Full title'
+            oldFieldUid: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 8cd6c691-2956-4ae7-835a-3c4950ba7f3b
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: d0499f4d-e39e-4fab-80c5-595fadbfcf91 # Multiline text
+            handle: shortDescriptionField
+            instructions: null
+            label: 'Short description'
+            oldFieldUid: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 660f2ced-6cc0-4021-a61d-f30fcb662d81
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: d1ab0c28-7124-4171-99dd-27b8f9805017 # Rich Text
+            handle: richTextField
+            instructions: null
+            label: Text
+            oldFieldUid: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 51e67891-9bce-47c2-9602-8b8c7809f0e6
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: a3045613-418c-483e-a666-fb4269b18c80 # URL
+            handle: videoField
+            instructions: null
+            label: Video
+            oldFieldUid: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 74885f49-52fc-4471-a1ec-7c8aa20cd560
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: a3045613-418c-483e-a666-fb4269b18c80 # URL
+            handle: viewerUrlField
+            instructions: null
+            label: '3D / interactive viewer'
+            oldFieldUid: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 4776af10-b934-4dd2-b7bd-80f37f13ad7e
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: 1383796c-c497-4943-94f8-10173287ff1c # Lightswitch
+            handle: priceOnRequestField
+            instructions: null
+            label: 'Price on request'
+            oldFieldUid: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 2ab2a208-a551-4269-a20e-0ba57c7601b9
             userCondition: null
             warning: null
             width: 100
@@ -293,7 +395,7 @@ variantFieldLayouts:
             editCondition: null
             elementCondition: null
             elementEditCondition: null
-            fieldUid: d6ca0115-c4d6-401d-86df-d9c4e0c5b090 # EAN
+            fieldUid: d6ca0115-c4d6-401d-86df-d9c4e0c5b090
             handle: null
             instructions: null
             label: null
@@ -319,6 +421,23 @@ variantFieldLayouts:
             tip: null
             type: craft\fieldlayoutelements\CustomField
             uid: be7feb57-e110-49ea-9674-51e31d558bee
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: 4381ddb2-8940-4d25-8e42-5a770b533b71 # Single line text
+            handle: eanField
+            instructions: null
+            label: EAN
+            oldFieldUid: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: ee58b9dd-b837-42f7-94c4-fab45d243fe2
             userCondition: null
             warning: null
             width: 100

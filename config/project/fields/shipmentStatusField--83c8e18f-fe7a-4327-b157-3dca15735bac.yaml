@@ -1,5 +1,5 @@
 columnSuffix: null
-handle: shipmentStatus
+handle: shipmentStatusField
 instructions: null
 name: 'Shipment status'
 searchable: false
@@ -50,6 +50,8 @@ settings:
         -
           - default
           - false
+tip: null
 translationKeyFormat: null
 translationMethod: none
 type: craft\fields\Dropdown
+warning: null

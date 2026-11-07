@@ -80,7 +80,7 @@ class ProductImporter extends Component
         $category = $this->data->categories[$this->primarySite()][$id];
         $entry = $this->findEntry('productCategories', $id, $category['title']) ?? $this->newEntry('productCategories', 'category');
         $parentId = ApiData::id($category['parent']);
-        $parent = $parentId ? Entry::find()->section('productCategories')->lightspeedId($parentId)->status(null)->one() : null;
+        $parent = $parentId ? Entry::find()->section('productCategories')->lightspeedIdField($parentId)->status(null)->one() : null;
 
         $this->saveForAllSites($entry, function(Entry $entry, string $site) use ($id, $category, $parent) {
             $entry->title = $this->text('categories', $site, $id, 'title');
@@ -88,10 +88,10 @@ class ProductImporter extends Component
             $entry->enabled = $category['isVisible'];
             $entry->setParentId($parent?->id);
             $entry->setFieldValues([
-                'lightspeedId' => (string)$id,
-                'fullTitle' => $this->text('categories', $site, $id, 'fulltitle'),
-                'shortDescription' => $this->text('categories', $site, $id, 'description') ?: null,
-                'richText' => $this->text('categories', $site, $id, 'content') ?: null,
+                'lightspeedIdField' => (string)$id,
+                'fullTitleField' => $this->text('categories', $site, $id, 'fulltitle'),
+                'shortDescriptionField' => ApiData::html($this->text('categories', $site, $id, 'description')),
+                'richTextField' => $this->text('categories', $site, $id, 'content') ?: null,
             ]);
         });
     }
@@ -121,14 +121,14 @@ class ProductImporter extends Component
             $entry->slug = $translated['url'];
             $entry->enabled = in_array(true, array_column($group, 'isVisible'), true);
             $entry->setFieldValues([
-                'lightspeedId' => (string)$brand['id'],
-                'brandImage' => $image ? [$image->id] : [],
-                'richText' => $translated['content'] ?: null,
+                'lightspeedIdField' => (string)$brand['id'],
+                'brandImageField' => $image ? [$image->id] : [],
+                'richTextField' => $translated['content'] ?: null,
             ]);
         });
 
         foreach (array_slice($group, 1) as $duplicate) {
-            $entry = Entry::find()->section('brands')->lightspeedId($duplicate['id'])->status(null)->one();
+            $entry = Entry::find()->section('brands')->lightspeedIdField($duplicate['id'])->status(null)->one();
             $entry && Craft::$app->getElements()->deleteElement($entry, true);
         }
     }
@@ -157,7 +157,7 @@ class ProductImporter extends Component
 
     public function importProduct(int $id): void
     {
-        $product = Product::find()->type('products')->site($this->primarySite())->lightspeedId($id)->status(null)->one()
+        $product = Product::find()->type('products')->site($this->primarySite())->lightspeedIdField($id)->status(null)->one()
             ?? new Product(['typeId' => Commerce::getInstance()->getProductTypes()->getProductTypeByHandle('products')->id]);
         $fieldValues = $this->productFieldValues($id);
 
@@ -178,13 +178,13 @@ class ProductImporter extends Component
         $brandId = ApiData::id($product['brand']);
 
         return [
-            'lightspeedId' => (string)$id,
-            'brand' => $brandId ? $this->entryIds('brands', [$this->brandIds()[$brandId] ?? $brandId]) : [],
-            'productCategories' => $this->entryIds('productCategories', $this->data->productCategories[$id] ?? []),
-            'priceOnRequest' => $variant['priceIncl'] <= self::PRICE_HACK_MAX,
-            'productImages' => array_values(array_filter(array_map(fn(string $url) => $this->findOrDownloadImage($url)?->id, $media['images']))),
-            'video' => $media['video'] ? ['type' => 'url', 'value' => $media['video']] : null,
-            'viewerUrl' => $media['viewer'] ? ['type' => 'url', 'value' => $media['viewer']] : null,
+            'lightspeedIdField' => (string)$id,
+            'brandField' => $brandId ? $this->entryIds('brands', [$this->brandIds()[$brandId] ?? $brandId]) : [],
+            'productCategoriesField' => $this->entryIds('productCategories', $this->data->productCategories[$id] ?? []),
+            'priceOnRequestField' => $variant['priceIncl'] <= self::PRICE_HACK_MAX,
+            'productImagesField' => array_values(array_filter(array_map(fn(string $url) => $this->findOrDownloadImage($url)?->id, $media['images']))),
+            'videoField' => $media['video'] ? ['type' => 'url', 'value' => $media['video']] : null,
+            'viewerUrlField' => $media['viewer'] ? ['type' => 'url', 'value' => $media['viewer']] : null,
         ];
     }
 
@@ -196,14 +196,14 @@ class ProductImporter extends Component
         // Not translated (French is missing for some products): text from the primary site, disabled on this site.
         $product->setEnabledForSite($this->data->products[$site][$id]['title'] !== '');
         $product->setFieldValues($fieldValues + [
-            'fullTitle' => $this->text('products', $site, $id, 'fulltitle'),
-            'shortDescription' => $this->text('products', $site, $id, 'description'),
-            'richText' => $this->text('products', $site, $id, 'content') ?: null,
+            'fullTitleField' => $this->text('products', $site, $id, 'fulltitle'),
+            'shortDescriptionField' => ApiData::html($this->text('products', $site, $id, 'description')),
+            'richTextField' => $this->text('products', $site, $id, 'content') ?: null,
         ]);
 
         $existing = [];
         foreach ($product->getVariants(true) as $variant) {
-            $existing[$variant->getFieldValue('lightspeedId')] = $variant;
+            $existing[$variant->getFieldValue('lightspeedIdField')] = $variant;
         }
 
         $variants = [];
@@ -236,8 +236,8 @@ class ProductImporter extends Component
         $variant->height = (float)$data['sizeZValue'] ?: null;
         $variant->weight = (float)$data['weightValue'] ?: null;
         $variant->setFieldValues([
-            'lightspeedId' => (string)$data['id'],
-            'ean' => $data['ean'] ?: null,
+            'lightspeedIdField' => (string)$data['id'],
+            'eanField' => $data['ean'] ?: null,
         ]);
 
         $rate = (string)($this->data->taxRates[ApiData::id($data['tax'])] ?? 0);
@@ -254,7 +254,7 @@ class ProductImporter extends Component
         $stock = array_column($this->data->variants[$this->primarySite()][$id], 'stockLevel', 'id');
 
         foreach (Variant::find()->productId($product->id)->site($this->primarySite())->status(null)->all() as $variant) {
-            $level = $stock[$variant->getFieldValue('lightspeedId')] ?? null;
+            $level = $stock[$variant->getFieldValue('lightspeedIdField')] ?? null;
             if ($level !== null) {
                 $inventory->updatePurchasableInventoryLevel($variant, max(0, (int)$level));
             }
@@ -291,7 +291,7 @@ class ProductImporter extends Component
     {
         // Lightspeed CDN URLs contain a file ID; other hosts get a hash of the URL.
         $id = preg_match('#/files/(\d+)/#', $url, $m) ? $m[1] : 'url-' . md5($url);
-        $asset = Asset::find()->volume($volumeHandle)->lightspeedId($id)->one();
+        $asset = Asset::find()->volume($volumeHandle)->lightspeedIdField($id)->one();
         if ($asset) {
             return $asset;
         }
@@ -317,7 +317,7 @@ class ProductImporter extends Component
             'avoidFilenameConflicts' => true,
         ]);
         $asset->setScenario(Asset::SCENARIO_CREATE);
-        $asset->setFieldValue('lightspeedId', $id);
+        $asset->setFieldValue('lightspeedIdField', $id);
 
         $this->save($asset);
         FileHelper::unlink($tempPath);
@@ -405,8 +405,8 @@ class ProductImporter extends Component
     private function findEntry(string $section, int|string $lightspeedId, string $title): ?Entry
     {
         $query = Entry::find()->section($section)->site($this->primarySite())->status(null);
-        return (clone $query)->lightspeedId($lightspeedId)->one()
-            ?? $query->lightspeedId(':empty:')->title(Db::escapeParam($title))->one();
+        return (clone $query)->lightspeedIdField($lightspeedId)->one()
+            ?? $query->lightspeedIdField(':empty:')->title(Db::escapeParam($title))->one();
     }
 
     /**
@@ -417,7 +417,7 @@ class ProductImporter extends Component
     {
         $ids = [];
         foreach ($lightspeedIds as $lightspeedId) {
-            $entry = Entry::find()->section($section)->site($this->primarySite())->lightspeedId($lightspeedId)->status(null)->one();
+            $entry = Entry::find()->section($section)->site($this->primarySite())->lightspeedIdField($lightspeedId)->status(null)->one();
             $entry && $ids[] = $entry->id;
         }
 

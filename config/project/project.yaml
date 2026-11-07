@@ -1,4 +1,4 @@
-dateModified: 1794054493
+dateModified: 1794055857
 elementSources:
   craft\commerce\elements\Product:
     -
@@ -250,16 +250,13 @@ mcp:
 meta:
   __names__:
     0b3110ba-6ae7-4004-9171-46aff8f33209: English # English
-    0bc16e16-73a2-43b3-9929-9c7b600b2b62: Memo # Memo
     00e1d9bb-51b9-4ebf-847e-a089feaef726: 'Public Schema' # Public Schema
-    1ecf5792-e5a0-4ab8-b08b-4e305679144a: 'Email confirmed in Lightspeed' # Email confirmed in Lightspeed
     2ad1794e-7b24-4662-b2ac-142c09d23a7a: Footer # Footer
     2b8c096e-8810-4a19-8e7d-f66703ed0052: Buttons # Buttons
     2c09a066-2d09-4894-9cf7-1922b6e62972: Architecten # Architecten
     2e4cae7a-2d4d-49bb-8f2a-b7ed384b49ef: SEO/GEO # SEO/GEO
     3a4636ce-ae5f-41b6-a380-04d42765f6a7: Customers # Customers
     3c7c40af-cf57-47c9-baf9-3e62b39faa21: 'Awaiting payment' # Awaiting payment
-    3c92137f-80db-453b-ab81-b93722ac4ab2: Phone # Phone
     3e23ed5e-c5f7-4239-8231-35dae44d6660: Dummy # Dummy
     4a0a43e5-9908-4d63-9932-ffe768ba759f: Images # Images
     4aad4683-55c2-4afb-93f2-868861a351c4: 'Ready for pickup' # Ready for pickup
@@ -279,16 +276,12 @@ meta:
     8da35481-725f-47fa-8876-76c117309522: 'Product categories' # Product categories
     9a80c602-8f9a-47fa-9f77-bec83a7c2418: Image # Image
     9a73018d-125f-47b1-9afa-e08cbc48a6ac: Anchor # Anchor
-    9da47733-7d57-41a1-a8d2-21647c21bf1d: 'Company number' # Company number
     23bc0810-e9d7-499e-8398-83de3788b62c: Blocks # Blocks
-    33d8854e-fe4a-4f83-a6b1-57cc2f3125a0: Birthdate # Birthdate
     39dae8e0-9ae7-4d95-9088-aa5a0af11cbe: Images # Images
     48a3d45e-b4f5-49f2-a960-94adcb851007: Spacing # Spacing
     48db8f35-32dc-4acd-985d-1895e5dc6eaa: Guests # Guests
-    51d0d58c-7b4f-4197-9c64-0b0d6d57a085: 'Full title' # Full title
     78f386d8-ccbe-4fa9-b24b-f527005175e6: Uploads # Uploads
     83c8e18f-fe7a-4327-b157-3dca15735bac: 'Shipment status' # Shipment status
-    86ac5424-b08e-4c43-b203-dda2ce4318e3: 'Short description' # Short description
     263a5658-820c-41a2-9395-b554e4953bce: 'Customer type' # Customer type
     280aeab8-8a93-4580-a007-3eb8823f9513: Image # Image
     325e4201-c4d6-48f3-9d0c-86102d4741e3: 'Navigation link' # Navigation link
@@ -298,7 +291,6 @@ meta:
     841b576a-8964-4701-ac7a-8789c2ee20d1: 'Primary navigation' # Primary navigation
     883ee07a-821a-4772-acaf-e9a78ff34015: 'Footer navigation' # Footer navigation
     900c896d-0e56-4089-93bf-b658cff2b95f: Brands # Brands
-    934a4695-ef0e-40a2-8e3c-aa126a626e87: Text # Text
     1375ad16-04b6-4c7f-97fb-8a8d24d288a1: 'Media bestanden' # Media bestanden
     4381ddb2-8940-4d25-8e42-5a770b533b71: 'Single line text' # Single line text
     4873bc46-6c2c-4e5a-8e84-cb8e312f20ad: Buttons # Buttons
@@ -308,21 +300,17 @@ meta:
     52649fa3-85e6-4725-9f40-699b1f061dd4: 'Navigation links list' # Navigation links list
     57049aa1-d70c-46c8-92ae-f86c72abc67c: 'Business Addresses' # Business Addresses
     72688bf2-9dcf-4032-9899-7d39ab1986f0: 'Navigation link + menu' # Navigation link + menu
-    75069bbd-1332-4c8e-ac47-28324d336d36: 'Invoice numbers' # Invoice numbers
-    96747e9b-bba0-4c0b-bf51-99c294068b93: Video # Video
     704846e3-cfa0-4a1f-8f8f-f65b73c9de47: Text # Text
+    1383796c-c497-4943-94f8-10173287ff1c: Lightswitch # Lightswitch
     12957444-6e55-49bf-acc1-494d6c90f761: Primary # Primary
+    41893669-183e-4f95-9dd9-254bf1342b1f: Date # Date
     89865385-579d-42d4-a578-48a011a9342a: 'Picked up' # Picked up
-    a5a2f1d3-acc2-4a33-a038-a46d733df2d3: 'Discount code' # Discount code
     a6ca9637-b600-4055-806f-e672ad03c6e0: Header # Header
     a9d2b9d3-4606-4e4c-aaae-58958e82f985: 'Organization Address' # Organization Address
     a41c652a-eb3b-48a1-8a47-f9e2f617e3d1: Cancelled # Cancelled
-    a297f69a-7938-4b9d-8142-16f72d8e05bf: 'Credit notes' # Credit notes
-    a1470400-45d3-415d-b060-870a544144a2: '3D / interactive viewer' # 3D / interactive viewer
     a3045613-418c-483e-a666-fb4269b18c80: URL # URL
     aa95f819-8179-4afd-8972-f3d4b77f3056: Button # Button
     aa81478e-752d-4fbd-b670-ea469cfe058c: 'Product images' # Product images
-    af60e1a9-5a4f-44f7-bddd-9cd08c16a81a: Mobile # Mobile
     b6eaa061-d417-41eb-8ec0-acc8c19d1378: Media # Media
     ba7f6370-bf87-4b80-8ed1-8d53cf300b28: Brand # Brand
     ba576e4d-37a8-4759-8e12-3721ccd44a04: 'Local Business Address' # Local Business Address
@@ -331,7 +319,6 @@ meta:
     ca6f639a-12fb-4ecd-8e43-1c9b5e863711: Spacing # Spacing
     d0499f4d-e39e-4fab-80c5-595fadbfcf91: 'Multiline text' # Multiline text
     d1ab0c28-7124-4171-99dd-27b8f9805017: 'Rich Text' # Rich Text
-    d6ca0115-c4d6-401d-86df-d9c4e0c5b090: EAN # EAN
     d7e8d0bc-8052-499d-99b8-d622687dfee7: 'Extra page' # Extra page
     dadd71bc-7f88-40e2-9d64-d59c8af94500: Withdrawn # Withdrawn
     dba87475-a4e6-4b5e-9b21-5cb3156adbe0: Footer # Footer
@@ -339,10 +326,7 @@ meta:
     e7c8d162-2de2-4ce8-bf03-5b10772f250b: 'Legal navigation' # Legal navigation
     e7f650f0-adf2-4ec9-95af-8db8542b1931: Title # Title
     eb0d0935-3bc1-4cf1-86d9-275a753716de: 'Extra pages' # Extra pages
-    f00a70c6-aa1e-4071-8916-4d0c690c5c66: 'Customer comment' # Customer comment
     f3996e6e-c0b1-4e36-87e5-a7102b6061b6: 'Home page' # Home page
-    fc61cd9e-3c29-43ee-a4d0-ebbdab8cd7e5: 'Payment method' # Payment method
-    fcc04824-66bf-4fc5-911b-fe6ab7f2b6f3: 'Price on request' # Price on request
     fff6fb9b-173c-4adf-a139-9bc40669780d: 'VIP Members' # VIP Members
 plugins:
   ckeditor:

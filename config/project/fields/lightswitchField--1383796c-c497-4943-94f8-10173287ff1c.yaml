@@ -1,13 +1,15 @@
 columnSuffix: null
-handle: emailConfirmed
+handle: lightswitchField
 instructions: null
-name: 'Email confirmed in Lightspeed'
+name: Lightswitch
 searchable: false
 settings:
   default: false
   offLabel: null
   onLabel: null
   showLabelsInCards: false
+tip: null
 translationKeyFormat: null
 translationMethod: none
 type: craft\fields\Lightswitch
+warning: null

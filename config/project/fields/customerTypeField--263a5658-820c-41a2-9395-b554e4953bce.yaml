@@ -1,5 +1,5 @@
 columnSuffix: null
-handle: customerType
+handle: customerTypeField
 instructions: null
 name: 'Customer type'
 searchable: false
@@ -39,6 +39,8 @@ settings:
         -
           - default
           - false
+tip: null
 translationKeyFormat: null
 translationMethod: none
 type: craft\fields\Dropdown
+warning: null

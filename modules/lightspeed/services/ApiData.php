@@ -101,6 +101,23 @@ class ApiData
         return $resource ? ($resource['resource']['id'] ?: null) : null;
     }
 
+    /**
+     * Plain text for a rich text field: a paragraph per blank line, `<br>` per line break. Text with HTML stays as it is.
+     */
+    public static function html(?string $text): ?string
+    {
+        $text = trim((string)$text);
+        if ($text === '') {
+            return null;
+        }
+        if (preg_match('/<\/?[a-z][^>]*>/i', $text)) {
+            return $text;
+        }
+
+        $paragraphs = preg_split('/\R{2,}/', $text);
+        return implode('', array_map(fn(string $p) => '<p>' . nl2br(htmlspecialchars($p), false) . '</p>', $paragraphs));
+    }
+
     public function isGuest(int $customerId): bool
     {
         return ($this->customers[$customerId]['type'] ?? null) === 'guest';

@@ -4,7 +4,7 @@
 - Custom Craft module with console commands
 - **Goal: port all data to Craft, as close as possible to the Lightspeed architecture** (1:1: same categories, statuses, groups, …)
 - Source = **API JSON export** of the live shop (`lightspeed/extract`); no CSVs anymore
-- Every record stores `lightspeedId` → import can run again without duplicates
+- Every record stores `lightspeedIdField` → import can run again without duplicates
 - Delta sync before go-live = new extract + import again
 - Client questions + open work: `.claude/docs/backlog.md`
 
@@ -45,7 +45,7 @@
 - Rate limit: 300 / 5 min, 3,000 / hour, 12,000 / day → the client waits automatically
 - Extract: languages from the API (`nl` default, `en`, `fr`); lists with texts per language in `{lang}/`, the rest once (images: once)
 - Import is safe to run again; existing orders are skipped
-- Nothing is deleted: records are matched on `lightspeedId` and updated; records deleted in Lightspeed stay in Craft
+- Nothing is deleted: records are matched on `lightspeedIdField` and updated; records deleted in Lightspeed stay in Craft
 - **Sample orders keep their broken email** on a full import (existing orders are skipped) → delete sample orders before the full import
 - Sample (`Sample.php`): 1 order per case (every Lightspeed status, linked lines, deleted product, guest, GDPR, VAT, discount, shipping + fee, credit note), 1 customer with several orders; their products + 1 product per case (every category, price on request, variants, brand, no FR, hidden, VAT, video); their customers + 3 VIP members without orders + 1 customer per Lightspeed group
 - Sample breaks all email addresses (`…@gmail.comx`) → no mail can reach real customers
@@ -132,51 +132,53 @@
 | Lightspeed (API) | Craft |
 |---|---|
 | Category (all 15, tree) | Structure section `productCategories`, 1:1: parent, order, visible → enabled |
-| Category title / fulltitle / description / content / url | title / `fullTitle` / `shortDescription` / `richText` / slug (per site) |
-| Product ↔ categories | field `productCategories` (all, in Lightspeed order) |
-| Brand | Channel section `brands`; `lightspeedId`, slug per language, visibility |
-| Brand image (9 of 19) | field `brandImage`, volume `brandImages` (`uploads/brands`) |
+| Category title / fulltitle / description / content / url | title / `fullTitleField` / `shortDescriptionField` / `richTextField` / slug (per site) |
+| Product ↔ categories | field `productCategoriesField` (all, in Lightspeed order) |
+| Brand | Channel section `brands`; `lightspeedIdField`, slug per language, visibility |
+| Brand image (9 of 19) | field `brandImageField`, volume `brandImages` (`uploads/brands`) |
 | Brand text | none in Lightspeed (`content` empty) |
 | Duplicate brands (same title) | merged into 1 entry (keeps the one with image, else oldest ID) |
 | Product | Commerce product type `products`, variants on |
-| Product / variant `id` | `lightspeedId` on product / variant |
-| title / fulltitle | title / `fullTitle` (per site) |
-| description / content | `shortDescription` / `richText` (per site) |
+| Product / variant `id` | `lightspeedIdField` on product / variant |
+| title / fulltitle | title / `fullTitleField` (per site) |
+| description / content | `shortDescriptionField` / `richTextField` (per site) |
 | `url` | slug (per site) |
 | Variant title | variant title ("Default" → product title) |
 | `sku` | SKU, or `LS-{variantId}` |
-| `priceIncl` ≤ 2 | lightswitch `priceOnRequest`, base price = `oldPriceIncl` |
+| `priceIncl` ≤ 2 | lightswitch `priceOnRequestField`, base price = `oldPriceIncl` |
 | `oldPriceIncl` > `priceIncl` | price = old price, promotional price = price |
 | Tax 0% / 6% / 21% | tax category `marginScheme` / `reduced` / `standard` (incl. in price) |
 | `stockLevel` | stock (min 0) |
 | size / weight | native variant length / width / height / weight |
-| `ean` | field `ean` |
+| `ean` | field `eanField` |
 | `isVisible` false | disabled |
-| Images + `data03` images | `productImages`, folder per product: `{Craft ID}-{EN slug}` |
-| `data02` + glo3d / hotspot viewers in `data01/03` | link field `viewerUrl` |
-| mp4 / YouTube in `data01/03` | link field `video` |
+| Images + `data03` images | `productImagesField`, folder per product: `{Craft ID}-{EN slug}` |
+| `data02` + glo3d / hotspot viewers in `data01/03` | link field `viewerUrlField` |
+| mp4 / YouTube in `data01/03` | link field `videoField` |
 | Meta title / description (metafields) | SEO plugin `core-seo-geo` — not yet |
 | Customer `registered` | **pending** user, group **VIP Members** (also default group for new sign-ups) |
 | Customer `guest` | **inactive** user (no login, no email), group **Guests** |
 | Customer with orders | group **Customers** (accounts + guests) |
 | Lightspeed customer groups | Craft user groups, 1:1 (created when missing) |
-| Customer `id` | user `lightspeedId` (match: ID, then email) |
-| isCompany, CoC number, birthDate, gender, isConfirmed | user fields `customerType`, `cocNumber`, `birthdate`, `gender`, `emailConfirmed` |
+| Customer `id` | user `lightspeedIdField` (match: ID, then email) |
+| isCompany, CoC number, birthDate, gender, isConfirmed | user fields `customerTypeField`, `cocNumberField`, `birthdateField`, `genderField`, `emailConfirmedField` |
 | Billing / shipping address | user addresses (1 when equal) + Commerce primary billing / shipping |
 | Company / VAT number / address name | address organization / tax ID / full name |
-| Phone / mobile | address fields `phone` / `mobile` |
+| Phone / mobile | address fields `phoneField` / `mobileField` |
 | Language | user preference language |
 | Region | dropped by Craft for BE (no region in BE address format) |
 | Order | completed Commerce order, `reference` = `ORD…`, no recalculation / stock change / emails |
 | Order status (8) | Craft order statuses, 1:1; default = Awaiting payment (like Lightspeed) |
 | Payment status `paid` | successful transaction via hidden gateway `lightspeed`; `datePaid` = order date |
-| Shipment status | order field `shipmentStatus` |
+| Shipment status | order field `shipmentStatusField` |
 | Order language | order site + language |
 | Order line | snapshot (title, price, qty); linked to the variant when it still exists, else custom line item |
 | Shipping / payment fee / VAT | adjustments `shipping` / `paymentFee` / `tax` (included) |
 | Invoices, credit notes, payment method, discount code, comment, memo | order fields |
 | GDPR-deleted order | order without customer, email and addresses |
 
+- **Fields: reuse base fields** (boilerplate `singleLineTextField`, `multilineTextField`, `richTextField`, `urlField` + own `lightswitchField`, `dateField`) with a layout handle (e.g. `singleLineTextField` → `fullTitleField`); all our handles end in `Field` (like the boilerplate). Own field only when settings differ: `lightspeedIdField` (not translatable), `productImagesField`, `brandImageField`, `productCategoriesField`, `brandField`, dropdowns `customerTypeField`, `genderField`, `shipmentStatusField`
+- `shortDescriptionField`, `customerCommentField`, `memoField` = CKEditor (`multilineTextField`) → plain text converted to `<p>` (`ApiData::html()`)
 - Store currency: EUR; units cm / kg (`config/commerce.php`)
 - Text fallback: site language → EN → NL
 
@@ -208,8 +210,8 @@
 - Source: API JSON export; CSV importers removed (2026-11-06)
 - 1 product type `products`, variants on
 - Categories → structure section; brands → channel section
-- Price hack (≤ 2) → `priceOnRequest` + real price from `oldPriceIncl`
-- `data03` = extra product images → add to `productImages`
+- Price hack (≤ 2) → `priceOnRequestField` + real price from `oldPriceIncl`
+- `data03` = extra product images → add to `productImagesField`
 - Tax: 0% = margin scheme; 6% = reduced (created, not used yet)
 - Images: restricted upload location `{Craft ID}-{primary site slug}` (title / slug differ per site for 1,640 of 1,726 products → always the EN slug, else the folder moves on every site save)
 - Sites: EN primary + NL + FR
@@ -220,6 +222,7 @@
 - Newsletter: not imported. Client exports subscribers to Klaviyo and deletes them in Lightspeed → Klaviyo is the source
 - Orders → real Commerce orders (customers see their past orders); lines = snapshot + link to variant
 - Dev: `--sample`; full import + full extract ask for confirmation
+- Reuse base fields with a layout handle; no new field per property; handles end in `Field` (2026-11-07)
 
 ## In progress (2026-11-06)
 - **Committed (2026-11-07):** import ported to the API export (`ApiData`, `Sample`, all importers, setup: 6% tax, 8 order statuses, `shipmentStatus`, category `shortDescription`; `featured` / `vipPreview` removed). Not tested yet
