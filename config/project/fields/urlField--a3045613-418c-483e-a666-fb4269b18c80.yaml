@@ -1,0 +1,69 @@
+columnSuffix: null
+handle: urlField
+instructions: null
+name: URL
+searchable: false
+settings:
+  advancedFields:
+    - urlSuffix
+    - target
+    - download
+  fullGraphqlData: false
+  maxLength: 255
+  showLabelField: true
+  typeSettings:
+    __assoc__:
+      -
+        - asset
+        -
+          __assoc__:
+            -
+              - sources
+              - '*'
+            -
+              - allowedKinds
+              -
+                - image
+                - pdf
+            -
+              - showUnpermittedVolumes
+              - ''
+            -
+              - showUnpermittedFiles
+              - ''
+      -
+        - entry
+        -
+          __assoc__:
+            -
+              - sources
+              - '*'
+            -
+              - showUnpermittedSections
+              - '1'
+            -
+              - showUnpermittedEntries
+              - '1'
+      -
+        - url
+        -
+          __assoc__:
+            -
+              - allowRootRelativeUrls
+              - '1'
+            -
+              - allowAnchors
+              - '1'
+            -
+              - allowCustomSchemes
+              - '1'
+  types:
+    - entry
+    - url
+    - asset
+    - email
+tip: null
+translationKeyFormat: null
+translationMethod: site
+type: craft\fields\Link
+warning: null

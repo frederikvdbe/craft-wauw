@@ -1,0 +1,53 @@
+{
+	"alignment": {
+		"options": ["left", "center", "right"]
+	},
+	"fontColor": {
+		"colorPicker": false,
+		"colors": [
+			{
+				"color": "",
+				"label": ""
+			}
+		]
+	},
+	"link": {
+		"decorators": {
+			"openInNewTab": {
+				"attributes": {
+					"rel": "noopener noreferrer",
+					"target": "_blank"
+				},
+				"label": "Open in new tab",
+				"mode": "manual"
+			}
+		}
+	},
+	"list": {
+		"properties": {
+			"reversed": false,
+			"startIndex": false,
+			"styles": false
+		}
+	},
+	"htmlSupport": {
+		"allow": [
+			{
+				"name": "abbr",
+				"attributes": ["title"]
+			}
+		],
+		"disallow": [
+			{
+				"name": "span",
+				"attributes": {
+					"style": true
+				}
+			},
+			{
+				"name": "span",
+				"classes": true
+			}
+		]
+	}
+}

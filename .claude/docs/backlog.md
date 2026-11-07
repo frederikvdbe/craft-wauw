@@ -20,7 +20,8 @@
 - [x] Content model: 3 sites, new fields
 - [x] API extract: full read-only JSON export of the live shop
 - [ ] Run the full API export (~3.5 h)
-- [ ] SEO meta title / description (CSV has them) → SEOmatic
+- [ ] SEO meta title / description (API metafields) → `core-seo-geo`
+- [ ] Currency per visitor: Europe = EUR, USA = USD, … (Commerce: 1 base currency per store → payment currencies, or a store per region?)
 - [ ] Redirects old → new URLs
 - [ ] Templates: product, category, brand
 - [ ] All customers (~25k): import from the full customer CSV / API JSON; account vs guest via API `type`

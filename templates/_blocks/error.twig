@@ -1,0 +1,26 @@
+{# ======================= #}
+{# PROPERTIES              #}
+{# ======================= #}
+{% cache %}
+
+{% set title = title|default("") %}
+{% set text = text|default("") %}
+
+{# ======================= #}
+{# TEMPLATE                #}
+{# ======================= #}
+<section class="b-error container">
+    <div class="b-error-content">
+        {% include "_components/title" with { title, tag: "h1" } only %}
+        {% include "_components/richText" with { text } only %}
+
+        {% include "_components/button" with { button: {
+            urlField: {
+                url: siteUrl,
+                label: "Terug naar de homepagina"|t
+            }
+        }} only %}
+    </div>
+</section>
+
+{% endcache %}

@@ -1,0 +1,84 @@
+{# ======================= #}
+{# PROPERTIES              #}
+{# ======================= #}
+{% set posterImage = posterImage|default(null) %}
+{% set aboveFold = aboveFold|default(false) %}
+{% set loading = loading|default(aboveFold ? "eager" : "lazy") %}
+{% set fetchpriority = fetchpriority|default(aboveFold ? "high" : "auto") %}
+{% set aspectRatio = aspectRatio|default("16/9") %}
+{% set sizes = sizes|default("100vw") %}
+{% set targetWidths = targetWidths|default([]) %}
+
+{# ======================= #}
+{# TEMPLATE                #}
+{# ======================= #}
+<video-player class="c-video c-media">
+    <media-container class="c-video-container" style="aspect-ratio: {{ aspectRatio }};">
+        {% block media %}{% endblock %}
+
+        <media-poster class="c-video-poster">
+            {% include "_components/image" with {
+                image: posterImage,
+                sizes,
+                targetWidths,
+                aboveFold,
+            } only %}
+        </media-poster>
+
+        <media-play-button class="c-video-initial-play">
+            <media-icon name="play" class="c-video-icon"></media-icon>
+        </media-play-button>
+
+        <media-gesture type="tap" action="togglePaused" pointer="mouse" region="center"></media-gesture>
+
+        <media-hotkey keys="Space" action="togglePaused"></media-hotkey>
+        <media-hotkey keys="k" action="togglePaused"></media-hotkey>
+        <media-hotkey keys="ArrowLeft" action="seekStep" value="-10"></media-hotkey>
+        <media-hotkey keys="ArrowRight" action="seekStep" value="10"></media-hotkey>
+        <media-hotkey keys="m" action="toggleMuted"></media-hotkey>
+        <media-hotkey keys="f" action="toggleFullscreen"></media-hotkey>
+
+        <media-status-announcer class="sr-only"></media-status-announcer>
+
+        <media-controls class="c-video-controls">
+            <media-controls-backdrop class="c-video-controls-backdrop"></media-controls-backdrop>
+            <media-controls-content class="c-video-controls-content">
+                <media-controls-group class="c-video-controls-group" aria-label="{{ "Playback controls"|t }}">
+                    <media-play-button class="c-video-control play">
+                        <media-icon name="play" class="c-video-icon paused"></media-icon>
+                        <media-icon name="pause" class="c-video-icon playing"></media-icon>
+                        <media-icon name="restart" class="c-video-icon ended"></media-icon>
+                    </media-play-button>
+
+                    <media-time-slider class="c-video-time-slider">
+                        <media-slider-track class="c-video-slider-track">
+                            <media-slider-buffer class="c-video-slider-buffer"></media-slider-buffer>
+                            <media-slider-fill class="c-video-slider-fill"></media-slider-fill>
+                        </media-slider-track>
+                        <media-slider-thumb class="c-video-slider-thumb"></media-slider-thumb>
+                        <media-slider-preview class="c-video-slider-preview">
+                            <media-slider-value type="pointer"></media-slider-value>
+                        </media-slider-preview>
+                    </media-time-slider>
+
+                    <media-time-group class="c-video-time">
+                        <media-time type="current"></media-time>
+                        <media-time-separator>/</media-time-separator>
+                        <media-time type="duration"></media-time>
+                    </media-time-group>
+
+                    <media-mute-button class="c-video-control mute">
+                        <media-icon name="volume-high" class="c-video-icon high"></media-icon>
+                        <media-icon name="volume-low" class="c-video-icon low"></media-icon>
+                        <media-icon name="volume-off" class="c-video-icon off"></media-icon>
+                    </media-mute-button>
+
+                    <media-fullscreen-button class="c-video-control fullscreen">
+                        <media-icon name="fullscreen-enter" class="c-video-icon enter"></media-icon>
+                        <media-icon name="fullscreen-exit" class="c-video-icon exit"></media-icon>
+                    </media-fullscreen-button>
+                </media-controls-group>
+            </media-controls-content>
+        </media-controls>
+    </media-container>
+</video-player>

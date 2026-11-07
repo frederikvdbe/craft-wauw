@@ -1,0 +1,77 @@
+{
+	"Block Template": {
+		"prefix": "cb-block",
+		"body": [
+			"{# ======================= #}",
+			"{# PROPERTIES              #}",
+			"{# ======================= #}",
+			"",
+			"{# ======================= #}",
+			"{# TEMPLATE                #}",
+			"{# ======================= #}",
+			"<section class=\"b-${1:name} container\">",
+			"    <div class=\"b-${1:name}-content\">",
+			"        $2",
+			"    </div>",
+			"</section>",
+		],
+		"description": "Creates a block template",
+	},
+	"Component Template": {
+		"prefix": "cb-component",
+		"body": [
+			"{# ======================= #}",
+			"{# PROPERTIES              #}",
+			"{# ======================= #}",
+			"",
+			"{# ======================= #}",
+			"{# TEMPLATE                #}",
+			"{# ======================= #}",
+			"<div class=\"c-${1:name}\">",
+			"    $2",
+			"</div>",
+		],
+		"description": "Creates a component template",
+	},
+	"Title component": {
+		"prefix": "cb-title",
+		"body": ["{% include \"_components/title\" with { title: ${1:title}, tag: \"${2:h2}\" } only %}"],
+		"description": "Creates a title component",
+	},
+	"Rich text component": {
+		"prefix": "cb-rich-text",
+		"body": ["{% include \"_components/richText\" with { text: ${1:text} } only %}"],
+		"description": "Creates a rich text component",
+	},
+	"Text component": {
+		"prefix": "cb-text",
+		"body": ["{% include \"_components/text\" with { text: ${1:text} } only %}"],
+		"description": "Creates a text component",
+	},
+	"Image component": {
+		"prefix": "cb-image",
+		"body": [
+			"{% include \"_components/image\" with {",
+			"    image: ${1:image},",
+			"    targetWidths: [${3:}]",
+			"    sizes: ${2:\"(min-width: 1024px) 50vw, 100vw}\"",
+			"} only %}",
+		],
+		"description": "Creates an image component",
+	},
+	"Buttons component": {
+		"prefix": "cb-buttons",
+		"body": ["{% include \"_components/buttons\" with { buttons: ${1:buttons} } only %}"],
+		"description": "Creates a buttons component",
+	},
+	"Icon component": {
+		"prefix": "cb-icon",
+		"body": ["{% include \"_components/icon\" with { icon: ${1:icon} } only %}"],
+		"description": "Creates an icon component",
+	},
+	"SCSS breakpoint": {
+		"prefix": "cb-breakpoint",
+		"body": ["@include styles-above(${1:desktopM}) {", "    $0", "}"],
+		"description": "Creates a breakpoint",
+	},
+}

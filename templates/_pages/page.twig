@@ -1,0 +1,14 @@
+{# ======================= #}
+{# TEMPLATE                #}
+{# ======================= #}
+{% extends "_base/layout" %}
+
+{% set pageClass = "extra" %}
+
+{% set breadcrumbs = breadcrumbs|default([
+    { label: entry.title, href: entry.url },
+]) %}
+
+{% block content %}
+    {% include '_blocks/index' with { blocks: contentBlocks } %}
+{% endblock %}

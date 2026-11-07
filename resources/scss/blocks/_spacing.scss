@@ -1,0 +1,18 @@
+@use "../base/breakpoints" as *;
+@use "../base/typography" as *;
+
+.b-spacing {
+	width: 100%;
+
+	&.small {
+		height: var(--space-32);
+	}
+
+	&.medium {
+		height: var(--space-96);
+	}
+
+	&.large {
+		height: var(--space-160);
+	}
+}

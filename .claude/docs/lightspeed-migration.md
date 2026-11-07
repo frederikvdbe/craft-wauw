@@ -9,7 +9,10 @@
 - Client questions + open work: `.claude/docs/backlog.md`
 
 ## Current state
-- Craft 5.9, fresh install, DDEV
+- Craft 5.12, DDEV (PHP 8.5, Node 24)
+- Merged with the boilerplate repo `frederikvdbe/craft-wauw` (2026-11-07): Vite, SCSS, templates, `modules/site`, sections home / pages / header / footer, SEO plugin `core-seo-geo`. Our sites, store, order statuses and user / address layouts kept
+- CP: `/launchpad`; volume Uploads = `web/uploads/files` (apart from `brands/`, `products/`)
+- Pending users are never purged (`purgePendingUsersDuration` removed: imported customers are pending)
 - Craft **Pro** (customer accounts; Solo = 1 user) → client needs a Pro license before go-live
 - System time zone: Europe/Brussels
 - Commerce 5.7 installed (1 store, dummy gateway)
@@ -148,7 +151,7 @@
 | Images + `data03` images | `productImages`, folder per product: `{Craft ID}-{EN slug}` |
 | `data02` + glo3d / hotspot viewers in `data01/03` | link field `viewerUrl` |
 | mp4 / YouTube in `data01/03` | link field `video` |
-| Meta title / description (metafields) | SEO plugin (SEOmatic) — not yet |
+| Meta title / description (metafields) | SEO plugin `core-seo-geo` — not yet |
 | Customer `registered` | **pending** user, group **VIP Members** (also default group for new sign-ups) |
 | Customer `guest` | **inactive** user (no login, no email), group **Guests** |
 | Customer with orders | group **Customers** (accounts + guests) |

@@ -60,6 +60,21 @@ tabs:
         userCondition: null
         warning: null
       -
+        attribute: latLong
+        dateAdded: '2026-10-29T20:22:13+00:00'
+        elementCondition: null
+        id: null
+        instructions: null
+        label: null
+        orientation: null
+        requirable: true
+        required: false
+        tip: null
+        type: craft\fieldlayoutelements\addresses\LatLongField
+        uid: b6f58b09-dd12-4937-8ea6-c7cf740bf84a
+        userCondition: null
+        warning: null
+      -
         dateAdded: null
         editCondition: null
         elementCondition: null

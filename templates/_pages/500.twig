@@ -1,0 +1,11 @@
+{# ======================= #}
+{# TEMPLATE                #}
+{# ======================= #}
+{% extends "_base/layout" %}
+
+{% block content %}
+    {% include "_blocks/error" with {
+        title: "Interne serverfout"|t,
+        text: "Er is een onverwachte fout opgetreden aan onze kant. Onze technische team is op de hoogte en werkt aan een oplossing. Probeer het later opnieuw."|t,
+    } %}
+{% endblock %}

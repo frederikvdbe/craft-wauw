@@ -1,0 +1,31 @@
+columnSuffix: null
+handle: buttonField
+instructions: null
+name: Button
+searchable: false
+settings:
+  createButtonLabel: 'New button'
+  defaultIndexViewMode: cards
+  enableVersioning: false
+  entryTypes:
+    -
+      __assoc__:
+        -
+          - uid
+          - aa95f819-8179-4afd-8972-f3d4b77f3056 # Button
+        -
+          - group
+          - General
+  includeTableView: false
+  maxEntries: 1
+  minEntries: null
+  pageSize: 50
+  propagationKeyFormat: null
+  propagationMethod: none
+  showCardsInGrid: true
+  viewMode: cards-grid
+tip: null
+translationKeyFormat: null
+translationMethod: site
+type: craft\fields\Matrix
+warning: null

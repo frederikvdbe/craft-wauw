@@ -1,0 +1,7 @@
+@use "../base/breakpoints" as *;
+@use "../base/typography" as *;
+
+.c-rich-text {
+	max-width: 600px;
+	text-wrap: balance;
+}

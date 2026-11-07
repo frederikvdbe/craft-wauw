@@ -1,0 +1,42 @@
+columnSuffix: null
+handle: mediaFileField
+instructions: null
+name: 'Media bestand'
+searchable: false
+settings:
+  allowSelfRelations: false
+  allowSubfolders: false
+  allowUploads: true
+  allowedKinds:
+    - audio
+    - gif
+    - image
+    - vector
+    - video
+  branchLimit: null
+  defaultPlacement: end
+  defaultUploadLocationSource: 'volume:78f386d8-ccbe-4fa9-b24b-f527005175e6' # Uploads
+  defaultUploadLocationSubpath: null
+  maintainHierarchy: false
+  maxRelations: 1
+  minRelations: null
+  previewMode: full
+  restrictFiles: true
+  restrictLocation: false
+  restrictedDefaultUploadSubpath: null
+  restrictedLocationSource: 'volume:78f386d8-ccbe-4fa9-b24b-f527005175e6' # Uploads
+  restrictedLocationSubpath: null
+  selectionLabel: 'Choose a media file'
+  showSearchInput: true
+  showSiteMenu: true
+  showUnpermittedFiles: false
+  showUnpermittedVolumes: false
+  sources: '*'
+  targetSiteId: null
+  validateRelatedElements: false
+  viewMode: thumbs
+tip: null
+translationKeyFormat: null
+translationMethod: none
+type: craft\fields\Assets
+warning: null

@@ -1,0 +1,11 @@
+{# ======================= #}
+{# PROPERTIES              #}
+{# ======================= #}
+{% set buttons = entry.buttonsField.all|default([]) %}
+
+{# ======================= #}
+{# TEMPLATE                #}
+{# ======================= #}
+<div class="c-rich-text-buttons">
+    {% include "_components/buttons" with { buttons } only %}
+</div>

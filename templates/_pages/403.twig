@@ -1,0 +1,11 @@
+{# ======================= #}
+{# TEMPLATE                #}
+{# ======================= #}
+{% extends "_base/layout" %}
+
+{% block content %}
+    {% include "_blocks/error" with {
+        title: "Toegang geweigerd"|t,
+        text: "U heeft geen toegang tot deze pagina. Mogelijk beschikt u niet over de vereiste rechten of bent u niet ingelogd. Neem contact op met de beheerder als u denkt dat dit een vergissing is."|t,
+    } %}
+{% endblock %}

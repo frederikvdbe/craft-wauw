@@ -1,0 +1,7 @@
+{# ======================= #}
+{# PROPERTIES              #}
+{# ======================= #}
+{% set kind = media.kind|default("") %}
+
+{% include "_components/" ~ kind ignore missing with { (kind): media } %}
+

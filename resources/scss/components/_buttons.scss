@@ -1,0 +1,8 @@
+@use "../base/breakpoints" as *;
+@use "../base/typography" as *;
+
+.c-buttons {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--space-16);
+}

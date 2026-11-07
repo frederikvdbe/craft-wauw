@@ -1,0 +1,77 @@
+@use "../base/breakpoints" as *;
+
+// =======================
+// HEADING TYPO'S
+// =======================
+@mixin typo-h1 {
+	font-family: var(--font-primary);
+	font-size: var(--fs-64);
+	font-weight: var(--fw-700);
+	line-height: 1.2;
+}
+
+@mixin typo-h2 {
+	font-family: var(--font-primary);
+	font-size: var(--fs-48);
+	font-weight: var(--fw-700);
+	line-height: 1.2;
+}
+
+@mixin typo-h3 {
+	font-family: var(--font-primary);
+	font-size: var(--fs-32);
+	font-weight: var(--fw-700);
+	line-height: 1.2;
+}
+
+@mixin typo-h4 {
+	font-family: var(--font-primary);
+	font-size: var(--fs-24);
+	font-weight: var(--fw-700);
+	line-height: 1.2;
+}
+
+@mixin typo-h5 {
+	font-family: var(--font-primary);
+	font-size: var(--fs-20);
+	font-weight: var(--fw-700);
+	line-height: 1.2;
+}
+
+@mixin typo-h6 {
+	font-family: var(--font-primary);
+	font-size: var(--fs-16);
+	font-weight: var(--fw-700);
+	line-height: 1.2;
+}
+
+// =======================
+// BODY TYPO'S
+// =======================
+@mixin typo-body-lg {
+	font-family: var(--font-primary);
+	font-weight: var(--fw-400);
+	font-size: var(--fs-20);
+	line-height: 1.6;
+}
+
+@mixin typo-body-md {
+	font-family: var(--font-primary);
+	font-weight: var(--fw-400);
+	font-size: var(--fs-16);
+	line-height: 1.6;
+}
+
+@mixin typo-body-sm {
+	font-family: var(--font-primary);
+	font-weight: var(--fw-400);
+	font-size: var(--fs-14);
+	line-height: 1.6;
+}
+
+// =======================
+// EXTRA TYPO'S
+// =======================
+@mixin typo-button {
+	font-family: var(--font-primary);
+}

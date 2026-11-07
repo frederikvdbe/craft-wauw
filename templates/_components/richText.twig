@@ -1,0 +1,13 @@
+{# ======================= #}
+{# PROPERTIES              #}
+{# ======================= #}
+{% set text = text|default("") %}
+
+{# ======================= #}
+{# TEMPLATE                #}
+{# ======================= #}
+{% if text %}
+    <div class="c-rich-text wysiwyg">
+        {{ text|raw }}
+    </div>
+{% endif %}

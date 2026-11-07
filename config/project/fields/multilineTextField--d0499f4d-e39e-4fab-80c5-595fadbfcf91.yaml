@@ -1,0 +1,58 @@
+columnSuffix: null
+handle: multilineTextField
+instructions: null
+name: 'Multiline text'
+searchable: false
+settings:
+  advancedLinkFields:
+    - urlSuffix
+    - target
+    - download
+  availableTransforms: ''
+  availableVolumes: '*'
+  characterLimit: null
+  css: null
+  cssFile: MultilineText.css
+  defaultTransform: null
+  defaultUploadLocationSubpath: null
+  defaultUploadLocationVolume: null
+  entryTypes:
+    -
+      __assoc__:
+        -
+          - uid
+          - 2b8c096e-8810-4a19-8e7d-f66703ed0052 # Buttons
+        -
+          - expanded
+          - false
+  fullGraphqlData: true
+  headingLevels: false
+  imageEntryTypeUid: null
+  imageFieldUid: null
+  imageMode: img
+  js: null
+  jsFile: MultilineText.json
+  options: null
+  parseEmbeds: false
+  purifierConfig: null
+  purifyHtml: true
+  showUnpermittedFiles: false
+  showUnpermittedVolumes: false
+  showWordCount: false
+  sourceEditingGroups:
+    - __ADMINS__
+  toolbar:
+    - bold
+    - italic
+    - strikethrough
+    - underline
+    - link
+    - '|'
+    - createEntry
+    - sourceEditing
+  wordLimit: null
+tip: null
+translationKeyFormat: null
+translationMethod: site
+type: craft\ckeditor\Field
+warning: null

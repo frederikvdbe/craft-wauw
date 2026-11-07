@@ -1,0 +1,45 @@
+{# ======================= #}
+{# PROPERTIES              #}
+{# ======================= #}
+{% set class = class|default("") %}
+
+{# ======================= #}
+{# TEMPLATE                #}
+{# ======================= #}
+<audio-player class="c-audio c-media {{ class }}">
+    <media-container class="c-audio-container">
+        {% block media %}{% endblock %}
+
+        <media-controls class="c-audio-controls" visibility="always">
+            <media-controls-content class="c-audio-controls-content">
+                <media-controls-group class="c-audio-controls-group" aria-label="{{ "Playback controls"|t }}">
+                    <media-play-button class="c-audio-control play">
+                        <media-icon name="play" class="c-audio-icon paused"></media-icon>
+                        <media-icon name="pause" class="c-audio-icon playing"></media-icon>
+                        <media-icon name="restart" class="c-audio-icon ended"></media-icon>
+                    </media-play-button>
+
+                    <media-time-slider class="c-audio-time-slider">
+                        <media-slider-track class="c-audio-slider-track">
+                            <media-slider-buffer class="c-audio-slider-buffer"></media-slider-buffer>
+                            <media-slider-fill class="c-audio-slider-fill"></media-slider-fill>
+                        </media-slider-track>
+                        <media-slider-thumb class="c-audio-slider-thumb"></media-slider-thumb>
+                    </media-time-slider>
+
+                    <media-time-group class="c-audio-time">
+                        <media-time type="current"></media-time>
+                        <media-time-separator>/</media-time-separator>
+                        <media-time type="duration"></media-time>
+                    </media-time-group>
+
+                    <media-mute-button class="c-audio-control mute">
+                        <media-icon name="volume-high" class="c-audio-icon high"></media-icon>
+                        <media-icon name="volume-low" class="c-audio-icon low"></media-icon>
+                        <media-icon name="volume-off" class="c-audio-icon off"></media-icon>
+                    </media-mute-button>
+                </media-controls-group>
+            </media-controls-content>
+        </media-controls>
+    </media-container>
+</audio-player>

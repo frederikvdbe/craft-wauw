@@ -1,0 +1,15 @@
+{# ======================= #}
+{# PROPERTIES              #}
+{# ======================= #}
+{% set blocks = blocks|default([]) %}
+
+{# ======================= #}
+{# TEMPLATE                #}
+{# ======================= #}
+{% for block in blocks %}      
+    {% include '_blocks/' ~ block.type.handle ignore missing with {
+        entry,
+        block,
+        loop
+    } only %}
+{% endfor %}

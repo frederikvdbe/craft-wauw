@@ -1,0 +1,14 @@
+{# ======================= #}
+{# PROPERTIES              #}
+{# ======================= #}
+{% cache using key block.id %}
+    
+{% set spacing = block.spacingConfig|default("medium") %}
+
+{# ======================= #}
+{# TEMPLATE                #}
+{# ======================= #} 
+<section class="b-spacing {{ spacing }}"></section>
+
+{% endcache %}
+

@@ -1,0 +1,41 @@
+{# ======================= #}
+{# PROPERTIES              #}
+{# ======================= #}
+{% set title = title|default("") %}
+
+{% set containerStyle = "max-width: 600px; margin: 0 auto; padding: 32px 24px; font-family: Helvetica, sans-serif; font-size: 14px; color: #333333; border-top: 4px solid #db2b1d;" %}
+{% set logoStyle = "height: 60px; width: auto; display: block; margin-bottom: 24px;" %}
+{% set textStyle = "margin: 0 0 8px 0; line-height: 1.5;" %}
+{% set labelStyle = "display: inline-block; width: 140px; font-weight: bold; color: #555555;" %}
+{% set heading2Style = "font-size: 18px; font-weight: bold; color: #111111; margin: 0 0 8px 0;" %}
+{% set heading3Style = "font-size: 15px; font-weight: bold; color: #111111; margin: 0 0 12px 0;" %}
+{% set dividerStyle = "border: none; border-top: 1px solid #e0e0e0; margin: 24px 0;" %}
+{% set totalStyle = "margin: 16px 0 0 0; padding-top: 12px; border-top: 1px solid #e0e0e0; font-weight: bold; font-size: 15px; color: #111111;" %}
+{% set tableHeaderStyle = "background-color: #f5f5f5; padding: 8px; text-align: left; font-weight: bold; border-bottom: 1px solid #e0e0e0;" %}
+{% set tableCellStyle = "padding: 8px; border-bottom: 1px solid #e0e0e0;" %}
+
+{# ======================= #}
+{# TEMPLATE                #}
+{# ======================= #}
+<!DOCTYPE html>
+<html lang="nl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+
+    <style>
+        li, p { line-height: 1.6 }
+    </style>
+</head>
+
+<body style="margin: 0; padding: 24px; background-color: #f5f5f5;">
+    <div style="{{ containerStyle }} background-color: #ffffff;">
+        <img src="{{ siteUrl('images/favicon.png') }}" alt="Street Theater" style="{{ logoStyle }}">
+
+        {% block content %}{% endblock %}
+    </div>
+</body>
+
+</html>

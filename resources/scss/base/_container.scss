@@ -1,0 +1,18 @@
+@use "../base/breakpoints" as *;
+
+// =======================
+// CONTAINER
+// =======================
+.container {
+	display: grid;
+	grid-template-columns:
+		1fr
+		var(--container-bound)
+		minmax(0, var(--container-width))
+		var(--container-bound)
+		1fr;
+
+	& > * {
+		grid-column: 3 / 4;
+	}
+}

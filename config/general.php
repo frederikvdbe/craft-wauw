@@ -1,33 +1,105 @@
 <?php
-/**
- * General Configuration
- *
- * All of your system's general configuration settings go in here. You can see a
- * list of the available settings in vendor/craftcms/cms/src/config/GeneralConfig.php.
- *
- * @see \craft\config\GeneralConfig
- * @link https://craftcms.com/docs/5.x/reference/config/general.html
- */
 
 use craft\config\GeneralConfig;
 use craft\helpers\App;
 
 return GeneralConfig::create()
-    // Set the default week start day for date pickers (0 = Sunday, 1 = Monday, etc.)
+    // EMERGENCY KIT
+    // ->disabledPlugins("*")
+    // ->safeMode(true)
+    // ->allowAdminChanges(false)
+
+    ->buildId((string) time())
+
+    // LOCALIZATION & DEFAULTS
     ->defaultWeekStartDay(1)
-    // Prevent generated URLs from including "index.php"
-    ->omitScriptNameInUrls()
-    // Preload Single entries as Twig variables
-    ->preloadSingles()
-    // Prevent user enumeration attacks
-    ->preventUserEnumeration()
-    // Prevent the front-end Login page
-    ->loginPath(false)
-    // Enable the Twig sandbox for system messages, etc.
-    ->enableTwigSandbox()
+    ->defaultCountryCode('BE')
+    ->defaultCpLocale("nl_BE")
+    ->defaultCpLanguage("en")
+    
+    // SEO
+    ->disallowRobots(App::env('CRAFT_DISALLOW_ROBOTS') ?? false)
+    
+    // SECURITY
+    ->allowAdminChanges(App::env('CRAFT_ALLOW_ADMIN_CHANGES') ?? false)
+    ->preventUserEnumeration(true)
+    ->sendPoweredByHeader(false)
+    ->enableCsrfProtection(true)
+    ->asyncCsrfInputs(true)
+    ->limitAutoSlugsToAscii(true)
     ->enableGql(false)
-    // Set the @webroot alias so the clear-caches command knows where to find CP resources
+    ->maxInvalidLogins(10)
+    
+    // ROUTING
+    ->omitScriptNameInUrls()
+    ->cpTrigger(App::env('CRAFT_CP_TRIGGER') ?? 'launchpad')
+    ->postCpLoginRedirect('entries')
+
+    // TEMPLATE RELATED SETTINGS
+    ->errorTemplatePrefix('_pages/errors/')
+    ->partialTemplatesPath('_elements') 
+    ->enableTemplateCaching(!(App::env('CRAFT_DEV_MODE') ?? false))
+    ->preloadSingles()
+    
+    // USER & AUTHENTICATION
+    ->deferPublicRegistrationPassword(true)
+    ->showFirstAndLastNameFields()
+    ->extraLastNamePrefixes(['van', 'de', 'von', 'du', 'della', 'van der', 'van den'])
+    ->extraNameSuffixes(['Jr.', 'Sr.', 'Ph.D.', 'M.D'])
+    ->purgeStaleUserSessionDuration('P90D')
+    ->purgeUnsavedDraftsDuration('P30D')
+    
+    // DATABASE 
+    ->backupOnUpdate(true)
+    ->maxRevisions(5)
+    ->maxBackups(5)
+
+    // ASSETS
+    ->preserveExifData(false)
+    ->revAssetUrls(true)
+    ->convertFilenamesToAscii(true)
+    ->sanitizeCpImageUploads(true)
+    ->sanitizeSvgUploads(true)
+    ->filenameWordSeparator('-')
+    ->imageEditorRatios([])
+    ->extraAllowedFileExtensions(['svg', 'webp', 'gif', 'avif', 'epub', 'dwg', 'dxf', 'csv'])
+    ->extraFileKinds([
+        'vector' => [
+            'label' => 'Vector Graphics',
+            'extensions' => ['svg', 'ai', 'eps'],
+        ],
+        'gif' => [
+            'label' => 'GIF',
+            'extensions' => ['gif'],
+        ],
+        'ebook' => [
+            'label' => 'eBooks',
+            'extensions' => ['epub', 'mobi'],
+        ],
+        'cad' => [
+            'label' => 'CAD',
+            'extensions' => ['dwg', 'dxf'],
+        ],
+        'csv' => [
+            'label' => 'Comma separated values',
+            'extensions' => ['csv']
+        ]
+    ])
+    
+    // ALIASSES
     ->aliases([
+        '@web' => App::env('PRIMARY_SITE_URL'),
         '@webroot' => dirname(__DIR__) . '/web',
     ])
+
+    // CONTROL PANEL
+    ->cpHeadTags([
+        ['link', ['rel' => 'stylesheet', 'href' => '/dist/admin.css']],
+    ])
+
+    // REVERSE PROXY CONFIGURATION
+    // ->secureProtocolHeaders([
+    //     'X-Forwared-Proto' => ['https'],
+    //     'X-Forwarded-Ssl' => ['on']
+    // ])
 ;

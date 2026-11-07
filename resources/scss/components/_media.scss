@@ -1,0 +1,6 @@
+@use "../base/breakpoints" as *;
+@use "../base/typography" as *;
+
+.c-media {
+	background-color: lch(from black l c h / 10%);
+}

@@ -1,0 +1,6 @@
+@use "../base/breakpoints" as *;
+@use "../base/typography" as *;
+
+.c-title {
+	text-wrap: balance;
+}

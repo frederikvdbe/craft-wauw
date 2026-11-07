@@ -1,0 +1,68 @@
+.ck-content h2 {
+	font-size: 24px;
+	font-weight: 400;
+}
+
+.ck-content h3 {
+	font-size: 20px;
+	font-weight: 400;
+}
+
+.ck-content h4 {
+	font-size: 18px;
+	font-weight: 400;
+}
+
+.ck-content h5 {
+	font-size: 16px;
+	font-weight: 400;
+}
+
+.ck-content h6 {
+	font-size: 14px;
+	text-transform: none;
+	font-weight: 400;
+}
+
+.ck-content td,
+.ck-content th,
+.ck-content block-contentquote,
+.ck-content li,
+.ck-content p {
+	font-size: 14px;
+}
+
+.ck-content figure {
+	margin-inline: 0;
+}
+
+.ck-content ul,
+.ck-content ol {
+	padding-left: 16px;
+}
+
+.ck-horizontal-line {
+	margin-block: 24px;
+}
+
+.ck-content hr {
+	height: 1px;
+	margin: 0;
+}
+
+.cke-entry-card:last-child,
+.cke-entry-card:has(+ .ck-fake-selection-container:last-child) {
+	margin-bottom: 0;
+}
+
+.ck-content :first-child {
+	margin-top: 0;
+}
+
+.ck-content :last-child {
+	margin-bottom: 0;
+}
+
+.ck-content :first-child {
+	margin-top: 0;
+}

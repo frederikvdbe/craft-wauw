@@ -1,0 +1,10 @@
+{# ======================= #}
+{# TEMPLATE                #}
+{# ======================= #}
+{% extends "_base/layout" %}
+
+{% set pageClass = "home" %}
+
+{% block content %}
+    {% include '_blocks/index' with { blocks: content } %}
+{% endblock %}
