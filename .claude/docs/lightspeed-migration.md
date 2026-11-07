@@ -13,6 +13,7 @@
 - Merged with the boilerplate repo `frederikvdbe/craft-wauw` (2026-11-07): Vite, SCSS, templates, `modules/site`, sections home / pages / header / footer, SEO plugin `core-seo-geo`. Our sites, store, order statuses and user / address layouts kept
 - CP: `/launchpad`; volume Uploads = `web/uploads/files` (apart from `brands/`, `products/`)
 - Pending users are never purged (`purgePendingUsersDuration` removed: imported customers are pending)
+- Deploy: GitHub Actions `.github/workflows/deploy-staging.yml` (push `staging` → build, rsync to Combell, `craft up`). Production later, at go-live
 - Craft **Pro** (customer accounts; Solo = 1 user) → client needs a Pro license before go-live
 - System time zone: Europe/Brussels
 - Commerce 5.7 installed (1 store, dummy gateway)
