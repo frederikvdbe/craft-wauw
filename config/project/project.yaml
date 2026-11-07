@@ -1,4 +1,4 @@
-dateModified: 1794055857
+dateModified: 1794058862
 elementSources:
   craft\commerce\elements\Product:
     -
@@ -277,6 +277,7 @@ meta:
     9a80c602-8f9a-47fa-9f77-bec83a7c2418: Image # Image
     9a73018d-125f-47b1-9afa-e08cbc48a6ac: Anchor # Anchor
     23bc0810-e9d7-499e-8398-83de3788b62c: Blocks # Blocks
+    29c263bc-c906-4bb4-af23-8671e323dbf5: 'Product image' # Product image
     39dae8e0-9ae7-4d95-9088-aa5a0af11cbe: Images # Images
     48a3d45e-b4f5-49f2-a960-94adcb851007: Spacing # Spacing
     48db8f35-32dc-4acd-985d-1895e5dc6eaa: Guests # Guests

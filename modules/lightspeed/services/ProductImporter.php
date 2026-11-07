@@ -176,13 +176,15 @@ class ProductImporter extends Component
         $variant = $this->data->variants[$this->primarySite()][$id][0];
         $media = $this->media($id);
         $brandId = ApiData::id($product['brand']);
+        $imageIds = array_values(array_filter(array_map(fn(string $url) => $this->findOrDownloadImage($url)?->id, $media['images'])));
 
         return [
             'lightspeedIdField' => (string)$id,
             'brandField' => $brandId ? $this->entryIds('brands', [$this->brandIds()[$brandId] ?? $brandId]) : [],
             'productCategoriesField' => $this->entryIds('productCategories', $this->data->productCategories[$id] ?? []),
             'priceOnRequestField' => $variant['priceIncl'] <= self::PRICE_HACK_MAX,
-            'productImagesField' => array_values(array_filter(array_map(fn(string $url) => $this->findOrDownloadImage($url)?->id, $media['images']))),
+            'featuredImageField' => array_slice($imageIds, 0, 1),
+            'productImagesField' => $imageIds,
             'videoField' => $media['video'] ? ['type' => 'url', 'value' => $media['video']] : null,
             'viewerUrlField' => $media['viewer'] ? ['type' => 'url', 'value' => $media['viewer']] : null,
         ];

@@ -88,13 +88,16 @@ class SetupController extends Controller
         ]);
         // One folder per product (`{Craft ID}-{slug}`): Craft moves related assets into it on every product save.
         // Always the primary site slug: the slug differs per site, so the folder would change on every site save.
-        $productImages = $this->field(AssetsField::class, 'productImagesField', 'Images', [
+        $productImageSettings = [
             'restrictLocation' => true,
             'restrictedLocationSource' => "volume:$volume->uid",
             'restrictedLocationSubpath' => self::PRODUCT_FOLDER,
             'restrictFiles' => true,
             'allowedKinds' => ['image'],
-        ]);
+        ];
+        $productImage = $this->field(AssetsField::class, 'productImageField', 'Product image', ['maxRelations' => 1] + $productImageSettings);
+        $featuredImage = new CustomField($productImage, ['handle' => 'featuredImageField', 'label' => 'Featured image']);
+        $productImages = $this->field(AssetsField::class, 'productImagesField', 'Images', $productImageSettings);
 
         $priceOnRequest = $this->instance('lightswitchField', 'priceOnRequestField', 'Price on request');
         $video = $this->instance('urlField', 'videoField', 'Video');
@@ -102,7 +105,7 @@ class SetupController extends Controller
         $ean = $this->instance('singleLineTextField', 'eanField', 'EAN');
 
         $this->productType(
-            [$fullTitle, $shortDescription, $richText, $productImages, $video, $viewerUrl, $productCategories, $brand, $priceOnRequest, $lightspeedId],
+            [$fullTitle, $shortDescription, $richText, $featuredImage, $productImages, $video, $viewerUrl, $productCategories, $brand, $priceOnRequest, $lightspeedId],
             [$ean, $lightspeedId],
         );
 
