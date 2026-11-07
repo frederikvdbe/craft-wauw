@@ -69,7 +69,7 @@ class SetupController extends Controller
         $shortDescription = $this->field(PlainText::class, 'shortDescription', 'Short description', ['multiline' => true, 'initialRows' => 3] + $translatable);
         $richText = $this->field(CkeditorField::class, 'richText', 'Text', $translatable);
 
-        $categories = $this->section('categories', 'Categories', 'category', Section::TYPE_STRUCTURE, 'categories/{slug}', [$fullTitle, $shortDescription, $richText, $lightspeedId]);
+        $categories = $this->section('productCategories', 'Product categories', 'category', Section::TYPE_STRUCTURE, "{parent ? parent.uri ~ '/' : ''}{slug}", [$fullTitle, $shortDescription, $richText, $lightspeedId]);
         $brandVolume = $this->volume('brandImages', 'Brand images', 'uploads/brands');
         $this->addToLayout($brandVolume->getFieldLayout(), [$lightspeedId]);
         Craft::$app->getVolumes()->saveVolume($brandVolume) || $this->fail($brandVolume);

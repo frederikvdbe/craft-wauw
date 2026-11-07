@@ -127,7 +127,7 @@
 ## Content model
 | Lightspeed (API) | Craft |
 |---|---|
-| Category (all 15, tree) | Structure section `categories`, 1:1: parent, order, visible → enabled |
+| Category (all 15, tree) | Structure section `productCategories`, 1:1: parent, order, visible → enabled |
 | Category title / fulltitle / description / content / url | title / `fullTitle` / `shortDescription` / `richText` / slug (per site) |
 | Product ↔ categories | field `productCategories` (all, in Lightspeed order) |
 | Brand | Channel section `brands`; `lightspeedId`, slug per language, visibility |

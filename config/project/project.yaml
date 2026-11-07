@@ -1,4 +1,4 @@
-dateModified: 1794041170
+dateModified: 1794044716
 elementSources:
   craft\commerce\elements\Product:
     -
@@ -199,7 +199,7 @@ elementSources:
         - asc
       defaultViewMode: ''
       disabled: false
-      key: 'section:8da35481-725f-47fa-8876-76c117309522' # Categories
+      key: 'section:8da35481-725f-47fa-8876-76c117309522' # Product categories
       page: Entries
       tableAttributes:
         - status
@@ -275,7 +275,7 @@ meta:
     7f11ae8a-7fe3-4b61-83d3-2239b81de7dd: Products # Products
     7f1122a8-64c1-450d-9ac3-63cfad4e623d: Category # Category
     8c994610-9c3a-4b18-8ab5-8e1e5334089b: 'Lightspeed (old orders)' # Lightspeed (old orders)
-    8da35481-725f-47fa-8876-76c117309522: Categories # Categories
+    8da35481-725f-47fa-8876-76c117309522: 'Product categories' # Product categories
     9a80c602-8f9a-47fa-9f77-bec83a7c2418: Image # Image
     9a73018d-125f-47b1-9afa-e08cbc48a6ac: Anchor # Anchor
     9da47733-7d57-41a1-a8d2-21647c21bf1d: 'Company number' # Company number

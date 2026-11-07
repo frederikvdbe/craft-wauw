@@ -3,7 +3,7 @@ enableVersioning: true
 entryTypes:
   -
     uid: d7e8d0bc-8052-499d-99b8-d622687dfee7 # Extra page
-handle: pages
+handle: extraPages
 maxAuthors: 1
 minAuthors: 1
 name: 'Extra pages'
@@ -18,17 +18,17 @@ siteSettings:
     enabledByDefault: true
     hasUrls: true
     template: _pages/page.twig
-    uriFormat: '{slug}'
+    uriFormat: "{parent ? parent.uri ~ '/' : ''}{slug}"
   6e5bf3fd-5e1c-4a52-8612-8a9c82be728d: # Nederlands
     enabledByDefault: true
     hasUrls: true
     template: _pages/page.twig
-    uriFormat: '{slug}'
+    uriFormat: "{parent ? parent.uri ~ '/' : ''}{slug}"
   7af71e61-e230-4285-b866-ec48801856d5: # Français
     enabledByDefault: true
     hasUrls: true
     template: _pages/page.twig
-    uriFormat: '{slug}'
+    uriFormat: "{parent ? parent.uri ~ '/' : ''}{slug}"
 structure:
   maxLevels: 3
   uid: 7ddf6c3b-101c-4f71-8d66-e6b989227b38

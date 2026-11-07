@@ -78,9 +78,9 @@ class ProductImporter extends Component
     public function importCategory(int $id): void
     {
         $category = $this->data->categories[$this->primarySite()][$id];
-        $entry = $this->findEntry('categories', $id, $category['title']) ?? $this->newEntry('categories', 'category');
+        $entry = $this->findEntry('productCategories', $id, $category['title']) ?? $this->newEntry('productCategories', 'category');
         $parentId = ApiData::id($category['parent']);
-        $parent = $parentId ? Entry::find()->section('categories')->lightspeedId($parentId)->status(null)->one() : null;
+        $parent = $parentId ? Entry::find()->section('productCategories')->lightspeedId($parentId)->status(null)->one() : null;
 
         $this->saveForAllSites($entry, function(Entry $entry, string $site) use ($id, $category, $parent) {
             $entry->title = $this->text('categories', $site, $id, 'title');
@@ -180,7 +180,7 @@ class ProductImporter extends Component
         return [
             'lightspeedId' => (string)$id,
             'brand' => $brandId ? $this->entryIds('brands', [$this->brandIds()[$brandId] ?? $brandId]) : [],
-            'productCategories' => $this->entryIds('categories', $this->data->productCategories[$id] ?? []),
+            'productCategories' => $this->entryIds('productCategories', $this->data->productCategories[$id] ?? []),
             'priceOnRequest' => $variant['priceIncl'] <= self::PRICE_HACK_MAX,
             'productImages' => array_values(array_filter(array_map(fn(string $url) => $this->findOrDownloadImage($url)?->id, $media['images']))),
             'video' => $media['video'] ? ['type' => 'url', 'value' => $media['video']] : null,

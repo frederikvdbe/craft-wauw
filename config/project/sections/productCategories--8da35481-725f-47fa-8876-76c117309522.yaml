@@ -3,31 +3,32 @@ enableVersioning: true
 entryTypes:
   -
     uid: 7f1122a8-64c1-450d-9ac3-63cfad4e623d # Category
-handle: categories
+handle: productCategories
 maxAuthors: 1
 minAuthors: 1
-name: Categories
+name: 'Product categories'
 previewTargets:
   -
     label: 'Primary entry page'
+    refresh: '1'
     urlFormat: '{url}'
 propagationMethod: all
 siteSettings:
   0b3110ba-6ae7-4004-9171-46aff8f33209: # English
     enabledByDefault: true
     hasUrls: true
-    template: categories/_entry
-    uriFormat: 'categories/{slug}'
+    template: productCategories/_entry
+    uriFormat: "{parent ? parent.uri ~ '/' : ''}{slug}"
   6e5bf3fd-5e1c-4a52-8612-8a9c82be728d: # Nederlands
     enabledByDefault: true
     hasUrls: true
-    template: categories/_entry
-    uriFormat: 'categories/{slug}'
+    template: productCategories/_entry
+    uriFormat: "{parent ? parent.uri ~ '/' : ''}{slug}"
   7af71e61-e230-4285-b866-ec48801856d5: # Français
     enabledByDefault: true
     hasUrls: true
-    template: categories/_entry
-    uriFormat: 'categories/{slug}'
+    template: productCategories/_entry
+    uriFormat: "{parent ? parent.uri ~ '/' : ''}{slug}"
 structure:
   maxLevels: null
   uid: 02d45ac1-79ac-4d53-864a-c7a672c578a3

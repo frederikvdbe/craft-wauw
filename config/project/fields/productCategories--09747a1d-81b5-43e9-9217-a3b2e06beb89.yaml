@@ -16,7 +16,7 @@ settings:
   showUnpermittedEntries: false
   showUnpermittedSections: false
   sources:
-    - 'section:8da35481-725f-47fa-8876-76c117309522' # Categories
+    - 'section:8da35481-725f-47fa-8876-76c117309522' # Product categories
   targetSiteId: null
   validateRelatedElements: false
   viewMode: list
