@@ -18,6 +18,7 @@ jobs:
         env:
             SSH_TARGET: ${{ vars.SSH_TARGET }}
             DEPLOY_PATH: ${{ vars.DEPLOY_PATH }}
+            SSH: ssh -i ./deploy_key -o StrictHostKeyChecking=no -o LogLevel=ERROR
 
         steps:
             -   name: Checkout
@@ -51,7 +52,7 @@ jobs:
             -   name: Sync
                 run: |
                     rsync -avh \
-                      -e 'ssh -i ./deploy_key -o StrictHostKeyChecking=no' \
+                      -e "$SSH" \
                       --exclude /deploy_key \
                       --exclude /.git/ \
                       --exclude /.github/ \
@@ -71,13 +72,13 @@ jobs:
                 run: |
                     for dir in templates modules translations config/project vendor web/dist; do
                       rsync -ah --delete \
-                        -e 'ssh -i ./deploy_key -o StrictHostKeyChecking=no' \
+                        -e "$SSH" \
                         "./$dir/" "$SSH_TARGET:$DEPLOY_PATH/$dir/"
                     done
 
             -   name: Craft up
                 run: |
-                    ssh -i ./deploy_key -o StrictHostKeyChecking=no "$SSH_TARGET" \
+                    $SSH "$SSH_TARGET" \
                       "cd $DEPLOY_PATH && php craft clear-caches/all && php craft up --interactive=0"
 
             -   name: Remove SSH key

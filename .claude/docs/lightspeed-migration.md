@@ -14,6 +14,8 @@
 - CP: `/launchpad`; volume Uploads = `web/uploads/files` (apart from `brands/`, `products/`)
 - Pending users are never purged (`purgePendingUsersDuration` removed: imported customers are pending)
 - Deploy: GitHub Actions `.github/workflows/deploy-staging.yml` (push `staging` → build, rsync to Combell, `craft up`). Production later, at go-live
+  - GitHub environment `Staging`: secret `DEPLOY_KEY` (own ed25519 key, **no passphrase**), vars `SSH_TARGET` (`wauwbe@ssh041.webhosting.be`), `DEPLOY_PATH`
+  - To do on Combell: cron `php craft queue/run` (Lightspeed sync jobs), check `.env` (dev mode off, admin changes off, robots off)
 - Craft **Pro** (customer accounts; Solo = 1 user) → client needs a Pro license before go-live
 - System time zone: Europe/Brussels
 - Commerce 5.7 installed (1 store, dummy gateway)
