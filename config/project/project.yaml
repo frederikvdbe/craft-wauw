@@ -1,4 +1,4 @@
-dateModified: 1793987925
+dateModified: 1794041170
 elementSources:
   craft\commerce\elements\Product:
     -
@@ -173,6 +173,41 @@ elementSources:
         - dateUpdated
         - status
       type: custom
+    -
+      heading: Categories
+      key: 'heading:0c087d6b-31f8-4a14-871e-79d774b1b506'
+      page: Entries
+      type: heading
+    -
+      defaultSort:
+        - postDate
+        - desc
+      defaultViewMode: ''
+      disabled: false
+      key: 'section:900c896d-0e56-4089-93bf-b658cff2b95f' # Brands
+      page: Entries
+      tableAttributes:
+        - status
+        - postDate
+        - expiryDate
+        - authors
+        - link
+      type: native
+    -
+      defaultSort:
+        - structure
+        - asc
+      defaultViewMode: ''
+      disabled: false
+      key: 'section:8da35481-725f-47fa-8876-76c117309522' # Categories
+      page: Entries
+      tableAttributes:
+        - status
+        - postDate
+        - expiryDate
+        - authors
+        - link
+      type: native
 email:
   fromEmail: hello@frederikvd.be
   fromName: WAUW
@@ -335,7 +370,7 @@ plugins:
       enableSecurityTxt: false
       enableSitemap: true
       enableTrustTxt: false
-      faviconAssetId: null
+      faviconAssetId: '1543'
       pluginName: null
       referrerPolicy: no-referrer-when-downgrade
       themeColor: fffc00
