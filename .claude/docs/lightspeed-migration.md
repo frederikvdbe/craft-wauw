@@ -11,7 +11,8 @@
 ## Current state
 - Craft 5.12, DDEV (PHP 8.5, Node 24)
 - Merged with the boilerplate repo `frederikvdbe/craft-wauw` (2026-11-07): Vite, SCSS, templates, `modules/site`, sections home / pages / header / footer, SEO plugin `core-seo-geo`. Our sites, store, order statuses and user / address layouts kept
-- Module `modules/shop`: Commerce CP changes (subscriptions + donations hidden: nav items, billing detail URL setting)
+- Module `modules/docs`: client manual (Dutch) in **Utilities → Handleiding**; 1 Markdown file per page in `content/`, menu in `DocsUtility::NAV`. Update it when a feature changes for the client
+- Module `modules/ecom`: Commerce CP changes (subscriptions + donations hidden: nav items, billing detail URL setting)
 - CP: `/launchpad`; volume Uploads = `web/uploads/files` (apart from `brands/`, `products/`)
 - Pending users are never purged (`purgePendingUsersDuration` removed: imported customers are pending)
 - Deploy: GitHub Actions `.github/workflows/deploy-staging.yml` (push `staging` → build, rsync to Combell, `craft up`). Production later, at go-live
@@ -30,7 +31,7 @@
 | `ddev craft lightspeed/sync [--sample]` | **queue**: full extract, then import (`--sample` = sample import); asks to confirm |
 | `ddev craft lightspeed/sync/extract [<name>,…]` | queue: extract only (all, or some files) |
 | `ddev craft lightspeed/sync/import [<part>,…] [--sample]` | queue: import only (all, or some parts) |
-| `ddev craft lightspeed/setup` | content model, tax, order statuses, user groups (safe to run again; tax + statuses are DB-only → run on every env) |
+| `ddev craft lightspeed/setup` | content model, tax, order statuses, user groups (safe to run again; tax is DB-only → run on every env) |
 | `ddev craft lightspeed/extract` | **full API export** → `storage/lightspeed/api/`; asks to confirm; ~10k requests ≈ 3.5 h |
 | `ddev craft lightspeed/extract --sample[=N]` | first 25 (or N) items per list → `storage/lightspeed/api-sample/` (not used by the import) |
 | `ddev craft lightspeed/extract <name>` | one file, e.g. `products-images`; `extract/counts` = records per list. Per-item lists resume after a crash |
