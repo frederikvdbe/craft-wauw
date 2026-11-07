@@ -132,18 +132,18 @@
         const lists = document.getElementById('extract-lists');
         const all = lists.querySelector('input.all');
         const emptyNames = {{ emptyNames|json_encode|raw }};
-        const empty = [...lists.querySelectorAll('input:not(.all)')].filter((input) => emptyNames.includes(input.value));
+        const inputs = [...lists.querySelectorAll('input[type=checkbox]:not(.all)')];
+        const empty = inputs.filter((input) => emptyNames.includes(input.value));
 
         const apply = () => {
             if (withData.checked && all.checked) {
                 $(all).prop('checked', false).trigger('change');
             }
-            empty.forEach((input) => {
-                input.disabled = withData.checked;
-                input.closest('.checkbox-select-item').style.opacity = withData.checked ? .4 : '';
-                if (withData.checked) {
-                    input.checked = false;
-                }
+            inputs.forEach((input) => {
+                const isEmpty = empty.includes(input);
+                input.disabled = withData.checked && isEmpty;
+                input.closest('.checkbox-select-item').style.opacity = input.disabled ? .4 : '';
+                input.checked = withData.checked && !isEmpty;
             });
         };
 
@@ -159,9 +159,14 @@
 
     document.getElementById('lightspeed-sync').addEventListener('submit', (event) => {
         const form = event.target;
+        if (form.querySelector('input[name="sample"]').value) {
+            return;
+        }
         const checked = (name) => [...form.querySelectorAll(`input[name="${name}[]"]:checked, input[name="${name}"][value="*"]:checked`)];
-        const fullExtract = checked('extract').some((input) => input.value === '*');
-        const fullImport = checked('import').length && !form.querySelector('input[name="sample"]').value;
+        const withData = document.getElementById('extract-with-data');
+        const fullExtract = checked('extract').some((input) => input.value === '*')
+            || (withData?.checked && [...form.querySelectorAll('#extract-lists input[type=checkbox]:not(.all):not(:disabled)')].every((input) => input.checked));
+        const fullImport = checked('import').length > 0;
         const warnings = [
             fullExtract && 'Full extract of the live shop: a few hours.',
             fullImport && 'Full import: everything, real email addresses.',
