@@ -24,6 +24,7 @@ use craft\fields\Date;
 use craft\fields\Dropdown;
 use craft\fields\Entries as EntriesField;
 use craft\fields\Lightswitch;
+use craft\fields\Link;
 use craft\fields\PlainText;
 use craft\fs\Local;
 use craft\helpers\StringHelper;
@@ -99,9 +100,10 @@ class SetupController extends Controller
         $featuredImage = new CustomField($productImage, ['handle' => 'featuredImageField', 'label' => 'Featured image']);
         $productImages = $this->field(AssetsField::class, 'productImagesField', 'Images', $productImageSettings);
 
-        $priceOnRequest = $this->instance('lightswitchField', 'priceOnRequestField', 'Price on request');
-        $video = $this->instance('urlField', 'videoField', 'Video');
-        $viewerUrl = $this->instance('urlField', 'viewerUrlField', '3D / interactive viewer');
+        $priceOnRequest = $this->instance('lightswitchField', 'priceOnRequestField', 'Price on request',
+            'Hides the price. On import: on when the Lightspeed price was 0, 1 or 2 (also used for sold items). The real price was the old price.');
+        $video = $this->instance('externalUrlField', 'videoField', 'Video');
+        $viewerUrl = $this->instance('externalUrlField', 'viewerUrlField', '3D / interactive viewer');
         $ean = $this->instance('singleLineTextField', 'eanField', 'EAN');
 
         $this->productType(
@@ -123,17 +125,18 @@ class SetupController extends Controller
     {
         $this->field(Lightswitch::class, 'lightswitchField', 'Lightswitch');
         $this->field(Date::class, 'dateField', 'Date', ['showDate' => true, 'showTime' => false]);
+        $this->field(Link::class, 'externalUrlField', 'External URL', ['types' => ['url'], 'showLabelField' => false]);
     }
 
     /**
-     * A base field in a layout under its own handle and label.
+     * A base field in a layout under its own handle, label and help text.
      */
-    private function instance(string $baseHandle, string $handle, string $label): CustomField
+    private function instance(string $baseHandle, string $handle, string $label, ?string $instructions = null): CustomField
     {
         $field = Craft::$app->getFields()->getFieldByHandle($baseHandle)
             ?? throw new Exception("Base field $baseHandle is missing");
 
-        return new CustomField($field, ['handle' => $handle, 'label' => $label]);
+        return new CustomField($field, ['handle' => $handle, 'label' => $label, 'instructions' => $instructions]);
     }
 
     /**
@@ -433,22 +436,59 @@ class SetupController extends Controller
      */
     private function addToLayout(FieldLayout $layout, array $fields): void
     {
+        // Layout elements are cloned: the same instance can go in several layouts.
+        $newElements = array_map(fn($field) => $field instanceof BaseField ? clone $field : new CustomField($field), $fields);
         $tabs = $layout->getTabs();
+        $this->updateExistingFields($tabs, $newElements);
+
         $tab = $tabs[0] ?? new FieldLayoutTab(['name' => 'Content', 'layout' => $layout]);
         $elements = $tab->getElements();
 
-        foreach ($fields as $field) {
-            $isNative = $field instanceof BaseField && !$field instanceof CustomField;
-            // Layout elements are cloned: the same instance can go in several layouts.
-            $element = $field instanceof BaseField ? clone $field : new CustomField($field);
+        foreach ($newElements as $element) {
             if ($layout->isFieldIncluded($element->attribute())) {
                 continue;
             }
-            $isNative ? array_unshift($elements, $element) : $elements[] = $element;
+            $element instanceof CustomField ? $elements[] = $element : array_unshift($elements, $element);
         }
 
         $tab->setElements($elements);
         $layout->setTabs($tabs ?: [$tab]);
+    }
+
+    /**
+     * Fields already in the layout keep their place, and get the label and help text from the code.
+     * A handle that now uses another field (e.g. a base field) gets the new field; values saved with the old field are lost.
+     *
+     * @param FieldLayoutTab[] $tabs
+     * @param BaseField[] $newElements
+     */
+    private function updateExistingFields(array $tabs, array $newElements): void
+    {
+        $byHandle = [];
+        foreach ($newElements as $element) {
+            if ($element instanceof CustomField) {
+                $byHandle[$element->attribute()] = $element;
+            }
+        }
+
+        foreach ($tabs as $tab) {
+            $elements = $tab->getElements();
+            foreach ($elements as $i => $old) {
+                $new = $old instanceof CustomField ? ($byHandle[$old->attribute()] ?? null) : null;
+                if (!$new) {
+                    continue;
+                }
+                if ($new->getFieldUid() !== $old->getFieldUid()) {
+                    $baseHandle = Craft::$app->getFields()->getFieldByUid($new->getFieldUid())->handle;
+                    $this->stdout("Layout: {$old->attribute()} now uses field $baseHandle\n");
+                    $elements[$i] = $new;
+                } else {
+                    $old->label = $new->label;
+                    $old->instructions = $new->instructions;
+                }
+            }
+            $tab->setElements($elements);
+        }
     }
 
     private function fail(object $model): never

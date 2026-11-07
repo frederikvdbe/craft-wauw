@@ -16,11 +16,11 @@ previewTargets:
         - label
         - 'Primary product page'
       -
-        - urlFormat
-        - '{url}'
-      -
         - refresh
         - '1'
+      -
+        - urlFormat
+        - '{url}'
 productFieldLayouts:
   19fc3671-f233-43d0-ac1b-99935d9dfa43:
     cardThumbAlignment: start
@@ -196,11 +196,11 @@ productFieldLayouts:
             warning: null
             width: 100
           -
-            dateAdded: '2026-11-07T13:39:47+00:00'
+            dateAdded: null
             editCondition: null
             elementCondition: null
             elementEditCondition: null
-            fieldUid: a3045613-418c-483e-a666-fb4269b18c80 # URL
+            fieldUid: f45ac18d-2903-4e31-8db0-5d1658a1c101 # External URL
             handle: videoField
             instructions: null
             label: Video
@@ -208,16 +208,16 @@ productFieldLayouts:
             required: false
             tip: null
             type: craft\fieldlayoutelements\CustomField
-            uid: 74885f49-52fc-4471-a1ec-7c8aa20cd560
+            uid: 257f37dc-7916-4033-a917-94b00e0e306b
             userCondition: null
             warning: null
             width: 100
           -
-            dateAdded: '2026-11-07T13:39:47+00:00'
+            dateAdded: null
             editCondition: null
             elementCondition: null
             elementEditCondition: null
-            fieldUid: a3045613-418c-483e-a666-fb4269b18c80 # URL
+            fieldUid: f45ac18d-2903-4e31-8db0-5d1658a1c101 # External URL
             handle: viewerUrlField
             instructions: null
             label: '3D / interactive viewer'
@@ -225,7 +225,7 @@ productFieldLayouts:
             required: false
             tip: null
             type: craft\fieldlayoutelements\CustomField
-            uid: 4776af10-b934-4dd2-b7bd-80f37f13ad7e
+            uid: 3d6972dd-e399-44d8-ad44-3640f21eb955
             userCondition: null
             warning: null
             width: 100
@@ -236,7 +236,7 @@ productFieldLayouts:
             elementEditCondition: null
             fieldUid: 1383796c-c497-4943-94f8-10173287ff1c # Lightswitch
             handle: priceOnRequestField
-            instructions: null
+            instructions: 'Hides the price. On import: on when the Lightspeed price was 0, 1 or 2 (also used for sold items). The real price was the old price.'
             label: 'Price on request'
             oldFieldUid: null
             required: false
@@ -268,7 +268,7 @@ productFieldLayouts:
         userCondition: null
     thumbFieldKey: 'layoutElement:aff74d73-97af-4c00-8022-0e5471fb5eb3'
 productTitleFormat: ''
-productTitleTranslationKeyFormat: ''
+productTitleTranslationKeyFormat: null
 productTitleTranslationMethod: site
 productUiLabelFormat: '{title}'
 propagationMethod: all
@@ -289,8 +289,8 @@ siteSettings:
     hasUrls: true
     template: products/_entry
     uriFormat: 'products/{slug}'
-skuFormat: ''
-slugTranslationKeyFormat: ''
+skuFormat: null
+slugTranslationKeyFormat: null
 slugTranslationMethod: site
 variantFieldLayouts:
   9b5697cc-51fa-4f66-a9cf-91e4803a38cb:
@@ -535,6 +535,6 @@ variantFieldLayouts:
         userCondition: null
     thumbFieldKey: null
 variantTitleFormat: '{product.title}'
-variantTitleTranslationKeyFormat: ''
+variantTitleTranslationKeyFormat: null
 variantTitleTranslationMethod: site
 variantUiLabelFormat: '{title}'

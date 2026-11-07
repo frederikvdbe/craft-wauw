@@ -1,4 +1,4 @@
-dateModified: 1794058862
+dateModified: 1794059460
 elementSources:
   craft\commerce\elements\Product:
     -
@@ -327,6 +327,7 @@ meta:
     e7c8d162-2de2-4ce8-bf03-5b10772f250b: 'Legal navigation' # Legal navigation
     e7f650f0-adf2-4ec9-95af-8db8542b1931: Title # Title
     eb0d0935-3bc1-4cf1-86d9-275a753716de: 'Extra pages' # Extra pages
+    f45ac18d-2903-4e31-8db0-5d1658a1c101: 'External URL' # External URL
     f3996e6e-c0b1-4e36-87e5-a7102b6061b6: 'Home page' # Home page
     fff6fb9b-173c-4adf-a139-9bc40669780d: 'VIP Members' # VIP Members
 plugins:

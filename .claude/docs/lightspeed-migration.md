@@ -178,7 +178,8 @@
 | Invoices, credit notes, payment method, discount code, comment, memo | order fields |
 | GDPR-deleted order | order without customer, email and addresses |
 
-- **Fields: reuse base fields** (boilerplate `singleLineTextField`, `multilineTextField`, `richTextField`, `urlField` + own `lightswitchField`, `dateField`) with a layout handle (e.g. `singleLineTextField` → `fullTitleField`); all our handles end in `Field` (like the boilerplate). Own field only when settings differ: `lightspeedIdField` (not translatable), `productImagesField`, `brandImageField`, `productCategoriesField`, `brandField`, dropdowns `customerTypeField`, `genderField`, `shipmentStatusField`
+- **Fields: reuse base fields** (boilerplate `singleLineTextField`, `multilineTextField`, `richTextField`, `urlField` + own `lightswitchField`, `dateField`, `externalUrlField` (Link, URL only: video, 3D viewer)) with a layout handle (e.g. `singleLineTextField` → `fullTitleField`); all our handles end in `Field` (like the boilerplate). Own field only when settings differ: `lightspeedIdField` (not translatable), `productImagesField` + `productImageField` (featured image; both upload to the product folder), `brandImageField`, `productCategoriesField`, `brandField`, dropdowns `customerTypeField`, `genderField`, `shipmentStatusField`
+- Setup swaps the field under a layout handle when the code points it to another field (values of that handle are lost → import again)
 - `shortDescriptionField`, `customerCommentField`, `memoField` = CKEditor (`multilineTextField`) → plain text converted to `<p>` (`ApiData::html()`)
 - Store currency: EUR; units cm / kg (`config/commerce.php`)
 - Text fallback: site language → EN → NL
