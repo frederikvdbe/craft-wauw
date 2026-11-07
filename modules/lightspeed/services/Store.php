@@ -37,6 +37,21 @@ class Store extends Component
         return $times ? (new DateTime())->setTimestamp(min($times)) : null;
     }
 
+    /**
+     * Downloaded, but the API returned no records (in every language).
+     */
+    public function isEmpty(string $name): bool
+    {
+        $paths = glob(Craft::getAlias($this->dir) . "/{,*/}$name.json", GLOB_BRACE) ?: [];
+        foreach ($paths as $path) {
+            if (filesize($path) > 2 || trim(file_get_contents($path)) !== '[]') {
+                return false;
+            }
+        }
+
+        return $paths !== [];
+    }
+
     public function delete(string $name, ?string $language = null): void
     {
         FileHelper::unlink($this->path($name, $language));

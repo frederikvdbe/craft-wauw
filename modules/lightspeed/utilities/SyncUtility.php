@@ -33,18 +33,22 @@ class SyncUtility extends Utility
         $module = Module::getInstance();
         $formatter = Craft::$app->getFormatter();
 
-        $extractOptions = array_map(function(string $name) use ($module, $formatter) {
+        $emptyNames = array_values(array_filter(Extractor::names(), fn(string $name) => $module->store->isEmpty($name)));
+
+        $extractOptions = array_map(function(string $name) use ($module, $formatter, $emptyNames) {
             $date = $module->store->modifiedAt($name);
+            $info = $date ? 'Downloaded ' . $formatter->asDatetime($date, 'short') : 'Not downloaded yet';
             return [
                 'label' => $name,
                 'value' => $name,
-                'info' => $date ? 'Downloaded ' . $formatter->asDatetime($date, 'short') : 'Not downloaded yet',
+                'info' => in_array($name, $emptyNames, true) ? "Empty. $info" : $info,
             ];
         }, Extractor::names());
 
         return Craft::$app->getView()->renderTemplate('lightspeed/_utility.twig', [
             'isQueued' => $module->sync->isQueued(),
             'extractOptions' => $extractOptions,
+            'emptyNames' => $emptyNames,
             'importOptions' => array_map(fn(string $part) => ['label' => ucfirst($part), 'value' => $part], ImportJob::PARTS),
         ]);
     }

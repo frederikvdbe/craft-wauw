@@ -11,13 +11,27 @@
     {{ actionInput('lightspeed/sync/start') }}
     {{ csrfInput() }}
 
-    {{ forms.checkboxSelectField({
+    {% set extractInput %}
+        {% if emptyNames|length %}
+            {{ forms.checkbox({
+                id: 'extract-with-data',
+                label: "Only lists with data (#{emptyNames|length} empty)",
+                checked: true,
+            }) }}
+            <hr>
+        {% endif %}
+        {{ forms.checkboxSelect({
+            id: 'extract-lists',
+            name: 'extract',
+            options: extractOptions,
+            showAllOption: true,
+        }) }}
+    {% endset %}
+
+    {{ forms.field({
         label: '1. Extract',
         instructions: 'Download from the Lightspeed API (read-only) to `storage/lightspeed/api/`. Full extract ≈ 10k requests, a few hours (rate limit).',
-        name: 'extract',
-        options: extractOptions,
-        showAllOption: true,
-    }) }}
+    }, extractInput) }}
 
     {{ forms.checkboxSelectField({
         label: '2. Import',
@@ -41,6 +55,39 @@
 </form>
 
 {% js %}
+    (() => {
+        const withData = document.getElementById('extract-with-data');
+        if (!withData) {
+            return;
+        }
+        const lists = document.getElementById('extract-lists');
+        const all = lists.querySelector('input.all');
+        const emptyNames = {{ emptyNames|json_encode|raw }};
+        const empty = [...lists.querySelectorAll('input:not(.all)')].filter((input) => emptyNames.includes(input.value));
+
+        const apply = () => {
+            if (withData.checked && all.checked) {
+                $(all).prop('checked', false).trigger('change');
+            }
+            empty.forEach((input) => {
+                input.disabled = withData.checked;
+                input.closest('.checkbox-select-item').style.opacity = withData.checked ? .4 : '';
+                if (withData.checked) {
+                    input.checked = false;
+                }
+            });
+        };
+
+        withData.addEventListener('change', apply);
+        $(all).on('change', () => {
+            if (all.checked && withData.checked) {
+                withData.checked = false;
+                empty.forEach((input) => input.closest('.checkbox-select-item').style.opacity = '');
+            }
+        });
+        apply();
+    })();
+
     document.getElementById('lightspeed-sync').addEventListener('submit', (event) => {
         const form = event.target;
         const checked = (name) => [...form.querySelectorAll(`input[name="${name}[]"]:checked, input[name="${name}"][value="*"]:checked`)];
