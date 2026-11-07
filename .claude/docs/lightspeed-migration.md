@@ -39,6 +39,7 @@
 
 - **Control panel: Utilities → Lightspeed sync** = same as `lightspeed/sync`: pick extract files (with last download date), import parts, sample on/off → Start (asks to confirm full extract / full import). Permission `utility:lightspeed-sync`
 - Queue: progress in Utilities → Queue Manager. All steps are queued at once (visible in Queue Manager), priority 100, 101, … → they run in order (needs 1 runner). A step stops when an earlier step is still in the queue (failed, or reserved after a killed process) → retry that one first. Data loads when a step runs, not when it is queued. Only 1 sync at a time
+- **Sync log** (`SyncLog`, `storage/lightspeed/sync-log.json`): last 10 runs, per step status (waiting / running / done / failed / stopped), items, warnings, error. Shown in the utility; red warning + CP menu badge when the last run has failed or stopped steps
 - Queue runner: DDEV daemon `craft-queue` (`.ddev/config.queue.yaml`); control panel requests don't run jobs. Production needs a runner too (cron / supervisor)
 - API is **read-only**: the client blocks every non-GET request (live shop)
 - Rate limit: 300 / 5 min, 3,000 / hour, 12,000 / day → the client waits automatically

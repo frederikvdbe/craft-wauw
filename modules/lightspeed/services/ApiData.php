@@ -35,7 +35,10 @@ class ApiData
     /** @var array<int, array[]> order ID => invoices and credit notes */
     public array $invoices = [];
 
-    public static function load(Store $store): self
+    /**
+     * @param bool $sample per-item lists of Sample::LIMITED_LISTS may be partial
+     */
+    public static function load(Store $store, bool $sample = false): self
     {
         $data = new self();
         $read = fn(string $name, ?string $language = null) => $store->read($name, $language)
@@ -62,7 +65,10 @@ class ApiData
             $data->productCategories[self::id($link['product'])][] = self::id($link['category']);
         }
 
-        foreach ($read('products-images') as $productId => $images) {
+        $productImages = $sample
+            ? $store->read('products-images') ?? $store->read('products-images.partial') ?? []
+            : $read('products-images');
+        foreach ($productImages as $productId => $images) {
             usort($images, fn(array $a, array $b) => $a['sortOrder'] <=> $b['sortOrder']);
             $data->productImages[$productId] = array_column($images, 'src');
         }

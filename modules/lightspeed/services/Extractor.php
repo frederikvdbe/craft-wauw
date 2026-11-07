@@ -58,15 +58,16 @@ class Extractor extends Component
     /**
      * File name => endpoint per item of a list, saved as item ID => list.
      * `requires`: skipped when that list is empty. `if`: only items where this field is set.
+     * `orders-products` first: the sample needs it to pick its products (see Sample::LIMITED_LISTS).
      */
     public const RELATIONS = [
+        'orders-products' => ['list' => 'orders', 'path' => 'orders/{id}/products'],
         'products-images' => ['list' => 'products', 'path' => 'products/{id}/images'],
         'products-relations' => ['list' => 'products', 'path' => 'products/{id}/relations'],
         'products-metafields' => ['list' => 'products', 'path' => 'products/{id}/metafields'],
         'products-filtervalues' => ['list' => 'products', 'path' => 'products/{id}/filtervalues', 'requires' => 'filters'],
         'products-attributes' => ['list' => 'products', 'path' => 'products/{id}/attributes', 'translated' => true, 'if' => 'type'],
         'filters-values' => ['list' => 'filters', 'path' => 'filters/{id}/values', 'translated' => true],
-        'orders-products' => ['list' => 'orders', 'path' => 'orders/{id}/products'],
         'invoices-items' => ['list' => 'invoices', 'path' => 'invoices/{id}/items'],
     ];
 
