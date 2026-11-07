@@ -36,6 +36,7 @@
 | `ddev craft lightspeed/import --sample` | **sample import** from the full export (use this during dev) |
 | `ddev craft lightspeed/import` | **full import**; asks to confirm |
 | `ddev craft lightspeed/import/<categories\|brands\|products\|customers\|orders> [--sample]` | one part. `import orders` (space) runs **everything** |
+| `ddev craft lightspeed/reset` | **deletes all imported data** (records with `lightspeedIdField`: orders, users except admins, products, brands, categories + all files in `productImages` / `brandImages`); shows counts, asks to confirm. Content model stays → then a fresh import |
 
 - **Control panel: Utilities → Lightspeed sync** = same as `lightspeed/sync`: pick extract files (with last download date), import parts, sample on/off → Start (asks to confirm full extract / full import). Permission `utility:lightspeed-sync`
 - Queue: progress in Utilities → Queue Manager. All steps are queued at once (visible in Queue Manager), priority 100, 101, … → they run in order (needs 1 runner). A step stops when an earlier step is still in the queue (failed, or reserved after a killed process) → retry that one first. Data loads when a step runs, not when it is queued. Only 1 sync at a time
