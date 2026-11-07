@@ -1,4 +1,4 @@
-dateModified: 1794044716
+dateModified: 1794054493
 elementSources:
   craft\commerce\elements\Product:
     -
@@ -255,6 +255,7 @@ meta:
     1ecf5792-e5a0-4ab8-b08b-4e305679144a: 'Email confirmed in Lightspeed' # Email confirmed in Lightspeed
     2ad1794e-7b24-4662-b2ac-142c09d23a7a: Footer # Footer
     2b8c096e-8810-4a19-8e7d-f66703ed0052: Buttons # Buttons
+    2c09a066-2d09-4894-9cf7-1922b6e62972: Architecten # Architecten
     2e4cae7a-2d4d-49bb-8f2a-b7ed384b49ef: SEO/GEO # SEO/GEO
     3a4636ce-ae5f-41b6-a380-04d42765f6a7: Customers # Customers
     3c7c40af-cf57-47c9-baf9-3e62b39faa21: 'Awaiting payment' # Awaiting payment
