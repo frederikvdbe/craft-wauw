@@ -10,23 +10,26 @@ use craft\commerce\Plugin as Commerce;
 use craft\elements\Asset;
 use craft\elements\Entry;
 use craft\helpers\Db;
-use craft\helpers\ElementHelper;
 use craft\helpers\FileHelper;
 use GuzzleHttp\Exception\GuzzleException;
 use modules\lightspeed\Module;
 use yii\base\Component;
 
 /**
- * Imports the Lightspeed product CSV export into Craft, for every site. Safe to run again:
- * products and variants are matched on `lightspeedId`, categories and brands on their primary-site title.
+ * Imports the API categories, brands and products into Craft, for every site. Safe to run again:
+ * everything is matched on `lightspeedId`.
  */
 class ProductImporter extends Component
 {
     use SavesElements;
 
-    private const TAX_CATEGORIES = [
+    /**
+     * Lightspeed tax rate => Craft tax category
+     */
+    public const TAX_CATEGORIES = [
         '0' => 'marginScheme',
-        '21' => 'standard',
+        '0.06' => 'reduced',
+        '0.21' => 'standard',
     ];
 
     /**
@@ -34,98 +37,100 @@ class ProductImporter extends Component
      */
     private const PRICE_HACK_MAX = 2;
 
-    private const COLLECTION_CATEGORY = 'collection in stock';
-    private const FEATURED_CATEGORY = 'TOP 50';
-    private const VIP_PREVIEW_CATEGORY = 'PREVIEW';
-
     /**
      * @var string[] image URLs that could not be downloaded
      */
     public array $failedImages = [];
 
     /**
-     * @param array<string, array<int, array<string, string>>> $products CSV rows grouped by product
-     * @param array<string, array> $brands API brands per site handle
+     * @var array<int, int>|null Lightspeed brand ID => ID of the brand it is merged into
      */
+    private ?array $brandIds = null;
+
     public function __construct(
-        private readonly array $products,
-        private readonly array $brands = [],
+        private readonly ApiData $data,
         array $config = [],
     ) {
         parent::__construct($config);
     }
 
+    /**
+     * The full Lightspeed category tree, 1:1.
+     */
     public function importCategories(): int
     {
-        $rows = [];
-        foreach ($this->products as [$row]) {
-            if ($row['NL_Category_1'] === self::COLLECTION_CATEGORY && $row['NL_Category_2'] !== '') {
-                $rows[$this->translated($row, $this->primaryLang(), 'Category_2')] ??= $row;
-            }
+        $ids = $this->categoryIds();
+        foreach ($ids as $id) {
+            $this->importCategory($id);
         }
 
-        foreach ($rows as $title => $row) {
-            $entry = $this->findEntryByTitle('categories', $title) ?? $this->newEntry('categories', 'category');
-            $this->saveForAllSites($entry, function(Entry $entry, string $lang) use ($row) {
-                $entry->title = $this->translated($row, $lang, 'Category_2');
-                $entry->slug = ElementHelper::generateSlug($entry->title);
-            });
-        }
-
-        return count($rows);
+        return count($ids);
     }
 
     /**
-     * From the API: the product CSV only has the brand name.
+     * @return int[] parents first
      */
+    public function categoryIds(): array
+    {
+        return array_keys($this->data->categories[$this->primarySite()]);
+    }
+
+    public function importCategory(int $id): void
+    {
+        $category = $this->data->categories[$this->primarySite()][$id];
+        $entry = $this->findEntry('categories', $id, $category['title']) ?? $this->newEntry('categories', 'category');
+        $parentId = ApiData::id($category['parent']);
+        $parent = $parentId ? Entry::find()->section('categories')->lightspeedId($parentId)->status(null)->one() : null;
+
+        $this->saveForAllSites($entry, function(Entry $entry, string $site) use ($id, $category, $parent) {
+            $entry->title = $this->text('categories', $site, $id, 'title');
+            $entry->slug = $this->text('categories', $site, $id, 'url');
+            $entry->enabled = $category['isVisible'];
+            $entry->setParentId($parent?->id);
+            $entry->setFieldValues([
+                'lightspeedId' => (string)$id,
+                'fullTitle' => $this->text('categories', $site, $id, 'fulltitle'),
+                'shortDescription' => $this->text('categories', $site, $id, 'description') ?: null,
+                'richText' => $this->text('categories', $site, $id, 'content') ?: null,
+            ]);
+        });
+    }
+
     public function importBrands(): int
     {
-        $translations = array_map(fn(array $brands) => array_column($brands, null, 'id'), $this->brands);
         $groups = $this->brandGroups();
-
         foreach ($groups as $group) {
-            $brand = $group[0];
-            $image = $brand['image'] ? $this->findOrDownloadImage($brand['image']['src'], 'brandImages') : null;
-            $entry = $this->findEntry('brands', $brand['id'], $brand['title']) ?? $this->newEntry('brands', 'brand');
-
-            $this->saveForAllSites($entry, function(Entry $entry, string $lang) use ($brand, $group, $translations, $image) {
-                $translated = $translations[strtolower($lang)][$brand['id']] ?? $brand;
-                $entry->title = $translated['title'];
-                $entry->slug = $translated['url'];
-                $entry->enabled = in_array(true, array_column($group, 'isVisible'), true);
-                $entry->setFieldValues([
-                    'lightspeedId' => (string)$brand['id'],
-                    'brandImage' => $image ? [$image->id] : [],
-                    'richText' => $translated['content'] ?: null,
-                ]);
-            });
-
-            foreach (array_slice($group, 1) as $duplicate) {
-                $entry = Entry::find()->section('brands')->lightspeedId($duplicate['id'])->status(null)->one();
-                $entry && Craft::$app->getElements()->deleteElement($entry, true);
-            }
+            $this->importBrandGroup($group);
         }
 
         return count($groups);
     }
 
     /**
-     * Lightspeed has duplicate brands (e.g. "Fontana Arte" twice): 1 entry per title.
-     * The first brand of a group is kept: the one with an image, else the oldest.
-     *
-     * @return array<string, array[]> title => brands
+     * @param array[] $group brands with the same title, see brandGroups()
      */
-    private function brandGroups(): array
+    public function importBrandGroup(array $group): void
     {
-        $brands = $this->brands[$this->primarySite()];
-        usort($brands, fn(array $a, array $b) => [!$a['image'], $a['id']] <=> [!$b['image'], $b['id']]);
+        $brand = $group[0];
+        $image = $brand['image'] ? $this->findOrDownloadImage($brand['image']['src'], 'brandImages') : null;
+        $entry = $this->findEntry('brands', $brand['id'], $brand['title']) ?? $this->newEntry('brands', 'brand');
 
-        $groups = [];
-        foreach ($brands as $brand) {
-            $groups[mb_strtolower(trim($brand['title']))][] = $brand;
+        $this->saveForAllSites($entry, function(Entry $entry, string $site) use ($brand, $group, $image) {
+            $translated = array_column($this->data->brands[$site], null, 'id')[$brand['id']] ?? $brand;
+            $entry->title = $translated['title'];
+            $entry->slug = $translated['url'];
+            $entry->enabled = in_array(true, array_column($group, 'isVisible'), true);
+            $entry->setFieldValues([
+                'lightspeedId' => (string)$brand['id'],
+                'brandImage' => $image ? [$image->id] : [],
+                'richText' => $translated['content'] ?: null,
+            ]);
+        });
+
+        foreach (array_slice($group, 1) as $duplicate) {
+            $entry = Entry::find()->section('brands')->lightspeedId($duplicate['id'])->status(null)->one();
+            $entry && Craft::$app->getElements()->deleteElement($entry, true);
         }
-
-        return $groups;
     }
 
     /**
@@ -133,59 +138,67 @@ class ProductImporter extends Component
      */
     public function importProducts(?callable $onProgress = null): int
     {
-        $productTypeId = Commerce::getInstance()->getProductTypes()->getProductTypeByHandle('products')->id;
-        $done = 0;
-
-        foreach ($this->products as $id => $rows) {
-            $product = Product::find()->type('products')->site($this->primarySite())->lightspeedId($id)->status(null)->one()
-                ?? new Product(['typeId' => $productTypeId]);
-            $fieldValues = $this->productFieldValues($rows);
-
-            $this->saveForAllSites($product, function(Product $product, string $lang) use ($rows, $fieldValues) {
-                $this->fillProduct($product, $rows, $lang, $fieldValues);
-            });
-            $this->updateStock($product, $rows);
-
-            $onProgress && $onProgress(++$done, count($this->products));
+        $ids = $this->productIds();
+        foreach ($ids as $i => $id) {
+            $this->importProduct($id);
+            $onProgress && $onProgress($i + 1, count($ids));
         }
 
-        return count($this->products);
+        return count($ids);
+    }
+
+    /**
+     * @return int[]
+     */
+    public function productIds(): array
+    {
+        return array_keys($this->data->products[$this->primarySite()]);
+    }
+
+    public function importProduct(int $id): void
+    {
+        $product = Product::find()->type('products')->site($this->primarySite())->lightspeedId($id)->status(null)->one()
+            ?? new Product(['typeId' => Commerce::getInstance()->getProductTypes()->getProductTypeByHandle('products')->id]);
+        $fieldValues = $this->productFieldValues($id);
+
+        $this->saveForAllSites($product, function(Product $product, string $site) use ($id, $fieldValues) {
+            $this->fillProduct($product, $id, $site, $fieldValues);
+        });
+        $this->updateStock($product, $id);
     }
 
     /**
      * Field values that are the same on every site.
      */
-    private function productFieldValues(array $rows): array
+    private function productFieldValues(int $id): array
     {
-        $row = $rows[0];
-        $media = $this->media($row);
+        $product = $this->data->products[$this->primarySite()][$id];
+        $variant = $this->data->variants[$this->primarySite()][$id][0];
+        $media = $this->media($id);
+        $brandId = ApiData::id($product['brand']);
 
         return [
-            'lightspeedId' => $row['Internal_ID'],
-            'brand' => $this->entryIds('brands', $row['Brand']),
-            'productCategories' => $row['NL_Category_1'] === self::COLLECTION_CATEGORY
-                ? $this->entryIds('categories', $row['NL_Category_2'] !== '' ? $this->translated($row, $this->primaryLang(), 'Category_2') : '')
-                : [],
-            'featured' => $row['NL_Category_1'] === self::FEATURED_CATEGORY,
-            'vipPreview' => $row['NL_Category_1'] === self::VIP_PREVIEW_CATEGORY,
-            'priceOnRequest' => (float)$row['Price'] <= self::PRICE_HACK_MAX,
+            'lightspeedId' => (string)$id,
+            'brand' => $brandId ? $this->entryIds('brands', [$this->brandIds()[$brandId] ?? $brandId]) : [],
+            'productCategories' => $this->entryIds('categories', $this->data->productCategories[$id] ?? []),
+            'priceOnRequest' => $variant['priceIncl'] <= self::PRICE_HACK_MAX,
             'productImages' => array_values(array_filter(array_map(fn(string $url) => $this->findOrDownloadImage($url)?->id, $media['images']))),
             'video' => $media['video'] ? ['type' => 'url', 'value' => $media['video']] : null,
             'viewerUrl' => $media['viewer'] ? ['type' => 'url', 'value' => $media['viewer']] : null,
         ];
     }
 
-    private function fillProduct(Product $product, array $rows, string $lang, array $fieldValues): void
+    private function fillProduct(Product $product, int $id, string $site, array $fieldValues): void
     {
-        $row = $rows[0];
-        $product->title = $this->translated($row, $lang, 'Title_Short');
-        $product->slug = $this->translated($row, $lang, 'URL');
-        $product->enabled = $row['Visible'] === 'Y';
-        $product->setEnabledForSite($row["{$lang}_Title_Short"] !== '');
+        $product->title = $this->text('products', $site, $id, 'title');
+        $product->slug = $this->text('products', $site, $id, 'url');
+        $product->enabled = $this->data->products[$this->primarySite()][$id]['isVisible'];
+        // Not translated (French is missing for some products): text from the primary site, disabled on this site.
+        $product->setEnabledForSite($this->data->products[$site][$id]['title'] !== '');
         $product->setFieldValues($fieldValues + [
-            'fullTitle' => $this->translated($row, $lang, 'Title_Long'),
-            'shortDescription' => $this->translated($row, $lang, 'Description_Short'),
-            'richText' => $this->translated($row, $lang, 'Description_Long') ?: null,
+            'fullTitle' => $this->text('products', $site, $id, 'fulltitle'),
+            'shortDescription' => $this->text('products', $site, $id, 'description'),
+            'richText' => $this->text('products', $site, $id, 'content') ?: null,
         ]);
 
         $existing = [];
@@ -194,12 +207,11 @@ class ProductImporter extends Component
         }
 
         $variants = [];
-        foreach ($rows as $i => $variantRow) {
-            $variant = $existing[$this->variantId($variantRow)] ?? new Variant();
-            $variantTitle = $this->translated($variantRow, $lang, 'Variant');
-            $variant->title = strcasecmp($variantTitle, 'default') === 0 ? $product->title : $variantTitle;
+        foreach ($this->data->variants[$site][$id] as $i => $data) {
+            $variant = $existing[$data['id']] ?? new Variant();
+            $variant->title = strcasecmp($data['title'], 'default') === 0 || $data['title'] === '' ? $product->title : $data['title'];
             $variant->isDefault = $i === 0;
-            $this->fillVariant($variant, $variantRow);
+            $this->fillVariant($variant, $data);
             $variants[] = $variant;
         }
 
@@ -208,62 +220,60 @@ class ProductImporter extends Component
         $product->setDirtyAttributes(['variants']);
     }
 
-    private function fillVariant(Variant $variant, array $row): void
+    private function fillVariant(Variant $variant, array $data): void
     {
-        $price = (float)$row['Price'];
-        $oldPrice = (float)$row['Price_Old'];
+        $price = (float)$data['priceIncl'];
+        $oldPrice = (float)$data['oldPriceIncl'];
         $onSale = $price > self::PRICE_HACK_MAX && $oldPrice > $price;
 
-        $variant->setSku($row['SKU'] ?: "LS-{$this->variantId($row)}");
+        $variant->setSku($data['sku'] ?: "LS-{$data['id']}");
         // With the price hack, the real price is in the old price.
         $variant->setBasePrice($price <= self::PRICE_HACK_MAX || $onSale ? $oldPrice : $price);
         $variant->setBasePromotionalPrice($onSale ? $price : null);
-        $variant->inventoryTracked = $row['Stock_Track'] === 'Y';
-        $variant->length = (float)$row['Size_X_Value'] ?: null;
-        $variant->width = (float)$row['Size_Y_Value'] ?: null;
-        $variant->height = (float)$row['Size_Z_Value'] ?: null;
-        $variant->weight = (float)$row['Weight_Value'] ?: null;
+        $variant->inventoryTracked = $data['stockTracking'] !== 'disabled';
+        $variant->length = (float)$data['sizeXValue'] ?: null;
+        $variant->width = (float)$data['sizeYValue'] ?: null;
+        $variant->height = (float)$data['sizeZValue'] ?: null;
+        $variant->weight = (float)$data['weightValue'] ?: null;
         $variant->setFieldValues([
-            'lightspeedId' => $this->variantId($row),
-            'ean' => $row['EAN'] ?: null,
+            'lightspeedId' => (string)$data['id'],
+            'ean' => $data['ean'] ?: null,
         ]);
 
-        $taxHandle = self::TAX_CATEGORIES[$row['Tax']] ?? 'marginScheme';
+        $rate = (string)($this->data->taxRates[ApiData::id($data['tax'])] ?? 0);
+        $taxHandle = self::TAX_CATEGORIES[$rate] ?? 'marginScheme';
         $variant->setTaxCategoryId(Commerce::getInstance()->getTaxCategories()->getTaxCategoryByHandle($taxHandle)->id);
     }
 
     /**
      * Inventory items only exist after the first save, so stock is set afterwards.
      */
-    private function updateStock(Product $product, array $rows): void
+    private function updateStock(Product $product, int $id): void
     {
         $inventory = Commerce::getInstance()->getInventory();
-        $variants = Variant::find()->productId($product->id)->site($this->primarySite())->status(null)->all();
+        $stock = array_column($this->data->variants[$this->primarySite()][$id], 'stockLevel', 'id');
 
-        foreach ($rows as $row) {
-            foreach ($variants as $variant) {
-                if ($variant->getFieldValue('lightspeedId') === $this->variantId($row)) {
-                    $inventory->updatePurchasableInventoryLevel($variant, max(0, (int)$row['Stock_Level']));
-                }
+        foreach (Variant::find()->productId($product->id)->site($this->primarySite())->status(null)->all() as $variant) {
+            $level = $stock[$variant->getFieldValue('lightspeedId')] ?? null;
+            if ($level !== null) {
+                $inventory->updatePurchasableInventoryLevel($variant, max(0, (int)$level));
             }
         }
     }
 
     /**
-     * Sorts the product images and the custom data fields (Data_01–03) into images, a video and an interactive viewer.
+     * Sorts the product images and the custom data fields (data01–03) into images, a video and an interactive viewer.
      *
      * @return array{images: string[], video: ?string, viewer: ?string}
      */
-    private function media(array $row): array
+    private function media(int $id): array
     {
-        $images = array_filter(array_map('trim', explode(',', $row['Images'])));
+        $product = $this->data->products[$this->primarySite()][$id];
+        $images = $this->data->productImages[$id] ?? [];
         $video = $viewer = null;
 
-        // Data_02 first: it is the dedicated viewer field.
-        foreach ([$row['Data_02'], $row['Data_01'], $row['Data_03']] as $url) {
-            if ($url === '') {
-                continue;
-            }
+        // data02 first: it is the dedicated viewer field.
+        foreach (array_filter(array_map('trim', [$product['data02'], $product['data01'], $product['data03']])) as $url) {
             $path = parse_url($url, PHP_URL_PATH) ?? '';
             if (preg_match('/\.(jpe?g|png|gif|webp)$/i', $path)) {
                 $images[] = $url;
@@ -316,9 +326,45 @@ class ProductImporter extends Component
     }
 
     /**
+     * Lightspeed has duplicate brands (e.g. "Fontana Arte" twice): 1 entry per title.
+     * The first brand of a group is kept: the one with an image, else the oldest.
+     *
+     * @return array<string, array[]> title => brands
+     */
+    public function brandGroups(): array
+    {
+        $brands = $this->data->brands[$this->primarySite()];
+        usort($brands, fn(array $a, array $b) => [!$a['image'], $a['id']] <=> [!$b['image'], $b['id']]);
+
+        $groups = [];
+        foreach ($brands as $brand) {
+            $groups[mb_strtolower(trim($brand['title']))][] = $brand;
+        }
+
+        return $groups;
+    }
+
+    /**
+     * @return array<int, int> Lightspeed brand ID => ID of the brand it is merged into
+     */
+    private function brandIds(): array
+    {
+        if ($this->brandIds === null) {
+            $this->brandIds = [];
+            foreach ($this->brandGroups() as $group) {
+                foreach ($group as $brand) {
+                    $this->brandIds[$brand['id']] = $group[0]['id'];
+                }
+            }
+        }
+
+        return $this->brandIds;
+    }
+
+    /**
      * Saves the element on the primary site first, then fills and saves it on every other site.
      *
-     * @param callable(Element $element, string $lang): void $fill $lang = CSV column prefix, e.g. `NL`
+     * @param callable(Element $element, string $site): void $fill $site = site handle = Lightspeed language
      */
     private function saveForAllSites(Element $element, callable $fill): void
     {
@@ -328,37 +374,29 @@ class ProductImporter extends Component
                 $element = $element::find()->id($element->id)->siteId($siteId)->status(null)->one();
             }
 
-            $fill($element, strtoupper($handle));
+            $fill($element, $handle);
             $this->save($element);
         }
     }
 
     /**
-     * Value in the given language, with the primary language as fallback (French is missing for some products).
+     * Text in the language of the site, with the primary language, then Dutch (Lightspeed's default) as fallback.
      */
-    private function translated(array $row, string $lang, string $column): string
+    private function text(string $list, string $site, int $id, string $field): string
     {
-        return $row["{$lang}_$column"] ?: $row["{$this->primaryLang()}_$column"] ?: $row["NL_$column"];
-    }
+        foreach ([$site, $this->primarySite(), 'nl'] as $language) {
+            $value = trim((string)($this->data->$list[$language][$id][$field] ?? ''));
+            if ($value !== '') {
+                return $value;
+            }
+        }
 
-    private function primaryLang(): string
-    {
-        return strtoupper($this->primarySite());
-    }
-
-    private function variantId(array $row): string
-    {
-        return str_replace('!ID:', '', $row['Internal_Variant_ID']);
+        return '';
     }
 
     private function primarySite(): string
     {
         return array_key_first(Module::SITES);
-    }
-
-    private function findEntryByTitle(string $section, string $title): ?Entry
-    {
-        return Entry::find()->section($section)->site($this->primarySite())->title(Db::escapeParam($title))->status(null)->one();
     }
 
     /**
@@ -371,10 +409,19 @@ class ProductImporter extends Component
             ?? $query->lightspeedId(':empty:')->title(Db::escapeParam($title))->one();
     }
 
-    private function entryIds(string $section, string $title): array
+    /**
+     * @param int[] $lightspeedIds
+     * @return int[] entry IDs, in the same order
+     */
+    private function entryIds(string $section, array $lightspeedIds): array
     {
-        $entry = $title !== '' ? $this->findEntryByTitle($section, $title) : null;
-        return $entry ? [$entry->id] : [];
+        $ids = [];
+        foreach ($lightspeedIds as $lightspeedId) {
+            $entry = Entry::find()->section($section)->site($this->primarySite())->lightspeedId($lightspeedId)->status(null)->one();
+            $entry && $ids[] = $entry->id;
+        }
+
+        return $ids;
     }
 
     private function newEntry(string $section, string $entryType): Entry

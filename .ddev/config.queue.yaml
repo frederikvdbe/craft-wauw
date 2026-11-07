@@ -1,0 +1,10 @@
+# Craft queue runner: runs queue jobs (e.g. lightspeed/sync) in the background.
+# Logs: ddev logs -s web
+web_extra_daemons:
+  - name: craft-queue
+    command: php craft queue/listen --verbose
+    directory: /var/www/html
+
+# Jobs only run in the daemon, not in control panel requests (those time out on long jobs).
+web_environment:
+  - CRAFT_RUN_QUEUE_AUTOMATICALLY=false

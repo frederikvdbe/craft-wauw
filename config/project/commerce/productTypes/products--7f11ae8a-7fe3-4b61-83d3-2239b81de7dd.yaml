@@ -203,7 +203,7 @@ productFieldLayouts:
             editCondition: null
             elementCondition: null
             elementEditCondition: null
-            fieldUid: 4a14e1b0-65f1-4e1e-85f0-e781c189785d # Featured (TOP 50)
+            fieldUid: 4a14e1b0-65f1-4e1e-85f0-e781c189785d
             handle: null
             instructions: null
             label: null
@@ -220,7 +220,7 @@ productFieldLayouts:
             editCondition: null
             elementCondition: null
             elementEditCondition: null
-            fieldUid: f816c1da-9def-4a30-83e2-57f81960eec9 # VIP preview
+            fieldUid: f816c1da-9def-4a30-83e2-57f81960eec9
             handle: null
             instructions: null
             label: null

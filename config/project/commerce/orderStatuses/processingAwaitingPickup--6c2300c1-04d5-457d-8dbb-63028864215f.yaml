@@ -1,0 +1,7 @@
+color: yellow
+default: false
+description: null
+handle: processingAwaitingPickup
+name: 'Awaiting pickup'
+sortOrder: 3
+store: 12957444-6e55-49bf-acc1-494d6c90f761 # Primary

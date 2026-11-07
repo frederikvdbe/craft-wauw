@@ -5,6 +5,7 @@ namespace modules\lightspeed\services;
 use Craft;
 use craft\helpers\FileHelper;
 use craft\helpers\Json;
+use DateTime;
 use yii\base\Component;
 
 /**
@@ -25,6 +26,20 @@ class Store extends Component
     {
         $path = $this->path($name, $language);
         return file_exists($path) ? Json::decode(file_get_contents($path)) : null;
+    }
+
+    /**
+     * When a file was last downloaded; translated files: the oldest language.
+     */
+    public function modifiedAt(string $name): ?DateTime
+    {
+        $times = array_map('filemtime', glob(Craft::getAlias($this->dir) . "/{,*/}$name.json", GLOB_BRACE) ?: []);
+        return $times ? (new DateTime())->setTimestamp(min($times)) : null;
+    }
+
+    public function delete(string $name, ?string $language = null): void
+    {
+        FileHelper::unlink($this->path($name, $language));
     }
 
     private function path(string $name, ?string $language): string

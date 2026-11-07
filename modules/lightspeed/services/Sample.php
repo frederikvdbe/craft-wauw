@@ -3,8 +3,9 @@
 namespace modules\lightspeed\services;
 
 /**
- * A small, fixed part of the CSV exports for testing: 1 order per case, the customers and products of
- * those orders, and unsold products that cover the product cases. The same input always gives the same sample.
+ * A small, fixed part of the API export for testing: 1 order per case, the customers and products of
+ * those orders, and products and customers that cover the other cases. The same input always gives the same sample.
+ * Email addresses are made invalid, so no mail can reach a real customer.
  */
 class Sample
 {
@@ -12,149 +13,170 @@ class Sample
     private const VIP_MEMBERS = 3;
     private const EMAIL_SUFFIX = 'x';
 
-    /**
-     * @var array<string, array<int, array<string, string>>>
-     */
-    public array $products = [];
+    private ApiData $data;
 
-    /**
-     * @var array<string, array<int, array<string, string>>>
-     */
-    public array $orders = [];
-
-    /**
-     * @var array<int, array<string, string>>
-     */
-    public array $customers = [];
-
-    /**
-     * @param string[] $guestIds
-     */
-    public function __construct(array $products, array $orders, array $customers, array $guestIds)
+    public function __construct(ApiData $data)
     {
-        $matcher = new ProductMatcher($products);
-        $this->orders = $this->selectOrders($orders, $guestIds, $matcher);
-        $this->products = $this->selectProducts($products, $matcher);
-        $this->customers = $this->selectCustomers($customers, $orders, $guestIds);
-
-        $this->customers = $this->breakEmails($this->customers);
-        $this->orders = array_map($this->breakEmails(...), $this->orders);
+        $this->data = clone $data;
     }
 
-    private function breakEmails(array $rows): array
+    public function apply(): ApiData
     {
-        return array_map(function(array $row) {
-            if (filter_var($row['E-mail'], FILTER_VALIDATE_EMAIL)) {
-                $row['E-mail'] .= self::EMAIL_SUFFIX;
-            }
-            return $row;
-        }, $rows);
-    }
+        $orderIds = $this->selectOrders();
+        $productIds = $this->selectProducts($orderIds);
+        $customerIds = $this->selectCustomers($orderIds);
 
-    /**
-     * The customers of the sample orders, and VIP members (account, no orders).
-     */
-    private function selectCustomers(array $customers, array $orders, array $guestIds): array
-    {
-        $sampleIds = array_map(fn(array $rows) => $rows[0]['Customer'], $this->orders);
-        $buyerIds = array_flip(array_map(fn(array $rows) => $rows[0]['Customer'], $orders));
-
-        $selected = array_filter($customers, fn(array $row) => in_array($row['Internal_ID'], $sampleIds, true));
-        $vipMembers = array_filter($customers, fn(array $row) => !isset($buyerIds[$row['Internal_ID']]) && !in_array($row['Internal_ID'], $guestIds, true));
-
-        return [...array_values($selected), ...array_slice(array_values($vipMembers), 0, self::VIP_MEMBERS)];
-    }
-
-    private function selectOrders(array $orders, array $guestIds, ProductMatcher $matcher): array
-    {
-        $matched = fn(array $rows) => array_filter($rows, fn(array $line) => $matcher->match($line) !== null);
-        $status = fn(string $status) => fn(array $rows) => $rows[0]['Status'] === $status;
-        $cases = [
-            'paid, shipped, product matched' => fn(array $rows) => $rows[0]['Status'] === 'Paid, shipped' && count($matched($rows)) === count($rows),
-            'several lines, all matched' => fn(array $rows) => count($rows) > 1 && count($matched($rows)) === count($rows),
-            'product not matched' => fn(array $rows) => !$matched($rows),
-            'guest checkout' => fn(array $rows) => in_array($rows[0]['Customer'], $guestIds, true),
-            'cancelled' => $status('Cancelled'),
-            'paid, not shipped' => $status('Paid, not shipped'),
-            'not paid' => $status('Not paid, not shipped'),
-            '21% VAT' => fn(array $rows) => CsvExport::number($rows[0]['Price_vat']) > 0,
-            'discount code' => fn(array $rows) => $rows[0]['Discount_code'] !== '',
-            'shipping costs + payment fee' => fn(array $rows) => CsvExport::number($rows[0]['Price_shipping']) > 0 && CsvExport::number($rows[0]['Price_payment']) > 0,
-        ];
-
-        $selected = [];
-        foreach ($cases as $case) {
-            $id = $this->first($orders, $case, $selected);
-            if ($id !== null) {
-                $selected[$id] = $orders[$id];
-            }
+        foreach ($this->data->products as $language => $products) {
+            $this->data->products[$language] = array_intersect_key($products, array_flip($productIds));
+            $this->data->variants[$language] = array_intersect_key($this->data->variants[$language], array_flip($productIds));
         }
+        $this->data->orders = array_map($this->breakEmail(...), array_intersect_key($this->data->orders, array_flip($orderIds)));
+        $this->data->customers = array_map($this->breakEmail(...), array_intersect_key($this->data->customers, array_flip($customerIds)));
+
+        return $this->data;
+    }
+
+    /**
+     * @return int[]
+     */
+    private function selectOrders(): array
+    {
+        $orders = $this->data->orders;
+        $lines = fn(array $order) => $this->data->orderLines[$order['id']] ?? [];
+        $linked = fn(array $order) => array_filter($lines($order), fn(array $line) => isset($this->data->products['nl'][ApiData::id($line['product'])]));
+
+        $cases = [
+            'paid, shipped, product linked' => fn(array $o) => $o['paymentStatus'] === 'paid' && $o['shipmentStatus'] === 'shipped' && $linked($o) && count($linked($o)) === count($lines($o)),
+            'several lines, all linked' => fn(array $o) => count($lines($o)) > 1 && count($linked($o)) === count($lines($o)),
+            'product deleted in Lightspeed' => fn(array $o) => $lines($o) && !$linked($o),
+            'guest checkout' => fn(array $o) => $this->data->isGuest((int)ApiData::id($o['customer'])),
+            'GDPR deleted customer' => fn(array $o) => !filter_var($o['email'], FILTER_VALIDATE_EMAIL),
+            '21% VAT' => fn(array $o) => array_sum(array_column($o['taxRates'], 'amount')) > 0,
+            'discount code' => fn(array $o) => $o['discountCouponCode'] !== '',
+            'shipping costs + payment fee' => fn(array $o) => $o['shipmentPriceIncl'] > 0 && $o['paymentPriceIncl'] > 0,
+            'credit note' => fn(array $o) => in_array(true, array_column($this->data->invoices[$o['id']] ?? [], 'isCreditNote'), true),
+        ];
+        foreach (array_unique(array_column($orders, 'status')) as $status) {
+            $cases["status $status"] = fn(array $o) => $o['status'] === $status;
+        }
+
+        $selected = $this->select($orders, $cases);
 
         // 1 customer with several orders
         $byCustomer = [];
-        foreach ($orders as $id => $rows) {
-            $byCustomer[$rows[0]['Customer']][$id] = $rows;
+        foreach ($orders as $id => $order) {
+            $byCustomer[ApiData::id($order['customer'])][] = $id;
         }
-        foreach ($byCustomer as $customerOrders) {
-            if (count($customerOrders) > 1) {
-                $selected += array_slice($customerOrders, 0, self::ORDERS_PER_CUSTOMER, true);
+        foreach ($byCustomer as $customerId => $ids) {
+            if (count($ids) > 1 && isset($this->data->customers[$customerId])) {
+                array_push($selected, ...array_slice($ids, 0, self::ORDERS_PER_CUSTOMER));
                 break;
             }
         }
 
-        return $selected;
+        return array_values(array_unique($selected));
     }
 
-    private function selectProducts(array $products, ProductMatcher $matcher): array
+    /**
+     * The products of the orders, and 1 product per case. Products in stock are preferred.
+     *
+     * @return int[]
+     */
+    private function selectProducts(array $orderIds): array
     {
         $selected = [];
-        foreach ($this->orders as $rows) {
-            foreach ($rows as $line) {
-                if ($match = $matcher->match($line)) {
-                    $selected[$match[0]] = $products[$match[0]];
-                }
+        foreach ($orderIds as $orderId) {
+            foreach ($this->data->orderLines[$orderId] ?? [] as $line) {
+                $productId = ApiData::id($line['product']);
+                isset($this->data->products['nl'][$productId]) && $selected[] = $productId;
             }
         }
 
-        $inStock = fn(array $rows) => (int)$rows[0]['Stock_Level'] > 0;
-        $category = fn(string $name) => fn(array $rows) => $rows[0]['NL_Category_1'] === $name;
+        $products = $this->data->products['nl'];
+        $variant = fn(array $p) => $this->data->variants['nl'][$p['id']][0];
 
         $cases = [
-            'price on request' => fn(array $rows) => (float)$rows[0]['Price'] <= 2,
-            'several variants' => fn(array $rows) => count($rows) > 1,
-            'on sale' => fn(array $rows) => (float)$rows[0]['Price'] > 2 && (float)$rows[0]['Price_Old'] > (float)$rows[0]['Price'],
-            'collection category' => fn(array $rows) => $rows[0]['NL_Category_1'] === 'collection in stock' && $rows[0]['NL_Category_2'] !== '',
-            'TOP 50' => $category('TOP 50'),
-            'PREVIEW' => $category('PREVIEW'),
-            'brand' => fn(array $rows) => $rows[0]['Brand'] !== '',
-            'no French text' => fn(array $rows) => $rows[0]['FR_Title_Short'] === '',
-            'hidden' => fn(array $rows) => $rows[0]['Visible'] === 'N',
-            '21% VAT' => fn(array $rows) => $rows[0]['Tax'] === '21',
-            'extra images, video or viewer' => fn(array $rows) => $rows[0]['Data_01'] !== '' || $rows[0]['Data_02'] !== '',
+            'price on request' => fn(array $p) => $variant($p)['priceIncl'] <= 2 && $variant($p)['stockLevel'] > 0,
+            'several variants' => fn(array $p) => count($this->data->variants['nl'][$p['id']]) > 1,
+            'on sale' => fn(array $p) => $variant($p)['oldPriceIncl'] > $variant($p)['priceIncl'] && $variant($p)['priceIncl'] > 2,
+            'several categories' => fn(array $p) => count($this->data->productCategories[$p['id']] ?? []) > 2,
+            'brand' => fn(array $p) => (bool)$p['brand'],
+            'no French text' => fn(array $p) => $this->data->products['fr'][$p['id']]['title'] === '',
+            'hidden' => fn(array $p) => !$p['isVisible'],
+            '21% VAT' => fn(array $p) => ($this->data->taxRates[ApiData::id($variant($p)['tax'])] ?? 0) > 0,
+            'video or viewer' => fn(array $p) => $p['data01'] !== '' || $p['data02'] !== '',
         ];
+        foreach (array_keys($this->data->categories['nl']) as $categoryId) {
+            $cases["category $categoryId"] = fn(array $p) => in_array($categoryId, $this->data->productCategories[$p['id']] ?? [], true);
+        }
 
+        $inStock = fn(callable $case) => fn(array $p) => $case($p) && $variant($p)['stockLevel'] > 0;
         foreach ($cases as $case) {
-            // Prefer a product that is not sold.
-            foreach ([fn($rows) => $case($rows) && $inStock($rows), $case] as $test) {
-                $id = $this->first($products, $test, $selected);
-                if ($id !== null) {
-                    $selected[$id] = $products[$id];
-                    break;
-                }
+            $id = $this->first($products, $inStock($case), $selected) ?? $this->first($products, $case, $selected);
+            $id !== null && $selected[] = $id;
+        }
+
+        return array_values(array_unique($selected));
+    }
+
+    /**
+     * The customers of the orders, VIP members without orders, and 1 customer per Lightspeed group.
+     *
+     * @return int[]
+     */
+    private function selectCustomers(array $orderIds): array
+    {
+        $selected = array_filter(array_map(fn(int $id) => ApiData::id($this->data->orders[$id]['customer']), $orderIds));
+        $buyerIds = array_flip(array_map(fn(array $o) => ApiData::id($o['customer']), $this->data->orders));
+
+        $vipMembers = array_filter($this->data->customers, fn(array $c) => !isset($buyerIds[$c['id']]) && !$this->data->isGuest($c['id']));
+        array_push($selected, ...array_slice(array_keys($vipMembers), 0, self::VIP_MEMBERS));
+
+        $groups = [];
+        foreach ($this->data->customerGroups as $customerId => $names) {
+            foreach ($names as $name) {
+                $groups[$name] ??= $customerId;
             }
+        }
+        array_push($selected, ...array_values($groups));
+
+        return array_values(array_unique(array_filter($selected, fn(int $id) => isset($this->data->customers[$id]))));
+    }
+
+    /**
+     * The first item per case; an item is only used for 1 case.
+     *
+     * @param array<string, callable> $cases
+     * @return int[]
+     */
+    private function select(array $items, array $cases): array
+    {
+        $selected = [];
+        foreach ($cases as $case) {
+            $id = $this->first($items, $case, $selected);
+            $id !== null && $selected[] = $id;
         }
 
         return $selected;
     }
 
-    private function first(array $items, callable $test, array $exclude): int|string|null
+    private function first(array $items, callable $test, array $exclude): ?int
     {
-        foreach ($items as $id => $rows) {
-            if (!isset($exclude[$id]) && $test($rows)) {
+        foreach ($items as $id => $item) {
+            if (!in_array($id, $exclude, true) && $test($item)) {
                 return $id;
             }
         }
 
         return null;
+    }
+
+    private function breakEmail(array $item): array
+    {
+        if (filter_var($item['email'], FILTER_VALIDATE_EMAIL)) {
+            $item['email'] .= self::EMAIL_SUFFIX;
+        }
+
+        return $item;
     }
 }

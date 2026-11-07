@@ -1,7 +1,7 @@
 color: blue
 default: false
 description: null
-handle: shipped
-name: Shipped
-sortOrder: 99
+handle: processingReadyForPickup
+name: 'Ready for pickup'
+sortOrder: 4
 store: 12957444-6e55-49bf-acc1-494d6c90f761 # Primary

@@ -27,4 +27,5 @@ return [
     'modules' => [
         'lightspeed' => modules\lightspeed\Module::class,
     ],
+    'bootstrap' => ['lightspeed'],
 ];

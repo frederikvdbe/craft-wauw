@@ -6,11 +6,12 @@ use craft\console\Controller;
 use craft\helpers\Console;
 use GuzzleHttp\Exception\ClientException;
 use modules\lightspeed\Module;
-use yii\base\Exception;
+use modules\lightspeed\services\Extractor;
 use yii\console\ExitCode;
 
 /**
  * Downloads all Lightspeed data from the API (read-only) to JSON files in storage/lightspeed/api.
+ * For a run in the background with progress in the control panel: `lightspeed/sync`.
  *
  * @property Module $module
  */
@@ -18,76 +19,14 @@ class ExtractController extends Controller
 {
     private const SAMPLE_SIZE = 25;
     private const SAMPLE_DIR = '@storage/lightspeed/api-sample';
-
-    /**
-     * File name => endpoint. The same in every language: fetched once.
-     */
-    private const SHARED = [
-        'shop' => 'shop',
-        'languages' => 'languages',
-        'taxes' => 'taxes',
-        'suppliers' => 'suppliers',
-        'discounts' => 'discounts',
-        'customers' => 'customers',
-        'groups' => 'groups',
-        'groups-customers' => 'groups/customers',
-        'subscriptions' => 'subscriptions',
-        'orders' => 'orders',
-        'shipments' => 'shipments',
-        'invoices' => 'invoices',
-        'returns' => 'returns',
-        'quotes' => 'quotes',
-        'categories-products' => 'categories/products',
-        'tags-products' => 'tags/products',
-        'types-attributes' => 'types/attributes',
-    ];
-
-    /**
-     * File name => endpoint. Has texts per language: fetched for every language.
-     */
-    private const TRANSLATED = [
-        'categories' => 'categories',
-        'products' => 'products',
-        'variants' => 'variants',
-        'brands' => 'brands',
-        'tags' => 'tags',
-        'filters' => 'filters',
-        'types' => 'types',
-        'attributes' => 'attributes',
-        'textpages' => 'textpages',
-        'blogs' => 'blogs',
-        'blogs-articles' => 'blogs/articles',
-        'reviews' => 'reviews',
-        'redirects' => 'redirects',
-        'shippingmethods' => 'shippingmethods',
-        'paymentmethods' => 'paymentmethods',
-        'deliverydates' => 'deliverydates',
-    ];
-
-    /**
-     * File name => endpoint per item of a list, saved as item ID => list.
-     * `requires`: skipped when that list is empty. `if`: only items where this field is set.
-     */
-    private const RELATIONS = [
-        'products-images' => ['list' => 'products', 'path' => 'products/{id}/images'],
-        'products-relations' => ['list' => 'products', 'path' => 'products/{id}/relations'],
-        'products-metafields' => ['list' => 'products', 'path' => 'products/{id}/metafields'],
-        'products-filtervalues' => ['list' => 'products', 'path' => 'products/{id}/filtervalues', 'requires' => 'filters'],
-        'products-attributes' => ['list' => 'products', 'path' => 'products/{id}/attributes', 'translated' => true, 'if' => 'type'],
-        'filters-values' => ['list' => 'filters', 'path' => 'filters/{id}/values', 'translated' => true],
-        'orders-products' => ['list' => 'orders', 'path' => 'orders/{id}/products'],
-        'invoices-items' => ['list' => 'invoices', 'path' => 'invoices/{id}/items'],
-    ];
+    private const SAVE_EVERY = 50;
 
     /**
      * @var bool|int only the first items of every list (`--sample` = 25, `--sample=500`), in storage/lightspeed/api-sample
      */
     public bool|int|null $sample = null;
 
-    /**
-     * @var string[]|null active shop languages, default first
-     */
-    private ?array $languages = null;
+    private Extractor $extractor;
 
     public function options($actionID): array
     {
@@ -103,6 +42,13 @@ class ExtractController extends Controller
         }
 
         $this->module->client->onWait = fn(int $seconds) => $this->stdout("Rate limit: waiting {$seconds}s\n", Console::FG_YELLOW);
+        $this->extractor = $this->module->extractor([
+            'max' => match ($this->sample) {
+                null => null,
+                true => self::SAMPLE_SIZE,
+                default => (int)$this->sample,
+            },
+        ]);
 
         return parent::beforeAction($action);
     }
@@ -113,9 +59,9 @@ class ExtractController extends Controller
     public function actionCounts(): int
     {
         $rows = [];
-        foreach ([...self::SHARED, ...self::TRANSLATED] as $name => $path) {
+        foreach ([...Extractor::SHARED, ...Extractor::TRANSLATED] as $name => $path) {
             try {
-                $rows[] = [$name, $this->module->client->count($this->primaryLanguage(), $path)];
+                $rows[] = [$name, $this->module->client->count($this->extractor->primaryLanguage(), $path)];
             } catch (ClientException $e) {
                 $rows[] = [$name, 'n/a (' . $e->getResponse()->getStatusCode() . ')'];
             }
@@ -130,28 +76,24 @@ class ExtractController extends Controller
      */
     public function actionIndex(?string $name = null): int
     {
-        $all = [...array_keys(self::SHARED), ...array_keys(self::TRANSLATED), ...array_keys(self::RELATIONS)];
+        $all = Extractor::names();
         if ($name !== null && !in_array($name, $all, true)) {
             $this->stderr("Unknown: $name. Use one of: " . implode(', ', $all) . "\n", Console::FG_RED);
             return ExitCode::USAGE;
         }
 
         foreach ($name ? [$name] : $all as $name) {
-            $languages = $this->isTranslated($name) ? $this->languages() : [$this->primaryLanguage()];
-            foreach ($languages as $language) {
+            foreach ($this->extractor->languagesOf($name) as $language) {
                 try {
-                    $data = $this->fetch($name, $language);
-                    if ($data === null) {
-                        $this->stderr("[$language] $name: skipped, download " . self::RELATIONS[$name]['list'] . " first\n", Console::FG_RED);
-                        continue;
-                    }
+                    $count = Extractor::isRelation($name)
+                        ? $this->extractRelation($name, $language)
+                        : $this->extractor->extractList($name, $language);
                 } catch (ClientException $e) {
                     $this->stderr("[$language] $name: not available (HTTP {$e->getResponse()->getStatusCode()})\n", Console::FG_RED);
                     continue;
                 }
 
-                $this->module->store->write($name, $data, $this->isTranslated($name) ? $language : null);
-                $this->stdout("[$language] $name: " . count($data) . "\n");
+                $this->stdout("[$language] $name: $count\n");
             }
         }
 
@@ -159,68 +101,27 @@ class ExtractController extends Controller
     }
 
     /**
-     * @return array|null null when the list of a relation is not downloaded
+     * Saves progress every few items: a stopped download resumes where it stopped.
      */
-    private function fetch(string $name, string $language): ?array
+    private function extractRelation(string $name, string $language): int
     {
-        $client = $this->module->client;
-        $max = match (true) {
-            $this->sample === null => null,
-            $this->sample === true => self::SAMPLE_SIZE,
-            default => (int)$this->sample,
-        };
-
-        if ($path = self::SHARED[$name] ?? self::TRANSLATED[$name] ?? null) {
-            return $client->all($language, $path, $max);
+        $data = $this->extractor->readPartial($name, $language);
+        if ($data) {
+            $this->stdout("[$language] $name: resuming after " . count($data) . " items\n", Console::FG_YELLOW);
         }
 
-        $relation = self::RELATIONS[$name];
-        if (isset($relation['requires']) && !$this->stored($relation['requires'])) {
-            return [];
-        }
+        foreach ($this->extractor->relationIds($name) as $id) {
+            if (isset($data[$id])) {
+                continue;
+            }
 
-        $items = $this->stored($relation['list']);
-        if ($items === null) {
-            return null;
-        }
-
-        $data = [];
-        foreach ($items as $item) {
-            if (!isset($relation['if']) || $item[$relation['if']]) {
-                $data[$item['id']] = $client->all($language, str_replace('{id}', (string)$item['id'], $relation['path']));
+            $data[$id] = $this->extractor->fetchRelation($name, $language, $id);
+            if (count($data) % self::SAVE_EVERY === 0) {
+                $this->extractor->writePartial($name, $language, $data);
             }
         }
 
-        return $data;
-    }
-
-    /**
-     * A list that was downloaded before. Translated lists: the primary language (IDs are the same in every language).
-     */
-    private function stored(string $name): ?array
-    {
-        return $this->module->store->read($name, isset(self::TRANSLATED[$name]) ? $this->primaryLanguage() : null);
-    }
-
-    private function isTranslated(string $name): bool
-    {
-        return isset(self::TRANSLATED[$name]) || (self::RELATIONS[$name]['translated'] ?? false);
-    }
-
-    private function primaryLanguage(): string
-    {
-        return $this->languages()[0];
-    }
-
-    private function languages(): array
-    {
-        if ($this->languages === null) {
-            $any = $this->module->client->getLanguages()[0] ?? throw new Exception('Set LIGHTSPEED_LANGUAGES in .env');
-            $languages = array_filter($this->module->client->all($any, 'languages'), fn(array $language) => $language['isActive']);
-            usort($languages, fn(array $a, array $b) => $b['isDefault'] <=> $a['isDefault']);
-            $this->languages = array_column($languages, 'code');
-        }
-
-        return $this->languages;
+        $this->extractor->finishRelation($name, $language, $data);
+        return count($data);
     }
 }

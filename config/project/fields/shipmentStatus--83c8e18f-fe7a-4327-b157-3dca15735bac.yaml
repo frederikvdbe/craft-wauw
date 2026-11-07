@@ -1,0 +1,55 @@
+columnSuffix: null
+handle: shipmentStatus
+instructions: null
+name: 'Shipment status'
+searchable: false
+settings:
+  customOptions: false
+  options:
+    -
+      __assoc__:
+        -
+          - label
+          - ''
+        -
+          - value
+          - ''
+        -
+          - default
+          - false
+    -
+      __assoc__:
+        -
+          - label
+          - 'Not shipped'
+        -
+          - value
+          - not_shipped
+        -
+          - default
+          - false
+    -
+      __assoc__:
+        -
+          - label
+          - Shipped
+        -
+          - value
+          - shipped
+        -
+          - default
+          - false
+    -
+      __assoc__:
+        -
+          - label
+          - Cancelled
+        -
+          - value
+          - cancelled
+        -
+          - default
+          - false
+translationKeyFormat: null
+translationMethod: none
+type: craft\fields\Dropdown

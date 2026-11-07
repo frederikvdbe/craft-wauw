@@ -1,0 +1,57 @@
+{% import '_includes/forms.twig' as forms %}
+
+{% if isQueued %}
+    <p class="notice has-icon">
+        <span class="icon" aria-hidden="true"></span>
+        <span>A sync is in the queue. See <a href="{{ cpUrl('utilities/queue-manager') }}">Queue Manager</a>.</span>
+    </p>
+{% endif %}
+
+<form id="lightspeed-sync" method="post" accept-charset="UTF-8">
+    {{ actionInput('lightspeed/sync/start') }}
+    {{ csrfInput() }}
+
+    {{ forms.checkboxSelectField({
+        label: '1. Extract',
+        instructions: 'Download from the Lightspeed API (read-only) to `storage/lightspeed/api/`. Full extract ≈ 10k requests, a few hours (rate limit).',
+        name: 'extract',
+        options: extractOptions,
+        showAllOption: true,
+    }) }}
+
+    {{ forms.checkboxSelectField({
+        label: '2. Import',
+        instructions: 'From the export into Craft, in this order. Safe to run again; existing orders are skipped.',
+        name: 'import',
+        options: importOptions,
+        showAllOption: true,
+        values: '*',
+    }) }}
+
+    {{ forms.lightswitchField({
+        label: 'Sample only',
+        instructions: 'Import a small, fixed test set; email addresses made invalid. Off = everything.',
+        name: 'sample',
+        on: true,
+    }) }}
+
+    <div class="buttons">
+        <button type="submit" class="btn submit"{% if isQueued %} disabled{% endif %}>Start sync</button>
+    </div>
+</form>
+
+{% js %}
+    document.getElementById('lightspeed-sync').addEventListener('submit', (event) => {
+        const form = event.target;
+        const checked = (name) => [...form.querySelectorAll(`input[name="${name}[]"]:checked, input[name="${name}"][value="*"]:checked`)];
+        const fullExtract = checked('extract').some((input) => input.value === '*');
+        const fullImport = checked('import').length && !form.querySelector('input[name="sample"]').value;
+        const warnings = [
+            fullExtract && 'Full extract of the live shop: a few hours.',
+            fullImport && 'Full import: everything, real email addresses.',
+        ].filter(Boolean);
+        if (warnings.length && !confirm(warnings.join('\n') + '\n\nContinue?')) {
+            event.preventDefault();
+        }
+    });
+{% endjs %}

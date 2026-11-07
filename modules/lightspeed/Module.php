@@ -3,17 +3,26 @@
 namespace modules\lightspeed;
 
 use Craft;
+use craft\events\RegisterComponentTypesEvent;
+use craft\events\RegisterTemplateRootsEvent;
+use craft\services\Utilities;
+use craft\web\View;
 use modules\lightspeed\services\Client;
+use modules\lightspeed\services\Extractor;
 use modules\lightspeed\services\Store;
+use modules\lightspeed\services\Sync;
+use modules\lightspeed\utilities\SyncUtility;
+use yii\base\Event;
 
 /**
  * @property-read Client $client
  * @property-read Store $store
+ * @property-read Sync $sync
  */
 class Module extends \yii\base\Module
 {
     /**
-     * Craft sites, primary first. The handle in upper case is the column prefix in the CSV export (`NL_Title_Short`).
+     * Craft sites, primary first. The handle = the Lightspeed language code.
      */
     public const SITES = [
         'en' => ['name' => 'English', 'language' => 'en', 'baseUrl' => '$PRIMARY_SITE_URL'],
@@ -25,15 +34,28 @@ class Module extends \yii\base\Module
     {
         Craft::setAlias('@modules/lightspeed', __DIR__);
 
-        if (Craft::$app->getRequest()->getIsConsoleRequest()) {
-            $this->controllerNamespace = 'modules\\lightspeed\\console\\controllers';
-        }
+        $this->controllerNamespace = Craft::$app->getRequest()->getIsConsoleRequest()
+            ? 'modules\\lightspeed\\console\\controllers'
+            : 'modules\\lightspeed\\controllers';
 
         parent::init();
 
         $this->setComponents([
             'client' => Client::class,
             'store' => Store::class,
+            'sync' => Sync::class,
         ]);
+
+        Event::on(Utilities::class, Utilities::EVENT_REGISTER_UTILITIES, function(RegisterComponentTypesEvent $event) {
+            $event->types[] = SyncUtility::class;
+        });
+        Event::on(View::class, View::EVENT_REGISTER_CP_TEMPLATE_ROOTS, function(RegisterTemplateRootsEvent $event) {
+            $event->roots['lightspeed'] = __DIR__ . '/templates';
+        });
+    }
+
+    public function extractor(array $config = []): Extractor
+    {
+        return new Extractor($this->client, $this->store, $config);
     }
 }

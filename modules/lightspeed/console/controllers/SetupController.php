@@ -42,6 +42,7 @@ use craft\services\ProjectConfig;
 use modules\lightspeed\Module;
 use modules\lightspeed\services\CustomerImporter;
 use modules\lightspeed\services\OrderImporter;
+use modules\lightspeed\services\ProductImporter;
 use yii\base\Exception;
 use yii\console\ExitCode;
 
@@ -50,6 +51,8 @@ use yii\console\ExitCode;
  */
 class SetupController extends Controller
 {
+    private const PRODUCT_FOLDER = "{{ object.id }}-{{ (object.site.primary ? object : object.getLocalized().site(craft.app.sites.primarySite.handle).status(null).one() ?? object).slug }}";
+
     public function actionIndex(): int
     {
         $this->setupSites();
@@ -66,7 +69,7 @@ class SetupController extends Controller
         $shortDescription = $this->field(PlainText::class, 'shortDescription', 'Short description', ['multiline' => true, 'initialRows' => 3] + $translatable);
         $richText = $this->field(CkeditorField::class, 'richText', 'Text', $translatable);
 
-        $categories = $this->section('categories', 'Categories', 'category', Section::TYPE_STRUCTURE, 'categories/{slug}', [$fullTitle, $richText, $lightspeedId]);
+        $categories = $this->section('categories', 'Categories', 'category', Section::TYPE_STRUCTURE, 'categories/{slug}', [$fullTitle, $shortDescription, $richText, $lightspeedId]);
         $brandVolume = $this->volume('brandImages', 'Brand images', 'uploads/brands');
         $this->addToLayout($brandVolume->getFieldLayout(), [$lightspeedId]);
         Craft::$app->getVolumes()->saveVolume($brandVolume) || $this->fail($brandVolume);
@@ -86,25 +89,23 @@ class SetupController extends Controller
             'sources' => ["section:$brands->uid"],
             'maxRelations' => 1,
         ]);
-        // One folder per product: Craft moves related assets into it on every product save.
-        // ID, not slug: the slug differs per site, so the folder would change on every site save.
+        // One folder per product (`{Craft ID}-{slug}`): Craft moves related assets into it on every product save.
+        // Always the primary site slug: the slug differs per site, so the folder would change on every site save.
         $productImages = $this->field(AssetsField::class, 'productImages', 'Images', [
             'restrictLocation' => true,
             'restrictedLocationSource' => "volume:$volume->uid",
-            'restrictedLocationSubpath' => '{id}',
+            'restrictedLocationSubpath' => self::PRODUCT_FOLDER,
             'restrictFiles' => true,
             'allowedKinds' => ['image'],
         ]);
 
-        $featured = $this->field(Lightswitch::class, 'featured', 'Featured (TOP 50)');
-        $vipPreview = $this->field(Lightswitch::class, 'vipPreview', 'VIP preview');
         $priceOnRequest = $this->field(Lightswitch::class, 'priceOnRequest', 'Price on request');
         $video = $this->field(Link::class, 'video', 'Video', ['types' => ['url']]);
         $viewerUrl = $this->field(Link::class, 'viewerUrl', '3D / interactive viewer', ['types' => ['url']]);
         $ean = $this->field(PlainText::class, 'ean', 'EAN');
 
         $this->productType(
-            [$fullTitle, $shortDescription, $richText, $productImages, $video, $viewerUrl, $productCategories, $brand, $featured, $vipPreview, $priceOnRequest, $lightspeedId],
+            [$fullTitle, $shortDescription, $richText, $productImages, $video, $viewerUrl, $productCategories, $brand, $priceOnRequest, $lightspeedId],
             [$ean, $lightspeedId],
         );
 
@@ -162,11 +163,16 @@ class SetupController extends Controller
         $storeId = $commerce->getStores()->getPrimaryStore()->id;
         $statuses = $commerce->getOrderStatuses();
 
-        foreach (['new' => ['New', 'green'], 'shipped' => ['Shipped', 'blue'], 'cancelled' => ['Cancelled', 'red']] as $handle => [$name, $color]) {
-            if (!$statuses->getOrderStatusByHandle($handle, $storeId)) {
-                $status = new OrderStatus(['storeId' => $storeId, 'handle' => $handle, 'name' => $name, 'color' => $color]);
-                $statuses->saveOrderStatus($status) || $this->fail($status);
-            }
+        // The Lightspeed statuses, 1:1. The first one is the default.
+        $sortOrder = 0;
+        foreach (OrderImporter::STATUSES as $handle => [$name, $color]) {
+            $status = $statuses->getOrderStatusByHandle($handle, $storeId)
+                ?? new OrderStatus(['storeId' => $storeId, 'handle' => $handle]);
+            $status->name = $name;
+            $status->color = $color;
+            $status->sortOrder = ++$sortOrder;
+            $status->default = $sortOrder === 1;
+            $statuses->saveOrderStatus($status) || $this->fail($status);
         }
 
         $gateways = $commerce->getGateways();
@@ -181,6 +187,9 @@ class SetupController extends Controller
         }
 
         $fields = [
+            $this->field(Dropdown::class, 'shipmentStatus', 'Shipment status', [
+                'options' => $this->dropdownOptions(['' => '', ...OrderImporter::SHIPMENT_STATUSES]),
+            ]),
             $this->field(PlainText::class, 'invoiceNumbers', 'Invoice numbers'),
             $this->field(PlainText::class, 'creditNotes', 'Credit notes'),
             $this->field(PlainText::class, 'paymentMethod', 'Payment method'),
@@ -242,27 +251,34 @@ class SetupController extends Controller
     /**
      * Lightspeed has "Marge" (margin scheme, 0%, default) and 21% VAT. Prices include VAT.
      */
+    /**
+     * Lightspeed tax rates: margin scheme (0%, default), reduced (6%) and standard (21%), included in the price.
+     */
     private function setupTax(): void
     {
         $this->taxCategory('marginScheme', 'Margin scheme', true);
-        $standard = $this->taxCategory('standard', 'Standard 21%', false);
+        $this->taxRate($this->taxCategory('reduced', 'Reduced 6%', false), 'VAT 6%', 0.06);
+        $this->taxRate($this->taxCategory('standard', 'Standard 21%', false), 'VAT 21%', 0.21);
+    }
 
+    private function taxRate(TaxCategory $category, string $name, float $rate): void
+    {
         $taxRates = Commerce::getInstance()->getTaxRates();
         $storeId = Commerce::getInstance()->getStores()->getPrimaryStore()->id;
 
-        if ($taxRates->getAllTaxRates($storeId)->firstWhere('taxCategoryId', $standard->id)) {
+        if ($taxRates->getAllTaxRates($storeId)->firstWhere('taxCategoryId', $category->id)) {
             return;
         }
 
-        $rate = new TaxRate([
+        $taxRate = new TaxRate([
             'storeId' => $storeId,
-            'name' => 'VAT 21%',
-            'rate' => 0.21,
+            'name' => $name,
+            'rate' => $rate,
             'include' => true,
             'taxable' => TaxRateRecord::TAXABLE_PRICE,
-            'taxCategoryId' => $standard->id,
+            'taxCategoryId' => $category->id,
         ]);
-        $taxRates->saveTaxRate($rate) || $this->fail($rate);
+        $taxRates->saveTaxRate($taxRate) || $this->fail($taxRate);
     }
 
     private function taxCategory(string $handle, string $name, bool $default): TaxCategory
@@ -383,10 +399,10 @@ class SetupController extends Controller
         $productType->setSiteSettings($siteSettings);
 
         $taxCategories = Commerce::getInstance()->getTaxCategories();
-        $productType->setTaxCategories([
-            $taxCategories->getTaxCategoryByHandle('marginScheme')->id,
-            $taxCategories->getTaxCategoryByHandle('standard')->id,
-        ]);
+        $productType->setTaxCategories(array_map(
+            fn(string $handle) => $taxCategories->getTaxCategoryByHandle($handle)->id,
+            array_values(ProductImporter::TAX_CATEGORIES),
+        ));
 
         $this->addToLayout($productType->getFieldLayout(), $fields);
         $this->addToLayout($productType->getVariantFieldLayout(), $variantFields);

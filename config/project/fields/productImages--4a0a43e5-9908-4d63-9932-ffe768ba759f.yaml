@@ -21,7 +21,7 @@ settings:
   restrictLocation: true
   restrictedDefaultUploadSubpath: null
   restrictedLocationSource: 'volume:aa81478e-752d-4fbd-b670-ea469cfe058c' # Product images
-  restrictedLocationSubpath: '{id}'
+  restrictedLocationSubpath: '{{ object.id }}-{{ (object.site.primary ? object : object.getLocalized().site(craft.app.sites.primarySite.handle).status(null).one() ?? object).slug }}'
   selectionLabel: null
   showSearchInput: true
   showSiteMenu: true
