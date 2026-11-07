@@ -1,4 +1,4 @@
-dateModified: 1794059460
+dateModified: 1794065341
 elementSources:
   craft\commerce\elements\Product:
     -
@@ -299,7 +299,6 @@ meta:
     8694ab8e-0843-4dd6-a487-9c714713b5fa: WAUW # WAUW
     09747a1d-81b5-43e9-9217-a3b2e06beb89: Categories # Categories
     52649fa3-85e6-4725-9f40-699b1f061dd4: 'Navigation links list' # Navigation links list
-    57049aa1-d70c-46c8-92ae-f86c72abc67c: 'Business Addresses' # Business Addresses
     72688bf2-9dcf-4032-9899-7d39ab1986f0: 'Navigation link + menu' # Navigation link + menu
     704846e3-cfa0-4a1f-8f8f-f65b73c9de47: Text # Text
     1383796c-c497-4943-94f8-10173287ff1c: Lightswitch # Lightswitch
@@ -307,14 +306,12 @@ meta:
     41893669-183e-4f95-9dd9-254bf1342b1f: Date # Date
     89865385-579d-42d4-a578-48a011a9342a: 'Picked up' # Picked up
     a6ca9637-b600-4055-806f-e672ad03c6e0: Header # Header
-    a9d2b9d3-4606-4e4c-aaae-58958e82f985: 'Organization Address' # Organization Address
     a41c652a-eb3b-48a1-8a47-f9e2f617e3d1: Cancelled # Cancelled
     a3045613-418c-483e-a666-fb4269b18c80: URL # URL
     aa95f819-8179-4afd-8972-f3d4b77f3056: Button # Button
     aa81478e-752d-4fbd-b670-ea469cfe058c: 'Product images' # Product images
     b6eaa061-d417-41eb-8ec0-acc8c19d1378: Media # Media
     ba7f6370-bf87-4b80-8ed1-8d53cf300b28: Brand # Brand
-    ba576e4d-37a8-4759-8e12-3721ccd44a04: 'Local Business Address' # Local Business Address
     c4e7dc45-ce6e-46dd-9299-2929fcf3c89d: 'Media bestand' # Media bestand
     c49989a6-437b-4760-bf96-1a5f55ec3ce3: Gender # Gender
     ca6f639a-12fb-4ecd-8e43-1c9b5e863711: Spacing # Spacing
