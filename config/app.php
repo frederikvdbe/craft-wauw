@@ -2,6 +2,7 @@
 
 use craft\helpers\App;
 use modules\lightspeed\Module as Lightspeed;
+use modules\shop\Module as Shop;
 use modules\site\Site;
 
 return [
@@ -14,9 +15,11 @@ return [
     'modules' => [
         'site' => Site::class,
         'lightspeed' => Lightspeed::class,
+        'shop' => Shop::class,
     ],
     'bootstrap' => [
         'site',
         'lightspeed',
+        'shop',
     ],
 ];

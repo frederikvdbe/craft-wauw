@@ -11,6 +11,7 @@
 ## Current state
 - Craft 5.12, DDEV (PHP 8.5, Node 24)
 - Merged with the boilerplate repo `frederikvdbe/craft-wauw` (2026-11-07): Vite, SCSS, templates, `modules/site`, sections home / pages / header / footer, SEO plugin `core-seo-geo`. Our sites, store, order statuses and user / address layouts kept
+- Module `modules/shop`: Commerce CP changes (subscriptions + donations hidden: nav items, billing detail URL setting)
 - CP: `/launchpad`; volume Uploads = `web/uploads/files` (apart from `brands/`, `products/`)
 - Pending users are never purged (`purgePendingUsersDuration` removed: imported customers are pending)
 - Deploy: GitHub Actions `.github/workflows/deploy-staging.yml` (push `staging` → build, rsync to Combell, `craft up`). Production later, at go-live

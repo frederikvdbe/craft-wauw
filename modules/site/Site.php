@@ -33,7 +33,6 @@ class Site extends Module {
 
         $this->registerTwigExtensions();
         $this->registerCpNavOrder();
-        $this->hideUnusedCommerceNavItems();
     }
 
     private function registerTwigExtensions(): void {
@@ -49,21 +48,6 @@ class Site extends Module {
             };
 
             usort($event->navItems, fn (array $a, array $b) => $position($a) <=> $position($b));
-        });
-    }
-
-    // Commerce has no setting to turn these features off; the pages stay reachable by URL.
-    private function hideUnusedCommerceNavItems(): void {
-        Event::on(Cp::class, Cp::EVENT_REGISTER_CP_NAV_ITEMS, function (RegisterCpNavItemsEvent $event) {
-            foreach ($event->navItems as &$item) {
-                if (($item['url'] ?? null) === 'commerce') {
-                    unset(
-                        $item['subnav']['subscriptions'],
-                        $item['subnav']['subscription-plans'],
-                        $item['subnav']['donations'],
-                    );
-                }
-            }
         });
     }
 }
