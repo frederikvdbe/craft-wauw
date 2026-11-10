@@ -8,6 +8,9 @@ use craft\db\Query;
 use craft\db\Table;
 use craft\helpers\Queue;
 use craft\queue\BaseBatchedJob;
+use modules\lightspeed\Module;
+use modules\lightspeed\services\SyncLog;
+use Throwable;
 use yii\base\Exception;
 
 /**
@@ -24,21 +27,51 @@ abstract class SyncJob extends BaseBatchedJob
     private const FIRST_PRIORITY = 100;
 
     /**
+     * @var string|null the run in the sync log (see SyncLog)
+     */
+    public ?string $runId = null;
+
+    /**
+     * @var int|null index of this step in the run
+     */
+    public ?int $step = null;
+
+    /**
      * False while the job is pushed: Craft counts the items then, for the description, but earlier steps may not be done yet.
      * A pushed job is only unserialized again to run it.
      */
     private bool $running = false;
 
     /**
-     * @param array[] $steps job configs (with `class`), in order
+     * Craft loads the items for the log line before `execute()`, outside its error handling:
+     * an error there kills the queue runner and leaves the job reserved. So keep it for `execute()`.
      */
-    public static function queueAll(array $steps): void
+    private ?Throwable $loadError = null;
+
+    /**
+     * Warnings of the current batch, for the sync log.
+     *
+     * @var string[]
+     */
+    private array $warnings = [];
+
+    /**
+     * @param SyncJob[] $jobs in order
+     */
+    public static function queueAll(array $jobs, string $runId): void
     {
-        foreach (array_values($steps) as $i => $step) {
-            $job = Craft::createObject([...$step, 'priority' => self::FIRST_PRIORITY + $i]);
+        foreach (array_values($jobs) as $i => $job) {
+            $job->runId = $runId;
+            $job->step = $i;
+            $job->priority = self::FIRST_PRIORITY + $i;
             Queue::push($job, $job->priority, null, $job->ttr);
         }
     }
+
+    /**
+     * E.g. `import: orders (sample)`.
+     */
+    abstract public function label(): string;
 
     /**
      * @return array the items to process; only called when the job runs
@@ -53,16 +86,65 @@ abstract class SyncJob extends BaseBatchedJob
 
     public function execute($queue): void
     {
-        if ($this->earlierStepInQueue()) {
-            throw new Exception('An earlier Lightspeed step is not done (failed or stopped). Retry that one first, then this one.');
+        try {
+            if ($this->earlierStepInQueue()) {
+                throw new Exception('An earlier Lightspeed step is not done (failed or stopped). Retry that one first, then this one.');
+            }
+
+            $this->data();
+            if ($this->loadError) {
+                throw $this->loadError;
+            }
+
+            $this->log(fn(SyncLog $log) => $log->running($this->runId, $this->step, $this->totalItems()));
+            parent::execute($queue);
+        } catch (Throwable $e) {
+            $this->log(fn(SyncLog $log) => $log->failed($this->runId, $this->step, $e->getMessage(), $this->warnings));
+            throw $e;
         }
 
-        parent::execute($queue);
+        $finished = $this->itemOffset >= $this->totalItems();
+        $this->log(fn(SyncLog $log) => $log->progress($this->runId, $this->step, $this->itemOffset, $finished, $this->warnings));
+    }
+
+    protected function defaultDescription(): ?string
+    {
+        return self::DESCRIPTION_PREFIX . ' ' . $this->label();
+    }
+
+    /**
+     * Logs a warning, and keeps it for the sync log.
+     */
+    protected function warn(string $message): void
+    {
+        Craft::warning(self::DESCRIPTION_PREFIX . ' ' . $this->label() . ": $message", 'lightspeed');
+        $this->warnings[] = $message;
     }
 
     protected function loadData(): Batchable
     {
-        return new ArrayBatcher($this->running ? $this->loadItems() : []);
+        if (!$this->running) {
+            return new ArrayBatcher([]);
+        }
+
+        try {
+            return new ArrayBatcher($this->loadItems());
+        } catch (Throwable $e) {
+            $this->loadError = $e;
+            return new ArrayBatcher([]);
+        }
+    }
+
+    /**
+     * Jobs queued without a run (before the log existed) are not logged.
+     *
+     * @param callable(SyncLog): void $write
+     */
+    private function log(callable $write): void
+    {
+        if ($this->runId !== null && $this->step !== null) {
+            $write(Module::getInstance()->syncLog);
+        }
     }
 
     /**

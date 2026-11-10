@@ -28,6 +28,14 @@ class SyncUtility extends Utility
         return 'arrows-rotate';
     }
 
+    /**
+     * Failed or stopped steps of the last sync: shown on Utilities in the CP menu.
+     */
+    public static function badgeCount(): int
+    {
+        return Module::getInstance()->syncLog->problemCount();
+    }
+
     public static function contentHtml(): string
     {
         $module = Module::getInstance();
@@ -47,6 +55,7 @@ class SyncUtility extends Utility
 
         return Craft::$app->getView()->renderTemplate('lightspeed/_utility.twig', [
             'isQueued' => $module->sync->isQueued(),
+            'runs' => $module->syncLog->runs(),
             'extractOptions' => $extractOptions,
             'emptyNames' => $emptyNames,
             'importOptions' => array_map(fn(string $part) => ['label' => ucfirst($part), 'value' => $part], ImportJob::PARTS),

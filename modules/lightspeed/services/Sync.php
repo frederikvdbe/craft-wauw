@@ -18,7 +18,7 @@ class Sync extends Component
     /**
      * @param string[] $extract file names, see Extractor::names()
      * @param string[] $import parts, see ImportJob::PARTS; always imported in dependency order
-     * @param bool $sample import only the sample
+     * @param bool $sample per-item lists + import: only the sample
      * @return int number of steps
      * @throws Exception when a sync is already in the queue
      */
@@ -28,10 +28,14 @@ class Sync extends Component
             throw new Exception('A Lightspeed sync is already in the queue (Utilities → Queue Manager: wait, retry or release it).');
         }
 
-        $steps = [...$this->extractSteps($extract), ...$this->importSteps($import, $sample)];
-        SyncJob::queueAll($steps);
+        $jobs = array_map(
+            fn(array $config) => Craft::createObject($config),
+            [...$this->extractSteps($extract, $sample), ...$this->importSteps($import, $sample)],
+        );
+        $runId = Module::getInstance()->syncLog->start(array_map(fn(SyncJob $job) => $job->label(), $jobs), $sample);
+        SyncJob::queueAll($jobs, $runId);
 
-        return count($steps);
+        return count($jobs);
     }
 
     public function isQueued(): bool
@@ -48,7 +52,7 @@ class Sync extends Component
     /**
      * 1 step per file; relations in more languages: 1 step per language.
      */
-    private function extractSteps(array $names): array
+    private function extractSteps(array $names, bool $sample): array
     {
         $extractor = Module::getInstance()->extractor();
         $steps = [];
@@ -56,7 +60,7 @@ class Sync extends Component
         foreach (array_intersect(Extractor::names(), $names) as $name) {
             if (Extractor::isRelation($name)) {
                 foreach ($extractor->languagesOf($name) as $language) {
-                    $steps[] = ['class' => ExtractJob::class, 'name' => $name, 'language' => $language];
+                    $steps[] = ['class' => ExtractJob::class, 'name' => $name, 'language' => $language, 'sample' => $sample];
                 }
             } else {
                 $steps[] = ['class' => ExtractJob::class, 'name' => $name];

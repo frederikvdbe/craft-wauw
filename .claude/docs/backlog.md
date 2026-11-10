@@ -13,6 +13,7 @@
 | 10 | Customers | API key for the live shop (read customers), to import all ~25k accounts? | ✓ live key in `.env` |
 | 9 | Craft Pro | Customer accounts need a Craft Pro license (~$299 + yearly updates). OK? | |
 | 8 | Sold items | Keep all 850+ sold items online (archive, SEO) or hide part of them? | |
+| 11 | Product parts | Dimensions per part (e.g. chair + footrest): weight per part too, or only dimensions? | |
 
 ## Dev backlog
 - [x] Switch importer from API JSON to CSV
@@ -29,3 +30,4 @@
 - [x] Order importer
 - [ ] Order templates: custom line items have no purchasable (guard `lineItem.type`)
 - [ ] Full import must run interactive (it asks for confirmation)
+- [ ] Product parts: Matrix field `productPartsField`, entry type `part` (title, length, width, height, weight?) via `lightspeed/setup`; native variant dimensions stay = full item (shipping); client fills in by hand (no data in Lightspeed). Waits on client question 11

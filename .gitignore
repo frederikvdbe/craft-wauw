@@ -23,3 +23,6 @@
 /node_modules
 /web/dist
 /web/temp
+
+# Claude Code: personal settings
+.claude/settings.local.json

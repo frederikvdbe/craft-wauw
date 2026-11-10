@@ -19,13 +19,13 @@ use yii\console\ExitCode;
 class SyncController extends Controller
 {
     /**
-     * @var bool import only the sample (see Sample). The extract is always full.
+     * @var bool only the sample (see Sample): per-item lists (images, order lines, …) and import. Other lists are always full.
      */
     public bool $sample = false;
 
     public function options($actionID): array
     {
-        return $actionID === 'extract' ? parent::options($actionID) : [...parent::options($actionID), 'sample'];
+        return [...parent::options($actionID), 'sample'];
     }
 
     /**

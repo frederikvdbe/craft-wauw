@@ -124,7 +124,7 @@ tabs:
         editCondition: null
         elementCondition: null
         elementEditCondition: null
-        fieldUid: 9da47733-7d57-41a1-a8d2-21647c21bf1d # Company number
+        fieldUid: 9da47733-7d57-41a1-a8d2-21647c21bf1d
         handle: null
         instructions: null
         label: null
@@ -141,7 +141,7 @@ tabs:
         editCondition: null
         elementCondition: null
         elementEditCondition: null
-        fieldUid: 33d8854e-fe4a-4f83-a6b1-57cc2f3125a0 # Birthdate
+        fieldUid: 33d8854e-fe4a-4f83-a6b1-57cc2f3125a0
         handle: null
         instructions: null
         label: null
@@ -175,7 +175,7 @@ tabs:
         editCondition: null
         elementCondition: null
         elementEditCondition: null
-        fieldUid: 1ecf5792-e5a0-4ab8-b08b-4e305679144a # Email confirmed in Lightspeed
+        fieldUid: 1ecf5792-e5a0-4ab8-b08b-4e305679144a
         handle: null
         instructions: null
         label: null
@@ -201,6 +201,57 @@ tabs:
         tip: null
         type: craft\fieldlayoutelements\CustomField
         uid: d2644aae-c97e-41e1-ac13-118ae68879b0
+        userCondition: null
+        warning: null
+        width: 100
+      -
+        dateAdded: null
+        editCondition: null
+        elementCondition: null
+        elementEditCondition: null
+        fieldUid: 4381ddb2-8940-4d25-8e42-5a770b533b71 # Single line text
+        handle: cocNumberField
+        instructions: null
+        label: 'Company number'
+        oldFieldUid: null
+        required: false
+        tip: null
+        type: craft\fieldlayoutelements\CustomField
+        uid: cd3d1f73-79ea-43aa-8716-acb0bd3921d4
+        userCondition: null
+        warning: null
+        width: 100
+      -
+        dateAdded: null
+        editCondition: null
+        elementCondition: null
+        elementEditCondition: null
+        fieldUid: 41893669-183e-4f95-9dd9-254bf1342b1f # Date
+        handle: birthdateField
+        instructions: null
+        label: Birthdate
+        oldFieldUid: null
+        required: false
+        tip: null
+        type: craft\fieldlayoutelements\CustomField
+        uid: 03412196-5705-49a6-9170-15ef8ba6dfc5
+        userCondition: null
+        warning: null
+        width: 100
+      -
+        dateAdded: null
+        editCondition: null
+        elementCondition: null
+        elementEditCondition: null
+        fieldUid: 1383796c-c497-4943-94f8-10173287ff1c # Lightswitch
+        handle: emailConfirmedField
+        instructions: null
+        label: 'Email confirmed in Lightspeed'
+        oldFieldUid: null
+        required: false
+        tip: null
+        type: craft\fieldlayoutelements\CustomField
+        uid: 666965d9-2c81-498e-9cae-7871d1671fe7
         userCondition: null
         warning: null
         width: 100

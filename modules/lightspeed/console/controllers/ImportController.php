@@ -96,7 +96,7 @@ class ImportController extends Controller
     private function data(): ApiData
     {
         if ($this->data === null) {
-            $this->data = ApiData::load($this->module->store);
+            $this->data = ApiData::load($this->module->store, $this->sample);
             if ($this->sample) {
                 $this->data = (new Sample($this->data))->apply();
             }
