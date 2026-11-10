@@ -13,7 +13,7 @@ fieldLayouts:
             autocomplete: false
             autocorrect: true
             class: null
-            dateAdded: null
+            dateAdded: '2026-11-08T15:40:03+00:00'
             disabled: false
             elementCondition: null
             id: null
@@ -37,7 +37,7 @@ fieldLayouts:
             warning: null
             width: 100
           -
-            dateAdded: null
+            dateAdded: '2026-11-08T15:40:03+00:00'
             editCondition: null
             elementCondition: null
             elementEditCondition: null
@@ -54,7 +54,7 @@ fieldLayouts:
             warning: null
             width: 100
           -
-            dateAdded: null
+            dateAdded: '2026-11-08T15:40:03+00:00'
             editCondition: null
             elementCondition: null
             elementEditCondition: null
@@ -71,7 +71,7 @@ fieldLayouts:
             warning: null
             width: 100
           -
-            dateAdded: null
+            dateAdded: '2026-11-08T15:40:03+00:00'
             editCondition: null
             elementCondition: null
             elementEditCondition: null
@@ -88,7 +88,7 @@ fieldLayouts:
             warning: null
             width: 100
           -
-            dateAdded: null
+            dateAdded: '2026-11-08T15:40:03+00:00'
             editCondition: null
             elementCondition: null
             elementEditCondition: null
@@ -110,7 +110,7 @@ fieldLayouts:
     thumbFieldKey: null
 handle: category
 hasTitleField: true
-icon: null
+icon: tags
 name: Category
 showSlugField: true
 showStatusField: true

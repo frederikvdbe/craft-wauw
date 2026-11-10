@@ -292,7 +292,7 @@ class ProductImporter extends Component
         // Lightspeed CDN URLs contain a file ID; other hosts get a hash of the URL.
         $id = preg_match('#/files/(\d+)/#', $url, $m) ? $m[1] : 'url-' . md5($url);
         $asset = Asset::find()->volume($volumeHandle)->lightspeedId($id)->one();
-        if ($asset) {
+        if ($asset && $asset->getFs()->fileExists($asset->getPath())) {
             return $asset;
         }
 
@@ -306,6 +306,14 @@ class ProductImporter extends Component
             $this->failedImages[] = $url;
             FileHelper::unlink($tempPath);
             return null;
+        }
+
+        // The asset row exists (e.g. restored from a database-only import) but its file is missing: re-fetch it
+        // into the same asset instead of creating a duplicate.
+        if ($asset) {
+            Craft::$app->getAssets()->replaceAssetFile($asset, $tempPath, $filename);
+            FileHelper::unlink($tempPath);
+            return $asset;
         }
 
         $volume = Craft::$app->getVolumes()->getVolumeByHandle($volumeHandle);

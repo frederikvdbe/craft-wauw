@@ -2,6 +2,10 @@
 @use "../base/typography" as *;
 
 .page {
+	main {
+		min-height: 60vh;
+	}
+
 	a.skip-link {
 		position: fixed;
 		top: var(--space-12);

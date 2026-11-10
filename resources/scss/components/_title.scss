@@ -3,4 +3,6 @@
 
 .c-title {
 	text-wrap: balance;
+
+	@include typo-h4;
 }

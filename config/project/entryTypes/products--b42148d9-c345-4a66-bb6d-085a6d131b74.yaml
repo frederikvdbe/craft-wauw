@@ -1,0 +1,25 @@
+allowLineBreaksInTitles: false
+color: null
+description: null
+fieldLayouts:
+  524a88f4-f0eb-41af-9b0f-f6dd63b4e143:
+    cardThumbAlignment: end
+    tabs:
+      -
+        elementCondition: null
+        name: Content
+        uid: 7e6bc1eb-8df0-499f-9b85-8228d2e718b8
+        userCondition: null
+    thumbFieldKey: null
+handle: products
+hasTitleField: false
+icon: box-taped
+name: Products
+showSlugField: false
+showStatusField: true
+slugTranslationKeyFormat: null
+slugTranslationMethod: site
+titleFormat: null
+titleTranslationKeyFormat: null
+titleTranslationMethod: site
+uiLabelFormat: '{title}'

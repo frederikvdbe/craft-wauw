@@ -3,16 +3,36 @@
 namespace modules\site\web\twig;
 
 use Craft;
+use craft\commerce\elements\Product;
+use craft\helpers\UrlHelper;
 
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
+
+use modules\site\services\SpecSheetGenerator;
 
 class SiteTwigExtension extends AbstractExtension {
     public function getFunctions() {
         return [
             new TwigFunction('getTransformsMap', [$this, 'getTransformsMap']),
             new TwigFunction('isActive', [$this, 'isActive']),
+            new TwigFunction('specSheetUrl', [$this, 'specSheetUrl']),
         ];
+    }
+
+    /**
+     * The download URL of a product's specification sheet, or null if it hasn't been generated yet.
+     * A stable route (not the backing asset's own URL, which changes on every regeneration).
+     *
+     * @param Product $product
+     * @return string|null
+     */
+    public function specSheetUrl(Product $product): ?string {
+        if (!SpecSheetGenerator::assetFor($product)) {
+            return null;
+        }
+
+        return UrlHelper::siteUrl("products/$product->slug/product-sheet", siteId: $product->siteId);
     }
 
     /**

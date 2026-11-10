@@ -1,2 +1,114 @@
 @use "../base/breakpoints" as *;
 @use "../base/typography" as *;
+
+// =======================
+// VIP PREVIEW FORM
+// =======================
+.formie-form {
+	.formie-form-header:empty,
+	.formie-form-navigation:empty,
+	.formie-form-messages:empty {
+		display: none;
+	}
+
+	.formie-page {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: var(--space-20) var(--space-10);
+	}
+
+	// unwrap the structural layers so rows + the submit button can share a flex line
+	.formie-page-container,
+	.formie-page-header,
+	.formie-page-body,
+	.formie-rows,
+	.formie-page-footer,
+	.formie-page-buttons,
+	.formie-button-container {
+		display: contents;
+	}
+
+	.formie-row {
+		&:has([data-formie-field-type="html"]) {
+			flex-basis: 100%;
+			text-align: right;
+			color: var(--clr-blue-900);
+
+			h2 {
+				@include typo-h6;
+			}
+
+			h3 {
+				@include typo-body-lg;
+				text-transform: uppercase;
+				font-weight: var(--fw-700);
+			}
+
+			p {
+				@include typo-body-sm;
+				margin-top: var(--space-5);
+			}
+		}
+
+		&:has([data-formie-field-type="email"]) {
+			flex: 1 1 0%;
+			min-width: 200px;
+		}
+	}
+
+	.formie-field,
+	.formie-field-layout,
+	.formie-field-content,
+	.formie-field-control {
+		display: block;
+		width: 100%;
+		height: 100%;
+	}
+
+	.formie-input {
+		@include typo-body-md;
+		display: block;
+		width: 100%;
+		height: 2.5rem;
+		padding-inline: var(--space-15);
+		background-color: var(--clr-white);
+		border: 1px solid var(--clr-grey-300);
+		border-radius: var(--border-radius-2);
+		color: var(--clr-blue-900);
+
+		&::placeholder {
+			color: var(--clr-grey-500);
+		}
+	}
+
+	.formie-button-submit {
+		@include typo-button;
+		display: inline-flex;
+		flex: 0 0 auto;
+		align-items: center;
+		justify-content: center;
+		height: 2.5rem;
+		padding-inline: var(--space-30);
+		background-color: var(--clr-blue-900);
+		border-radius: var(--border-radius-2);
+		color: var(--clr-white);
+		font-weight: var(--fw-700);
+		font-size: var(--fs-14);
+		text-transform: uppercase;
+		letter-spacing: 1px;
+		border: none;
+		cursor: pointer;
+	}
+
+	@include styles-below(mobileL) {
+		.formie-row:has([data-formie-field-type="html"]) {
+			text-align: left;
+		}
+
+		.formie-row:has([data-formie-field-type="email"]) {
+			flex: 1 1 100%;
+		}
+	}
+}

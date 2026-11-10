@@ -1,13 +1,36 @@
 {# ======================= #}
 {# PROPERTIES              #}
 {# ======================= #}
+{% set contactInfo = craft.entries().section("contactInfo").one() %}
+{% set headquarters = contactInfo.headquartersField.one() ?? null %}
+{% set vipPreviewForm = craft.formie.forms.handle("vipPreviewEn").one() %}
 
 {# ======================= #}
 {# TEMPLATE                #}
 {# ======================= #}
 <footer class="c-footer container">
     <div class="c-footer-content">
+        <div class="c-footer-info">
+            {% include "_components/icon" with { icon: "wauw-wordmark" } only %}
+
+            {% if headquarters %}
+                <address class="c-footer-address">
+                    {{ craft.app.addresses.formatAddress(headquarters)|raw }}
+                    {% include "_components/text" with { 
+                        text: headquarters.organizationTaxId|default("") 
+                    } only %}
+                </address>
+            {% endif %}
+
+            <div class="c-footer-info-extra">
+                {% include "_components/text" with { text: contactInfo.phoneNumberField|default("") } only %}
+                {% include "_components/text" with { text: contactInfo.emailField|default("") } only %}
+            </div>
+        </div>
+
         {% include "_components/footerNavigation" %}
+
+        {{ craft.formie.renderForm(vipPreviewForm) }}
         
         {% include "_components/legalNavigation" %}
     </div>

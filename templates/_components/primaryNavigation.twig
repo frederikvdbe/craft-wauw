@@ -1,9 +1,7 @@
 {# ======================= #}
 {# PROPERTIES              #}
 {# ======================= #}
-{% cache %}
-    
-{% set primaryNavigation = header.primaryNavigationField.eagerly().all() %}
+{% set primaryNavigation = header.primaryNavigationField.all() %}
 
 {# ======================= #}
 {# TEMPLATE                #}
@@ -11,24 +9,9 @@
 <nav class="c-primary-navigation">
     <ul class="c-primary-navigation-links">
         {% for link in primaryNavigation %}
-            {% set menuLinks = link.menuField.eagerly().all()|default([]) %}
-
             <li class="c-primary-navigation-link">
                 {% include "_components/navigationLink" with { link } only %}
-
-                {% if menuLinks|length %}
-                    <ul class="c-primary-navigation-menu-links">
-                        {% for link in menuLinks %}
-
-                            <li class="c-primary-navigation-menu-link">
-                                {% include "_components/navigationLink" with { link } only %}
-                            </li>
-                        {% endfor %}
-                    </ul>
-                {% endif %}
             </li>
         {% endfor %}
     </ul>
 </nav>
-
-{% endcache %}

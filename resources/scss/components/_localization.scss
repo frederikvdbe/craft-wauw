@@ -1,0 +1,91 @@
+@use "../base/breakpoints" as *;
+@use "../base/typography" as *;
+
+$snappy-ease: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+.c-localization {
+	position: relative;
+
+	&-toggle {
+		display: flex;
+		align-items: center;
+		gap: var(--space-15);
+		height: 50px;
+		min-width: 140px;
+		padding-inline: var(--space-20);
+		cursor: pointer;
+
+		.c-text:nth-child(1) {
+			@include typo-body-lg;
+		}
+
+		.c-text:nth-child(2) {
+			@include typo-body-sm;
+		}
+	}
+
+	&-config {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-10);
+		position: absolute;
+		top: 100%;
+		right: 0;
+		border: 1px solid var(--clr-grey-300);
+		border-radius: var(--border-radius-2);
+		padding: var(--space-15);
+		opacity: 0;
+		pointer-events: none;
+		transform: translateY(-8px);
+		background-color: var(--clr-white);
+		z-index: 2;
+
+		transition:
+			opacity 0.2s $snappy-ease,
+			transform 0.2s $snappy-ease;
+
+		&-divider {
+			height: 1px;
+			background-color: var(--clr-grey-300);
+			width: 100%;
+		}
+	}
+
+	&:hover &-config {
+		opacity: 1;
+		pointer-events: auto;
+		transform: translateY(0);
+	}
+
+	&-options {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-5);
+	}
+
+	&-option.active {
+		.c-localization-option-state {
+			background-color: var(--clr-yellow-500);
+		}
+	}
+
+	&-option-link {
+		display: grid;
+		align-items: center;
+		grid-template-columns: 1fr 24px 20px;
+		gap: var(--space-20);
+
+		.c-text:nth-child(2) {
+			text-align: center;
+		}
+	}
+
+	&-option-state {
+		width: 17px;
+		height: 17px;
+		outline: 1px solid var(--clr-black);
+		outline-offset: 2px;
+		border-radius: 100%;
+		background-color: var(--clr-grey-300);
+	}
+}

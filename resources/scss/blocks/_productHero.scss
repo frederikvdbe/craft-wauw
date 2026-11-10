@@ -1,0 +1,31 @@
+@use "../base/breakpoints" as *;
+@use "../base/typography" as *;
+
+.b-product-hero {
+	pointer-events: none;
+
+	&-content {
+		position: relative;
+		margin-block: var(--space-30);
+		overflow: hidden;
+	}
+
+	.c-image {
+		clip-path: inset(0px 0px 0px 0px);
+		will-change: clip-path;
+	}
+
+	.c-title {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		position: absolute;
+		text-align: center;
+		inset: 0;
+		text-shadow: 0 3px 6px lch(from var(--clr-black) l c h / 15%);
+		will-change: transform;
+
+		@include typo-h2;
+		color: var(--clr-white);
+	}
+}

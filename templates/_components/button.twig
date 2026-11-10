@@ -13,6 +13,7 @@
 {% set tag = url ? "a" : "button" %}
 {% set iconBefore = iconBefore|default("") %}
 {% set iconAfter = iconAfter|default("") %}
+{% set class = class|default("") %}
 {% set attributes = attributes|default({}) %}
 
 {# ======================= #}
@@ -21,7 +22,7 @@
 {% if label %}
     <{{ tag }}
         {{ attr({
-            class: "c-button #{variant}",
+            class: "c-button #{variant} #{class}"|trim,
             title: label,
             href: tag == "a" ? url : null,
             target: tag == "a" ? target : null,

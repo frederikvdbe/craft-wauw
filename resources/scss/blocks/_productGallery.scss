@@ -1,0 +1,19 @@
+@use "../base/breakpoints" as *;
+
+.b-product-gallery {
+	&-content {
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		gap: var(--space-30);
+		margin-bottom: var(--space-30);
+
+		@include styles-below(tablet) {
+			grid-template-columns: 1fr;
+		}
+
+		.c-image:nth-child(-n + 2),
+		.c-image:nth-child(3n + 5) {
+			grid-column: 1 / -1;
+		}
+	}
+}

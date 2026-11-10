@@ -8,6 +8,7 @@
 {% set target = data.target|default("_self") %}
 {% set download = data.download|default(false) %}
 
+{% set active = isActive(url) %}
 {% set iconAfter = iconAfter|default("") %}
 {% set class = class|default("") %}
 {% set attributes = attributes|default({}) %}
@@ -18,11 +19,12 @@
 {% if label %}
     <a
         {{ attr({
-            class: "c-navigation-link #{class}",
+            class: "c-navigation-link #{active}",
             title: label,
             href: url,
             target: target,
             download: download,
+            data: { text: label|striptags },
         }|merge(attributes)) }}
     >
         <span>{{ label|raw }}</span>

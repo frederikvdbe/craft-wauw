@@ -40,13 +40,13 @@
 	}
 
 	p {
-		@include typo-body-md;
-		margin-block: var(--space-12);
+		@include typo-body-sm;
+		margin-block: var(--space-20);
 	}
 
 	a {
 		text-decoration: underline;
-		color: blue;
+		color: var(--clr-yellow-500);
 	}
 
 	ul,

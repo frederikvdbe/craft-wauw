@@ -4,13 +4,15 @@
 // COLORS & GRADIENTS
 // =======================
 :root {
-	--clr-primary: ;
-	--clr-secondary: ;
-	--clr-accent: ;
+	--clr-blue-900: oklch(20.867% 0.0625 274.314);
+	--clr-yellow-500: oklch(97.088% 0.18378 109.401);
+	--clr-red-700: oklch(58.171% 0.23469 28.847);
+	--clr-red-500: oklch(68.013% 0.19141 23.68);
 
-	--clr-black: hsl(213, 31%, 11%);
-	--clr-grey-300: rgb(183, 183, 183);
-	--clr-grey-100: rgb(238, 238, 238);
+	--clr-grey-500: oklch(84.522% 0.0001 271.152);
+	--clr-grey-300: oklch(93.1% 0.00011 271.152);
+	--clr-grey-100: oklch(97% 0.0001 271.152);
+	--clr-black: oklch(0% 0 0);
 	--clr-white: hsl(0, 0%, 100%);
 }
 
@@ -20,13 +22,12 @@
 
 // FONTS
 :root {
-	--font-primary: sans-serif;
-	--font-secondary: sans-serif;
+	--font-primary: "Figtree";
 }
 
 // FONT SIZES
 :root {
-	$font-size-values: (12, 14, 16, 18, 20, 24, 32, 48, 56, 72);
+	$font-size-values: (12, 14, 16, 18, 24, 30, 34, 40, 80, 100, 120);
 
 	@each $size in $font-size-values {
 		--fs-#{$size}: #{calc($size / 16)}rem;
@@ -46,7 +47,7 @@
 // SPACING
 // =======================
 :root {
-	$spacing-values: (1, 4, 8, 12, 16, 20, 24, 32, 48, 64, 96, 160);
+	$spacing-values: (5, 10, 15, 20, 30, 40, 50, 60, 80);
 
 	@each $value in $spacing-values {
 		--space-#{$value}: #{calc($value / 16)}rem;
@@ -57,16 +58,8 @@
 // CONTAINER
 // =======================
 :root {
-	--container-width: 1400px;
-	--container-bound: 1rem;
-
-	@include styles-above(tablet) {
-		--container-bound: 1.5rem;
-	}
-
-	@include styles-above(desktopS) {
-		--container-bound: 2rem;
-	}
+	--container-width: 1860px;
+	--container-bound: var(--space-30);
 }
 
 // =======================
@@ -75,7 +68,7 @@
 
 // BORDER RADIUS VALUES
 :root {
-	$border-radius-values: (5, 10, 15);
+	$border-radius-values: (2, 4);
 
 	@each $value in $border-radius-values {
 		--border-radius-#{$value}: #{$value}px;

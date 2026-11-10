@@ -1,9 +1,14 @@
 // =======================
 // FONTS
 // =======================
+
+// Figtree
 @font-face {
-	font-family: "";
-	font-weight: 400;
+	font-family: "Figtree";
+	font-weight: 300 900;
 	font-style: normal;
-	src: url("") format("");
+	font-display: swap;
+	src:
+		url("/web/fonts/figtree/woff2/variable.woff2") format("woff2"),
+		url("/web/fonts/figtree/ttf/variable.ttf") format("truetype");
 }

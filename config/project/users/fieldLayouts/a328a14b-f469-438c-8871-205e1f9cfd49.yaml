@@ -8,7 +8,7 @@ tabs:
         autocomplete: false
         autocorrect: true
         class: null
-        dateAdded: null
+        dateAdded: '2026-11-10T17:14:49+00:00'
         disabled: false
         elementCondition: null
         id: null
@@ -37,7 +37,7 @@ tabs:
         autocomplete: false
         autocorrect: true
         class: null
-        dateAdded: null
+        dateAdded: '2026-11-10T17:14:49+00:00'
         disabled: false
         elementCondition: null
         id: null
@@ -62,7 +62,7 @@ tabs:
         warning: null
         width: 100
       -
-        dateAdded: null
+        dateAdded: '2026-11-10T17:14:49+00:00'
         elementCondition: null
         id: null
         instructions: null
@@ -80,7 +80,7 @@ tabs:
         autocomplete: false
         autocorrect: true
         class: null
-        dateAdded: null
+        dateAdded: '2026-11-10T17:14:49+00:00'
         disabled: false
         elementCondition: null
         id: null
@@ -103,7 +103,7 @@ tabs:
         userCondition: null
         width: 100
       -
-        dateAdded: null
+        dateAdded: '2026-11-10T17:14:49+00:00'
         editCondition: null
         elementCondition: null
         elementEditCondition: null
@@ -120,7 +120,7 @@ tabs:
         warning: null
         width: 100
       -
-        dateAdded: null
+        dateAdded: '2026-11-10T17:14:49+00:00'
         editCondition: null
         elementCondition: null
         elementEditCondition: null
@@ -137,7 +137,7 @@ tabs:
         warning: null
         width: 100
       -
-        dateAdded: null
+        dateAdded: '2026-11-10T17:14:49+00:00'
         editCondition: null
         elementCondition: null
         elementEditCondition: null
@@ -154,7 +154,7 @@ tabs:
         warning: null
         width: 100
       -
-        dateAdded: null
+        dateAdded: '2026-11-10T17:14:49+00:00'
         editCondition: null
         elementCondition: null
         elementEditCondition: null
@@ -171,7 +171,7 @@ tabs:
         warning: null
         width: 100
       -
-        dateAdded: null
+        dateAdded: '2026-11-10T17:14:49+00:00'
         editCondition: null
         elementCondition: null
         elementEditCondition: null
@@ -188,7 +188,7 @@ tabs:
         warning: null
         width: 100
       -
-        dateAdded: null
+        dateAdded: '2026-11-10T17:14:49+00:00'
         editCondition: null
         elementCondition: null
         elementEditCondition: null
@@ -206,5 +206,28 @@ tabs:
         width: 100
     name: Content
     uid: 3aeca452-ae20-4ecc-93dc-f69018751f7c
+    userCondition: null
+  -
+    elementCondition: null
+    elements:
+      -
+        dateAdded: '2026-11-10T17:16:42+00:00'
+        editCondition: null
+        elementCondition: null
+        elementEditCondition: null
+        fieldUid: 28fb50aa-e48c-45b4-b2ad-78a1d6255801 # Products
+        handle: favoriteProductsField
+        instructions: null
+        label: 'Favorite products'
+        oldFieldUid: 28fb50aa-e48c-45b4-b2ad-78a1d6255801 # Products
+        required: false
+        tip: null
+        type: craft\fieldlayoutelements\CustomField
+        uid: cd5f001d-df1d-4963-bc83-ccc0005c3f0d
+        userCondition: null
+        warning: null
+        width: 100
+    name: Favorites
+    uid: 496d555b-c238-401a-90e7-989d95cef842
     userCondition: null
 thumbFieldKey: null

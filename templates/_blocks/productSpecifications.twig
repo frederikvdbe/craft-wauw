@@ -1,0 +1,69 @@
+{# ======================= #}
+{# PROPERTIES              #}
+{# ======================= #}
+{% set text = entry.richText|default("") %}
+{% set variant = entry.defaultVariant %}
+
+{% set dimensions = [
+    { label: "Length"|t, value: variant.length|default(null), unit: "cm" },
+    { label: "Width"|t, value: variant.width|default(null), unit: "cm" },
+    { label: "Height"|t, value: variant.height|default(null), unit: "cm" },
+    { label: "Weight"|t, value: variant.weight|default(null), unit: "kg" },
+]|filter(dimension => dimension.value) %}
+
+{% set specSheetUrl = specSheetUrl(entry) %}
+
+{% set askDavyMonaModalId = "ask-davy-mona-modal" %}
+
+{# ======================= #}
+{# TEMPLATE                #}
+{# ======================= #}
+<section id="product-specifications" class="b-product-specifications container">
+    <div class="b-product-specifications-content">
+        <div class="b-product-specifications-left">
+            {% include "_components/title" with { title: "Product specifications"|t, tag: "h2" } only %}
+
+            {% include "_components/richText" with { text } only %}
+
+            {% include "_components/productActions" with { variant } only %}
+
+            <div class="b-product-specifications-actions">
+                {% include "_components/ctaCard" with {
+                    icon: "staff-circle",
+                    title: "Ask Davy & Mona"|t,
+                    description: "Get personal advice from our Founders on this piece or any other."|t,
+                    linkLabel: "Contact us"|t,
+                    modalId: askDavyMonaModalId,
+                } only %}
+
+                {% include "_components/ctaCard" with {
+                    icon: "calendar-circle",
+                    title: "Book a private viewing"|t,
+                    description: "Visit our gallery in Kuurne by appointment."|t,
+                    linkLabel: "Book now"|t,
+                    linkUrl: "#",
+                } only %}
+            </div>
+        </div>
+
+        <div class="b-product-specifications-right">
+            <dl class="b-product-specifications-dimensions">
+                {% for dimension in dimensions %}
+                    <div class="b-product-specifications-dimension">
+                        <dt>{{ dimension.label }}</dt>
+                        <dd>{{ dimension.value }} {{ dimension.unit }}</dd>
+                    </div>
+                {% endfor %}
+            </dl>
+
+            {% if specSheetUrl %}
+                {% include "_components/button" with {
+                    button: { urlField: { url: specSheetUrl, label: "Download specification sheet"|t, download: true } },
+                    class: "tertiary",
+                } only %}
+            {% endif %}
+        </div>
+    </div>
+
+    {% include "_components/modals/askDavyMona" with { id: askDavyMonaModalId } only %}
+</section>

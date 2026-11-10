@@ -1,0 +1,62 @@
+@use "../base/breakpoints" as *;
+@use "../base/typography" as *;
+
+.c-search {
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	min-width: 60px;
+	height: 50px;
+
+	&::after {
+		content: "";
+		position: absolute;
+		width: 1px;
+		inset: 10px 0 10px auto;
+		background-color: var(--clr-grey-300);
+	}
+
+	&-input {
+		position: relative;
+
+		input {
+			opacity: 0;
+			height: 40px;
+			width: 40px;
+			field-sizing: content;
+			border-radius: var(--border-radius-2);
+			padding-inline: var(--space-20);
+			cursor: pointer;
+			transition:
+				width ease-out 300ms,
+				padding ease-out 300ms,
+				opacity ease-out 300ms;
+
+			@include typo-body-md;
+
+			&:focus {
+				cursor: text;
+				width: 178px;
+				opacity: 1;
+				padding-inline: var(--space-20) var(--space-40);
+				border: 1px solid var(--clr-grey-300);
+			}
+
+			&::placeholder {
+				@include typo-body-md;
+				color: lch(from var(--clr-black) l c h / 45%);
+			}
+		}
+
+		&-icon {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			position: absolute;
+			height: 40px;
+			inset: 0 var(--space-20) 0 auto;
+			pointer-events: none;
+		}
+	}
+}

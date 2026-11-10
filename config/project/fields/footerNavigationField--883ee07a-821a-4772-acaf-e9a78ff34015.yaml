@@ -4,7 +4,7 @@ instructions: null
 name: 'Footer navigation'
 searchable: false
 settings:
-  createButtonLabel: 'New footer navigation links list'
+  createButtonLabel: 'New footer navigation link'
   defaultIndexViewMode: cards
   enableVersioning: false
   entryTypes:
@@ -12,7 +12,7 @@ settings:
       __assoc__:
         -
           - uid
-          - 52649fa3-85e6-4725-9f40-699b1f061dd4 # Navigation links list
+          - 325e4201-c4d6-48f3-9d0c-86102d4741e3 # Navigation link
         -
           - group
           - General

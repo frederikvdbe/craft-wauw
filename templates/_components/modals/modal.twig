@@ -1,0 +1,36 @@
+{# ======================= #}
+{# PROPERTIES              #}
+{# ======================= #}
+{% set id = id|default("modal-#{random()}") %}
+{% set title = title|default("") %}
+{% set content = content|default("") %}
+{% set class = class|default("") %}
+{% set attributes = attributes|default({}) %}
+
+{# ======================= #}
+{# TEMPLATE                #}
+{# ======================= #}
+<dialog
+    {{ attr({
+        class: "c-modal #{class}",
+        "data-modal-id": id,
+        "x-data": "modal()",
+        "@click.self": "closeModal()",
+    }|merge(attributes)) }}
+>
+    <div class="c-modal-panel">
+        {% block header %}
+            <div class="c-modal-header">
+                {% include "_components/title" with { title: title, tag: "h2" } only %}
+
+                <button type="button" class="c-modal-close" aria-label="{{ 'Sluiten'|t }}" @click="closeModal()">
+                    {% include "_components/icon" with { icon: "close" } only %}
+                </button>
+            </div>
+        {% endblock %}
+
+        <div class="c-modal-content">
+            {% block content %}{{ content|raw }}{% endblock %}
+        </div>
+    </div>
+</dialog>

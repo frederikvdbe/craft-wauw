@@ -93,7 +93,7 @@ fieldLayouts:
     thumbFieldKey: 'layoutElement:78447147-cdaf-40cb-b778-dc29a54b94ac'
 handle: brand
 hasTitleField: true
-icon: null
+icon: copyright
 name: Brand
 showSlugField: true
 showStatusField: true

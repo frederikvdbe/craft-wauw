@@ -1,0 +1,131 @@
+allowLineBreaksInTitles: false
+color: null
+description: null
+fieldLayouts:
+  9477f17e-0486-4217-8fe9-1763a6f98339:
+    cardThumbAlignment: end
+    tabs:
+      -
+        elementCondition: null
+        elements:
+          -
+            dateAdded: '2026-11-08T16:05:50+00:00'
+            elementCondition: null
+            heading: Algemeen
+            type: craft\fieldlayoutelements\Heading
+            uid: 5d01d789-091e-4dd0-aa9a-b7b2afaa780b
+            userCondition: null
+          -
+            dateAdded: '2026-11-08T15:23:22+00:00'
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: bdbaeeef-48be-47ec-b4a5-9e20ff4972fa # Address
+            handle: headquartersField
+            instructions: null
+            label: Hoofdzetel
+            oldFieldUid: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: ccc23791-26c7-456e-9971-d8c70deadc07
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: '2026-11-08T16:05:35+00:00'
+            elementCondition: null
+            type: craft\fieldlayoutelements\HorizontalRule
+            uid: 73b3f6c0-57f0-48b2-8919-5381d0fc0421
+            userCondition: null
+          -
+            dateAdded: '2026-11-08T16:05:35+00:00'
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: 4381ddb2-8940-4d25-8e42-5a770b533b71 # Single line text
+            handle: phoneNumberField
+            instructions: null
+            label: 'Phone number'
+            oldFieldUid: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: d2a0d18f-b868-41f5-bc51-c4e228556771
+            userCondition: null
+            warning: null
+            width: 50
+          -
+            dateAdded: '2026-11-08T16:05:35+00:00'
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: 4381ddb2-8940-4d25-8e42-5a770b533b71 # Single line text
+            handle: emailField
+            instructions: null
+            label: E-mail
+            oldFieldUid: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 42c9d813-0871-4a16-9dc0-e30d2c491c27
+            userCondition: null
+            warning: null
+            width: 50
+          -
+            dateAdded: '2026-11-08T16:05:35+00:00'
+            elementCondition: null
+            heading: Socials
+            type: craft\fieldlayoutelements\Heading
+            uid: 0041e25a-2a2b-436a-9960-6d4a147c96f8
+            userCondition: null
+          -
+            dateAdded: '2026-11-08T16:08:40+00:00'
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: 87f0b4b9-5ec2-4af6-8060-1add2afd3e01 # External URL
+            handle: facebookUrlField
+            instructions: null
+            label: 'Facebook URL'
+            oldFieldUid: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 9e24acff-748a-494f-a7d6-95c3ef2a2f6e
+            userCondition: null
+            warning: null
+            width: 50
+          -
+            dateAdded: '2026-11-08T16:08:40+00:00'
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: 87f0b4b9-5ec2-4af6-8060-1add2afd3e01 # External URL
+            handle: instagramUrlField
+            instructions: null
+            label: 'Instagram URL'
+            oldFieldUid: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 2e5f165b-51c7-4b0c-97fa-f3c8a02ef73d
+            userCondition: null
+            warning: null
+            width: 50
+        name: Content
+        uid: 2927cf4e-1f89-4d19-9c13-40531f9b8287
+        userCondition: null
+    thumbFieldKey: null
+handle: contactInfo
+hasTitleField: false
+icon: address-book
+name: 'Contact info'
+showSlugField: false
+showStatusField: true
+slugTranslationKeyFormat: null
+slugTranslationMethod: site
+titleFormat: null
+titleTranslationKeyFormat: null
+titleTranslationMethod: site
+uiLabelFormat: '{title}'

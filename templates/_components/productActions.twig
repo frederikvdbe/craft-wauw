@@ -1,0 +1,35 @@
+{# ======================= #}
+{# PROPERTIES              #}
+{# ======================= #}
+{% set variant = variant|default(null) %}
+{% set priceOnRequest = variant.priceOnRequest|default(false) %}
+{% set shippingCalculatorModalId = "shipping-calculator-modal-#{variant.id|default(random())}" %}
+
+{# ======================= #}
+{# TEMPLATE                #}
+{# ======================= #}
+<div class="b-product-actions">
+    {% if variant and not priceOnRequest %}
+        <form method="post">
+            {{ csrfInput() }}
+            {{ actionInput('commerce/cart/update-cart') }}
+
+            <input type="hidden" name="purchasables[0][id]" value="{{ variant.id }}">
+            <input type="hidden" name="purchasables[0][qty]" value="1">
+
+            {% include "_components/button" with {
+                label: "Add to cart"|t,
+                attributes: { type: "submit" },
+            } only %}
+        </form>
+    {% endif %}
+
+    {% include "_components/button" with {
+        label: "shipping calculator"|t,
+        class: "tertiary",
+        attributes: {
+            type: "button",
+            "@click": "window.dispatchEvent(new CustomEvent('wauw:modal-open', { detail: { id: '#{shippingCalculatorModalId}' } }))",
+        },
+    } only %}
+</div>

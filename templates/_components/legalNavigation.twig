@@ -1,21 +1,17 @@
 {# ======================= #}
 {# PROPERTIES              #}
 {# ======================= #}
-{% cache %}
-    
-{% set legalNavigation = footer.legalNavigationField.eagerly().all() %}
+{% set legalNavigation = footer.legalNavigationField.all() %}
 
 {# ======================= #}
 {# TEMPLATE                #}
 {# ======================= #}
 <nav class="c-legal-navigation">
-    <ul class="c-legal-navigation-lists">
+    <ul class="c-legal-navigation-links">
         {% for link in legalNavigation %}
-            <li class="c-legal-navigation-list-item">
+            <li class="c-legal-navigation-link">
                 {% include "_components/navigationLink" with { link } only %}
             </li>
         {% endfor %}
     </ul>
 </nav>
-
-{% endcache %}

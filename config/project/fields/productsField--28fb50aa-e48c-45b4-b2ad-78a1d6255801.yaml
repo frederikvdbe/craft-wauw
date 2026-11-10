@@ -1,0 +1,24 @@
+columnSuffix: null
+handle: productsField
+instructions: null
+name: Products
+searchable: false
+settings:
+  allowSelfRelations: false
+  branchLimit: null
+  defaultPlacement: end
+  maintainHierarchy: false
+  maxRelations: null
+  minRelations: null
+  selectionLabel: null
+  showSearchInput: true
+  showSiteMenu: false
+  sources: '*'
+  targetSiteId: null
+  validateRelatedElements: false
+  viewMode: cards-grid
+tip: null
+translationKeyFormat: null
+translationMethod: none
+type: craft\commerce\fields\Products
+warning: null

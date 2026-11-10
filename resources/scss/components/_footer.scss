@@ -2,4 +2,43 @@
 @use "../base/typography" as *;
 
 .c-footer {
+	background-color: var(--clr-yellow-500);
+
+	--container-width: 1600px;
+	--container-bound: 54px;
+
+	&-content {
+		padding-top: var(--space-80);
+		display: grid;
+		grid-template-columns: 1fr 1fr 2fr;
+
+		& > * {
+			padding-inline: var(--space-80);
+
+			&:nth-child(1),
+			&:nth-child(2) {
+				border-right: 1px solid var(--clr-black);
+			}
+		}
+	}
+
+	.c-legal-navigation {
+		grid-column: 1 / -1;
+	}
+
+	&-info {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-20);
+
+		address {
+			@include typo-body-md;
+			font-style: normal;
+		}
+	}
+
+	.formie-form {
+		max-width: 600px;
+		justify-self: flex-end;
+	}
 }

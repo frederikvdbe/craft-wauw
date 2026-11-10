@@ -3,4 +3,6 @@
 
 .c-text {
 	text-wrap: balance;
+
+	@include typo-body-md;
 }

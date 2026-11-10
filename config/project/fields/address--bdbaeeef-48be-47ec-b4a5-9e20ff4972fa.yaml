@@ -1,7 +1,7 @@
 columnSuffix: null
-handle: organizationAddress
+handle: address
 instructions: null
-name: 'Organization Address'
+name: Address
 searchable: false
 settings:
   maxAddresses: 1

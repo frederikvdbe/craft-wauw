@@ -4,18 +4,10 @@ instructions: null
 name: 'Primary navigation'
 searchable: false
 settings:
-  createButtonLabel: 'New primary navigation item'
+  createButtonLabel: 'New primary navigation link'
   defaultIndexViewMode: cards
   enableVersioning: false
   entryTypes:
-    -
-      __assoc__:
-        -
-          - uid
-          - 72688bf2-9dcf-4032-9899-7d39ab1986f0 # Navigation link + menu
-        -
-          - group
-          - General
     -
       __assoc__:
         -

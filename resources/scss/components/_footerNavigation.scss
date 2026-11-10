@@ -2,4 +2,20 @@
 @use "../base/typography" as *;
 
 .c-footer-navigation {
+	padding-block: var(--space-20) var(--space-40);
+
+	&-links {
+		display: flex;
+		flex-direction: column;
+	}
+
+	.c-navigation-link {
+		min-height: 50px;
+		padding-block: var(--space-10);
+		border-bottom: 1px solid var(--clr-black);
+		display: flex;
+		align-items: center;
+
+		@include typo-body-md;
+	}
 }

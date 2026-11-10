@@ -24,19 +24,7 @@ export default defineConfig(({ command, mode }) => {
 						if (!id.includes("node_modules")) return;
 						if (id.includes("swiper")) return "swiper";
 						if (id.includes("alpine")) return "alpine";
-
-						if (
-							id.includes("/hls.js/") ||
-							id.includes("@videojs/hlsjs-video") ||
-							id.includes("@videojs/native-hls-video")
-						)
-							return "hls-video";
-
-						if (id.includes("@videojs/mux-video") || id.includes("/media/mux-video")) return "mux-video";
-						if (id.includes("@videojs/youtube-video") || id.includes("/media/youtube-video"))
-							return "youtube-video";
-						if (id.includes("@videojs/vimeo-video") || id.includes("/media/vimeo-video"))
-							return "vimeo-video";
+						if (id.includes("gsap")) return "gsap";
 
 						return "vendor";
 					},

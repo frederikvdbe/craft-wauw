@@ -1,0 +1,32 @@
+{% set icon = icon|default("") %}
+{% set title = title|default("") %}
+{% set description = description|default("") %}
+{% set linkLabel = linkLabel|default("") %}
+{% set linkUrl = linkUrl|default("") %}
+{% set modalId = modalId|default("") %}
+
+{% if title %}
+    <div class="c-cta-card">
+        {% include "_components/icon" with { icon, class: "c-cta-card-icon" } only %}
+
+        <div class="c-cta-card-content">
+            <strong class="c-cta-card-title">{{ title }}</strong>
+
+            {% if description %}
+                <p class="c-cta-card-description">{{ description }}</p>
+            {% endif %}
+
+            {% if linkLabel and modalId %}
+                <button
+                    type="button"
+                    class="c-cta-card-link"
+                    @click="window.dispatchEvent(new CustomEvent('wauw:modal-open', { detail: { id: '{{ modalId }}' } }))"
+                >
+                    {{ linkLabel }}
+                </button>
+            {% elseif linkLabel and linkUrl %}
+                <a href="{{ linkUrl }}" class="c-cta-card-link">{{ linkLabel }}</a>
+            {% endif %}
+        </div>
+    </div>
+{% endif %}

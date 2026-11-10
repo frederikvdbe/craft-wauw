@@ -1,0 +1,29 @@
+{# ======================= #}
+{# PROPERTIES              #}
+{# ======================= #}
+{% set products = products|default(craft.products.type("products").all()) %}
+{% set title = title|default(null) %}
+
+{# ======================= #}
+{# TEMPLATE                #}
+{# ======================= #}
+<section class="b-products container">
+    {% if title %}
+        {% include "_components/title" with { title, tag: "h2" } only %}
+    {% endif %}
+
+    <div class="b-products-content">
+        {% for product in products %}
+            {% set image = product.productImages.one() %}
+
+            <a class="b-products-item" href="{{ product.url }}">
+                {% include "_components/image" with {
+                    image,
+                    targetWidths: [1600, 800],
+                    sizes: "(min-width: 1024px) 33vw, 100vw",
+                    aspectRatio: 3 / 2,
+                } only %}
+            </a>
+        {% endfor %}
+    </div>
+</section>

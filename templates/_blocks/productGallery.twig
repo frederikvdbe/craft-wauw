@@ -1,0 +1,26 @@
+{# ======================= #}
+{# PROPERTIES              #}
+{# ======================= #}
+{% set productImages = productImages|slice(2)|default([]) %}
+
+{# ======================= #}
+{# TEMPLATE                #}
+{# ======================= #}
+<section class="b-product-gallery container">
+    <div class="b-product-gallery-content">
+        {% for image in productImages %}
+            {% set largeImage = loop.index <= 2 or (loop.index >= 5 and (loop.index - 5) % 3 == 0) %}
+
+            {% include "_components/image" with {
+                image,
+                targetWidths: largeImage ? 
+                    [2400, 1600, 800] : 
+                    [1600, 1200, 800],
+                sizes: largeImage ? 
+                    "100vw" : 
+                    "(min-width: 1024px) 50vw, 100vw",
+                aspectRatio: 16 / 8,
+            } only %}
+        {% endfor %}
+    </div>
+</section>

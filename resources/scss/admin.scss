@@ -1,22 +1,6 @@
 // =======================
 // CONTROL PANEL STYLES
 // =======================
-[data-attribute="seo"] {
-	.seo--wrap {
-		border-bottom: none;
-	}
-
-	.seo--tab {
-		padding-bottom: 0;
-	}
-
-	.seo--tab[data-seo-tab="optimisation"] {
-		.seo--snippet ~ *:not(input):not(textarea) {
-			display: none;
-		}
-	}
-}
-
 table.data tbody td,
 table.data tbody th {
 	max-width: 15vw !important;

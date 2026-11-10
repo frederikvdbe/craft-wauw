@@ -1,0 +1,81 @@
+data:
+  dataRetention: forever
+  dataRetentionValue: null
+  fileUploadsAction: retain
+  settings:
+    allowedStatusIds: null
+    automaticSubmissionState: true
+    collectIp: false
+    collectUser: false
+    completionBehavior: message
+    completionRedirectSource: url
+    cpSubmissionFieldConditions: null
+    dataRetention: null
+    dataRetentionValue: null
+    defaultEmailTemplateId: null
+    defaultErrorMessagePosition: verbb\formie\positions\BelowInput
+    defaultInstructionsPosition: verbb\formie\positions\AboveInput
+    defaultLabelPosition: verbb\formie\positions\AboveInput
+    disableCaptchas: false
+    disableSubmitButtonUntilValid: false
+    displayCurrentPageTitle: false
+    displayFormTitle: false
+    displayPageProgress: false
+    displayPageTabs: false
+    enableDefaultClientEvents: false
+    enableRedirectRules: false
+    enableStatusRules: false
+    errorMessage:
+      -
+        content:
+          -
+            text: 'Couldn’t save submission due to errors.'
+            type: text
+        type: paragraph
+    errorMessagePosition: top-form
+    fileUploadsAction: null
+    hideFormAfterSubmit: false
+    limitSubmissions: null
+    limitSubmissionsIpAddressNumber: null
+    limitSubmissionsIpAddressType: null
+    limitSubmissionsNumber: null
+    limitSubmissionsScope: form
+    limitSubmissionsType: total
+    loadingIndicator: null
+    loadingIndicatorText: null
+    pageRedirectUrl: null
+    progressCalculation: completion
+    progressPosition: end
+    progressValuePosition: inside-center
+    quizAllowRetakes: true
+    quizPassPercentage: 70.0
+    quizShowScoreAfterSubmit: true
+    redirectTarget: same-tab
+    redirectUrl: null
+    requireUser: false
+    requiredIndicator: asterisk
+    scheduleForm: false
+    scheduleFormEnd: null
+    scheduleFormStart: null
+    scoringEnabled: false
+    scrollToTop: true
+    submissionTitleFormat: '{timestamp}'
+    submitMethod: page-reload
+    successMessage:
+      -
+        content:
+          -
+            text: 'Submission saved.'
+            type: text
+        type: paragraph
+    successMessagePosition: top-form
+    successMessageTimeout: null
+    usePerFormPermissions: false
+    validationOnFocus: false
+    validationOnSubmit: true
+  userDeletedAction: retain
+defaultStatus: f1b1f216-76e4-4246-a0ca-5c1545903517 # New
+handle: contactForm
+name: 'Contact Form'
+redirectEntry: null
+template: null

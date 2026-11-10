@@ -2,4 +2,40 @@
 @use "../base/typography" as *;
 
 .c-primary-navigation {
+	&-links {
+		display: flex;
+		align-items: center;
+	}
+
+	.c-navigation-link {
+		display: grid;
+		grid-template-areas: "label";
+		justify-items: start;
+		align-items: center;
+		height: 110px;
+		padding-inline: var(--space-30);
+
+		@include typo-body-sm;
+		text-transform: uppercase;
+
+		> span {
+			grid-area: label;
+			transition: font-weight 0.2s ease;
+		}
+
+		&::after {
+			content: attr(data-text);
+			grid-area: label;
+			font-weight: var(--fw-700);
+			visibility: hidden;
+			pointer-events: none;
+		}
+
+		&.active,
+		&:hover {
+			> span {
+				font-weight: var(--fw-700);
+			}
+		}
+	}
 }

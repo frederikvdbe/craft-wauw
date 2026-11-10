@@ -1,38 +1,17 @@
 {# ======================= #}
 {# PROPERTIES              #}
 {# ======================= #}
-{% cache %}
-    
-{% set footer = craft.entries.section("footer").one %}
-
-{% set footerNavigation = footer.footerNavigationField.eagerly().all() %}
+{% set footerNavigation = footer.footerNavigationField.all() %}
 
 {# ======================= #}
 {# TEMPLATE                #}
 {# ======================= #}
-{% if footerNavigation|length %}
-    <nav class="c-footer-navigation">
-        <ul class="c-footer-navigation-lists">
-            {% for list in footerNavigation %}
-                {% set label = list.labelField|default("") %}
-                {% set links = list.linksField.eagerly().all() %}
-
-                <li class="c-footer-navigation-list">
-                    {% include "_components/title" with { title: label, tag: "h2" } only %}
-
-                    {% if links|length %}
-                        <ul class="c-footer-navigation-list-links">
-                            {% for link in links %}
-                                <li class="c-footer-navigation-list-link">
-                                    {% include "_components/navigationLink" with { link } only %}
-                                </li>
-                            {% endfor %}
-                        </ul>
-                    {% endif %}
-                </li>
-            {% endfor %}
-        </ul>
-    </nav>
-{% endif %}
-
-{% endcache %}
+<nav class="c-footer-navigation">
+    <ul class="c-footer-navigation-links">
+        {% for link in footerNavigation %}
+            <li class="c-footer-navigation-link">
+                {% include "_components/navigationLink" with { link } only %}
+            </li>
+        {% endfor %}
+    </ul>
+</nav>

@@ -1,0 +1,26 @@
+@use "../base/breakpoints" as *;
+@use "../base/typography" as *;
+
+.b-products {
+	.c-title {
+		text-align: center;
+
+		@include typo-h6;
+	}
+
+	&-content {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: var(--space-30);
+		margin-block: var(--space-30);
+
+		@include styles-below(tablet) {
+			grid-template-columns: 1fr;
+		}
+	}
+
+	&-item {
+		display: block;
+		text-decoration: none;
+	}
+}

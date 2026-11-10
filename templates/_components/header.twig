@@ -1,12 +1,42 @@
 {# ======================= #}
 {# PROPERTIES              #}
 {# ======================= #}
+{% set cartModalId = "cart-modal" %}
+{% set cartQty = craft.commerce.carts.cart.getTotalQty() %}
 
 {# ======================= #}
 {# TEMPLATE                #}
 {# ======================= #}
 <header class="c-header container">
     <div class="c-header-content">
+        <a href="{{ siteUrl }}" class="c-header-logo" aria-label="{{ "Go to the homepage"|t }}">
+            {% include "_components/icon" with { icon: "wauw-wordmark-slogan" } only %}
+        </a>
+
         {% include "_components/primaryNavigation" %}
+
+        <div class="c-header-actions">
+            {% include "_components/search" %}
+
+            {% include "_components/localization" %}
+
+            <div class="c-header-important-actions">
+                <a class="c-header-account" href="">
+                    {% include "_components/icon" with { icon: "account" } only %}
+                </a>
+
+                <button
+                    type="button"
+                    class="c-header-cart"
+                    @click="window.dispatchEvent(new CustomEvent('wauw:modal-open', { detail: { id: '{{ cartModalId }}' } }))"
+                >
+                    {% include "_components/icon" with { icon: "cart" } only %}
+
+                    <div class="c-header-cart-badge">{{ cartQty > 0 ? cartQty : "" }}</div>
+                </button>
+            </div>
+        </div>
+
+        {% include "_components/modals/cart" with { id: cartModalId } only %}
     </div>
 </header>

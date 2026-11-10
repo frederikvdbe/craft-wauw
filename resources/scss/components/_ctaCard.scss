@@ -1,0 +1,46 @@
+@use "../base/breakpoints" as *;
+@use "../base/typography" as *;
+
+.c-cta-card {
+	display: flex;
+	align-items: center;
+	gap: var(--space-30);
+	padding: var(--space-20) var(--space-30);
+	border: 1px solid var(--clr-grey-100);
+
+	&-icon {
+		flex-shrink: 0;
+		width: 80px;
+		height: 80px;
+	}
+
+	&-content {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-5);
+	}
+
+	&-title {
+		@include typo-body-sm;
+		font-weight: var(--fw-700);
+	}
+
+	&-description {
+		@include typo-body-xs;
+	}
+
+	&-link {
+		@include typo-body-sm;
+		font-weight: var(--fw-700);
+		text-transform: uppercase;
+		text-decoration: underline;
+
+		&:is(button) {
+			background: none;
+			border: none;
+			padding: 0;
+			text-align: left;
+			cursor: pointer;
+		}
+	}
+}

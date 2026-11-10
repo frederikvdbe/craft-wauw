@@ -22,10 +22,11 @@
 	"prefer-stable": true,
 	"require": {
 		"craftcms/ckeditor": "^5.9.0",
-		"craftcms/cms": "^5.12.0.1",
+		"craftcms/cms": "^5.12.1",
 		"craftcms/commerce": "^5.7.8",
 		"digitalastronaut/craft-core-seo-geo": "*",
 		"nystudio107/craft-vite": "^5.0.2",
+		"verbb/formie": "^4.0.8",
 		"vlucas/phpdotenv": "^5.4.0"
 	},
 	"require-dev": {
@@ -40,6 +41,7 @@
 	"config": {
 		"allow-plugins": {
 			"craftcms/plugin-installer": true,
+			"php-http/discovery": true,
 			"treeware/plant": true,
 			"yiisoft/yii2-composer": true
 		},

@@ -1,0 +1,19 @@
+@use "../base/breakpoints" as *;
+@use "../base/typography" as *;
+
+.c-legal-navigation {
+	display: flex;
+	justify-content: center;
+	padding-block: var(--space-80) var(--space-20);
+
+	&-links {
+		display: flex;
+		justify-content: center;
+		flex-wrap: wrap;
+		gap: var(--space-5) var(--space-80);
+	}
+
+	.c-navigation-link {
+		@include typo-body-sm;
+	}
+}

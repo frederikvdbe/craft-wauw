@@ -1,0 +1,34 @@
+{# ======================= #}
+{# TEMPLATE                #}
+{# ======================= #}
+{% extends "_base/layout" %}
+
+{% set pageClass = "product" %}
+
+{% set entry = product %}
+{% set productImages = entry.productImages.all() %}
+{% set shippingCalculatorModalId = "shipping-calculator-modal-#{entry.defaultVariant.id|default(random())}" %}
+
+{% set otherProducts = craft.products
+    .type("products")
+    .id(["not", entry.id])
+    .orderBy("RAND()")
+    .limit(6)
+    .all() %}
+
+{% block content %}
+    {% include "_blocks/productHero" %}
+
+    {% include "_blocks/productIntro" %}
+
+    {% include "_blocks/productGallery" %}
+
+    {% include "_blocks/productSpecifications" %}
+
+    {% include "_blocks/products" with {
+        products: otherProducts,
+        title: "You may also like"|t,
+    } only %}
+
+    {% include "_components/modals/shippingCalculator" with { id: shippingCalculatorModalId } only %}
+{% endblock %}

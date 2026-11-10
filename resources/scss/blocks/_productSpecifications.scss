@@ -1,0 +1,70 @@
+@use "../base/breakpoints" as *;
+@use "../base/typography" as *;
+
+.b-product-specifications {
+	margin-bottom: var(--space-30);
+
+	&-content {
+		display: grid;
+		padding: var(--space-80);
+		border: 1px solid var(--clr-grey-300);
+		grid-template-columns: 2fr 1fr;
+		gap: var(--space-30);
+		align-items: start;
+
+		@include styles-below(tablet) {
+			grid-template-columns: 1fr;
+		}
+	}
+
+	&-left,
+	&-right {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-20);
+	}
+
+	&-left {
+		border-right: 1px solid var(--clr-grey-300);
+		padding-right: var(--space-80);
+
+		.c-title {
+			@include typo-h6;
+		}
+
+		@include styles-below(tablet) {
+			border-right: 0;
+			padding-right: 0;
+		}
+	}
+
+	&-actions {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+		gap: var(--space-30);
+	}
+
+	&-dimensions {
+		display: flex;
+		flex-direction: column;
+		margin: 0;
+	}
+
+	&-dimension {
+		display: flex;
+		justify-content: space-between;
+		gap: var(--space-20);
+		padding-block: var(--space-15);
+		border-bottom: 1px solid var(--clr-grey-300);
+
+		dt,
+		dd {
+			margin: 0;
+			@include typo-body-sm;
+		}
+
+		dt {
+			font-weight: var(--fw-700);
+		}
+	}
+}

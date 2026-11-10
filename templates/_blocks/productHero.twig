@@ -1,0 +1,22 @@
+{# ======================= #}
+{# PROPERTIES              #}
+{# ======================= #}
+{% set title = entry.title|default("") %}
+{% set image = productImages[0]|default(null) %}
+
+{# ======================= #}
+{# TEMPLATE                #}
+{# ======================= #}
+<section class="b-product-hero container">
+    <div class="b-product-hero-content">
+        {% include "_components/image" with {
+            image,
+            targetWidths: [2400, 1600, 800],
+            sizes: "100vw",
+            aspectRatio: 16 / 8,
+            aboveFold: true,
+        } only %}
+
+        {% include "_components/title" with { title, tag: "h1" } only %}
+    </div>
+</section>

@@ -2,4 +2,48 @@
 @use "../base/typography" as *;
 
 .c-button {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	min-height: 40px;
+	min-width: 180px;
+	gap: var(--space-10);
+	padding-inline: var(--space-20);
+	background-color: var(--clr-yellow-500);
+	border-radius: var(--border-radius-2);
+	border: 1px solid transparent;
+
+	@include typo-body-xs;
+	text-transform: uppercase;
+
+	&:hover {
+		cursor: pointer;
+	}
+
+	&.tertiary {
+		background-color: transparent;
+		border: 1px solid var(--clr-grey-300);
+	}
+
+	&.icon-only {
+		width: 40px;
+		height: 40px;
+		min-height: 40px;
+		padding: 0;
+		gap: 0;
+
+		span {
+			display: none;
+		}
+
+		.c-icon {
+			width: 20px;
+			height: 20px;
+		}
+	}
+
+	&.is-favorite .c-icon {
+		fill: currentColor;
+		color: var(--clr-red-500);
+	}
 }

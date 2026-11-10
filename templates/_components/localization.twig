@@ -1,0 +1,66 @@
+{# ======================= #}
+{# PROPERTIES              #}
+{# ======================= #}
+{% set allSites = craft.app.sites.getAllSites %}
+
+{% set languageMap = {
+    "nl-BE": "Nederlands",
+    "fr-BE": "Français",
+    "en": "English",
+} %}
+
+{% set currencyMap = {
+    "EUR": "Euro",
+    "USD": "Dollar",
+} %}
+
+{% set allCurrencies = craft.commerce.paymentCurrencies.getAllPaymentCurrencies() %}
+{% set activeCurrencyIso = craft.commerce.paymentCurrencies.getPrimaryPaymentCurrencyIso() %}
+{% set activeCurrencySymbol = craft.app.locale.getCurrencySymbol(activeCurrencyIso) %}
+
+{# ======================= #}
+{# TEMPLATE                #}
+{# ======================= #}
+<div class="c-localization">
+    <div class="c-localization-toggle">
+        {% include "_components/text" with { text: activeCurrencySymbol } only %}
+        {% include "_components/text" with { text: languageMap[craft.app.language] } only %}
+        {% include "_components/icon" with { icon: "chevron-down" } only %}
+    </div>
+
+    <div class="c-localization-config">
+        <ul class="c-localization-options">
+            {% for site in allSites %}
+                {% set languageBasedEntry = craft.entries.id(entry.id).site(site).one() %}
+                {% set language = site.language|default("") %}
+                {% set url = languageBasedEntry.url|default(siteUrl) %}
+                {% set active = isActive(url) %}
+
+                <li class="c-localization-option {{ active }}">
+                    <a class="c-localization-option-link" href="{{ url }}">
+                        {% include "_components/text" with { text: languageMap[language] } only %}
+                        {% include "_components/icon" with { icon: "flag-" ~ language } only %}
+                        <div class="c-localization-option-state"></div>
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+
+        <div class="c-localization-config-divider"></div>
+
+        <ul class="c-localization-options">
+            {% for currency in allCurrencies %}
+                {% set active = currency.iso == activeCurrencyIso ? "active" : "" %}
+                {% set symbol = craft.app.locale.getCurrencySymbol(currency.iso) %}
+
+                <li class="c-localization-option {{ active }}">
+                    <a class="c-localization-option-link" href="">
+                        {% include "_components/text" with { text: currencyMap[currency.iso] } only %}
+                        {% include "_components/text" with { text: symbol } only %}
+                        <div class="c-localization-option-state"></div>
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
