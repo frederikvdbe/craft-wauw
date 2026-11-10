@@ -2,6 +2,8 @@
 
 use craft\helpers\App;
 use modules\lightspeed\Module as Lightspeed;
+use modules\docs\Module as Docs;
+use modules\ecom\Module as Ecom;
 use modules\site\Site;
 
 return [
@@ -14,9 +16,13 @@ return [
     'modules' => [
         'site' => Site::class,
         'lightspeed' => Lightspeed::class,
+        'ecom' => Ecom::class,
+        'docs' => Docs::class,
     ],
     'bootstrap' => [
         'site',
         'lightspeed',
+        'ecom',
+        'docs',
     ],
 ];

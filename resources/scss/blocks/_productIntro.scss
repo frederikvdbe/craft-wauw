@@ -51,6 +51,10 @@
 		display: flex;
 		flex-wrap: wrap;
 		gap: var(--space-10);
+
+		.c-button {
+			min-width: min-content;
+		}
 	}
 
 	.b-product-actions {

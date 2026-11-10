@@ -122,14 +122,14 @@ class OrderImporter extends Component
         $invoices = $this->data->invoices[$data['id']] ?? [];
         $numbers = fn(bool $creditNote) => implode(', ', array_column(array_filter($invoices, fn(array $invoice) => $invoice['isCreditNote'] === $creditNote), 'number')) ?: null;
         $order->setFieldValues([
-            'lightspeedId' => (string)$data['id'],
-            'shipmentStatus' => $data['shipmentStatus'],
-            'invoiceNumbers' => $numbers(false),
-            'creditNotes' => $numbers(true),
-            'paymentMethod' => $data['paymentTitle'] ?: null,
-            'discountCode' => $data['discountCouponCode'] ? "{$data['discountCouponCode']} (−{$data['discountAmount']})" : null,
-            'customerComment' => $data['comment'] ?: null,
-            'memo' => $data['memo'] ?: null,
+            'lightspeedIdField' => (string)$data['id'],
+            'shipmentStatusField' => $data['shipmentStatus'],
+            'invoiceNumbersField' => $numbers(false),
+            'creditNotesField' => $numbers(true),
+            'paymentMethodField' => $data['paymentTitle'] ?: null,
+            'discountCodeField' => $data['discountCouponCode'] ? "{$data['discountCouponCode']} (−{$data['discountAmount']})" : null,
+            'customerCommentField' => ApiData::html($data['comment']),
+            'memoField' => ApiData::html($data['memo']),
         ]);
         $this->save($order);
 
@@ -152,7 +152,7 @@ class OrderImporter extends Component
         $service = Commerce::getInstance()->getLineItems();
         $qty = max(1, (int)$line['quantityOrdered']);
         $variantId = ApiData::id($line['variant']);
-        $variant = $variantId ? Variant::find()->lightspeedId($variantId)->status(null)->one() : null;
+        $variant = $variantId ? Variant::find()->lightspeedIdField($variantId)->status(null)->one() : null;
 
         if ($variant) {
             $lineItem = $service->create($order, ['purchasable' => $variant, 'qty' => $qty]);
@@ -199,7 +199,7 @@ class OrderImporter extends Component
         $transactions = Commerce::getInstance()->getTransactions();
         $transaction = $transactions->createTransaction($order, null, TransactionRecord::TYPE_PURCHASE);
         $transaction->status = TransactionRecord::STATUS_SUCCESS;
-        $transaction->message = $order->getFieldValue('paymentMethod') ?? '';
+        $transaction->message = $order->getFieldValue('paymentMethodField') ?? '';
         $transactions->saveTransaction($transaction) || throw new Exception("Could not save transaction for order $order->reference");
 
         // Load again: the order caches its transactions.
@@ -218,7 +218,7 @@ class OrderImporter extends Component
 
     private function customer(array $data): User
     {
-        return User::find()->lightspeedId(ApiData::id($data['customer']))->status(null)->one()
+        return User::find()->lightspeedIdField(ApiData::id($data['customer']))->status(null)->one()
             ?? Craft::$app->getUsers()->ensureUserByEmail($data['email']);
     }
 

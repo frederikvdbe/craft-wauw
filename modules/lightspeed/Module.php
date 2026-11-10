@@ -11,6 +11,7 @@ use modules\lightspeed\services\Client;
 use modules\lightspeed\services\Extractor;
 use modules\lightspeed\services\Store;
 use modules\lightspeed\services\Sync;
+use modules\lightspeed\services\SyncLog;
 use modules\lightspeed\utilities\SyncUtility;
 use yii\base\Event;
 
@@ -18,6 +19,7 @@ use yii\base\Event;
  * @property-read Client $client
  * @property-read Store $store
  * @property-read Sync $sync
+ * @property-read SyncLog $syncLog
  */
 class Module extends \yii\base\Module
 {
@@ -44,6 +46,7 @@ class Module extends \yii\base\Module
             'client' => Client::class,
             'store' => Store::class,
             'sync' => Sync::class,
+            'syncLog' => SyncLog::class,
         ]);
 
         Event::on(Utilities::class, Utilities::EVENT_REGISTER_UTILITIES, function(RegisterComponentTypesEvent $event) {

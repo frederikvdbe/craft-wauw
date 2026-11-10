@@ -1,11 +1,11 @@
 {# ======================= #}
 {# PROPERTIES              #}
 {# ======================= #}
-{% set title = entry.fullTitle|default("") %}
-{% set text = entry.shortDescription|default("") %}
-{% set image = productImages[1]|default(null) %}
+{% set title = entry.fullTitleField|default("") %}
+{% set text = entry.shortDescriptionField|default("") %}
+{% set image = productImages[1] %}
 {% set variant = entry.defaultVariant %}
-{% set priceOnRequest = variant.priceOnRequest|default(false) %}
+{% set priceOnRequest = variant.priceOnRequestField|default(false) %}
 {% set isFavorite = currentUser ? (entry.id in currentUser.favoriteProductsField.ids()) : false %}
 
 {# ======================= #}
@@ -23,7 +23,7 @@
         <div class="b-product-intro-main">
             {% include "_components/title" with { title, tag: "h2" } only %}
 
-            {% include "_components/text" with { text } only %}
+            {% include "_components/richText" with { text } only %}
 
             <div class="b-product-intro-links">
                 {% include "_components/button" with {
@@ -52,7 +52,7 @@
                     iconBefore: "share",
                     class: "tertiary icon-only",
                     attributes: {
-                        "x-data": "share('#{entry.fullTitle|default(entry.title)|e('js')}', '#{entry.url|e('js')}')",
+                        "x-data": "share('#{entry.fullTitleField|default(entry.title)|e('js')}', '#{entry.url|e('js')}')",
                         "@click": "share()",
                     },
                 } only %}

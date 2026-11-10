@@ -1,4 +1,4 @@
-dateModified: 1794332718
+dateModified: 1794341993
 elementSources:
   craft\commerce\elements\Product:
     -
@@ -293,15 +293,13 @@ mcp:
 meta:
   __names__:
     0b3110ba-6ae7-4004-9171-46aff8f33209: English # English
-    0bc16e16-73a2-43b3-9929-9c7b600b2b62: Memo # Memo
     00e1d9bb-51b9-4ebf-847e-a089feaef726: 'Public Schema' # Public Schema
-    1ecf5792-e5a0-4ab8-b08b-4e305679144a: 'Email confirmed in Lightspeed' # Email confirmed in Lightspeed
     2ad1794e-7b24-4662-b2ac-142c09d23a7a: Footer # Footer
     2b8c096e-8810-4a19-8e7d-f66703ed0052: Buttons # Buttons
+    2c09a066-2d09-4894-9cf7-1922b6e62972: Architecten # Architecten
     2e4cae7a-2d4d-49bb-8f2a-b7ed384b49ef: SEO/GEO # SEO/GEO
     3a4636ce-ae5f-41b6-a380-04d42765f6a7: Customers # Customers
     3c7c40af-cf57-47c9-baf9-3e62b39faa21: 'Awaiting payment' # Awaiting payment
-    3c92137f-80db-453b-ab81-b93722ac4ab2: Phone # Phone
     3e23ed5e-c5f7-4239-8231-35dae44d6660: Dummy # Dummy
     3fc8091f-6100-4e21-9772-9aa96d4b73c0: 'Product key' # Product key
     4a0a43e5-9908-4d63-9932-ffe768ba759f: Images # Images
@@ -329,11 +327,11 @@ meta:
     12f1523e-de84-4e0f-9c1a-c47fdc071991: 'Contact Form' # Contact Form
     23bc0810-e9d7-499e-8398-83de3788b62c: Blocks # Blocks
     28fb50aa-e48c-45b4-b2ad-78a1d6255801: Products # Products
+    29c263bc-c906-4bb4-af23-8671e323dbf5: 'Product image' # Product image
     33d8854e-fe4a-4f83-a6b1-57cc2f3125a0: Birthdate # Birthdate
     39dae8e0-9ae7-4d95-9088-aa5a0af11cbe: Images # Images
     48a3d45e-b4f5-49f2-a960-94adcb851007: Spacing # Spacing
     48db8f35-32dc-4acd-985d-1895e5dc6eaa: Guests # Guests
-    51d0d58c-7b4f-4197-9c64-0b0d6d57a085: 'Full title' # Full title
     78f386d8-ccbe-4fa9-b24b-f527005175e6: Uploads # Uploads
     83c8e18f-fe7a-4327-b157-3dca15735bac: 'Shipment status' # Shipment status
     86ac5424-b08e-4c43-b203-dda2ce4318e3: 'Short description' # Short description
@@ -347,29 +345,28 @@ meta:
     841b576a-8964-4701-ac7a-8789c2ee20d1: 'Primary navigation' # Primary navigation
     883ee07a-821a-4772-acaf-e9a78ff34015: 'Footer navigation' # Footer navigation
     900c896d-0e56-4089-93bf-b658cff2b95f: Brands # Brands
-    934a4695-ef0e-40a2-8e3c-aa126a626e87: Text # Text
     1375ad16-04b6-4c7f-97fb-8a8d24d288a1: 'Media bestanden' # Media bestanden
     4381ddb2-8940-4d25-8e42-5a770b533b71: 'Single line text' # Single line text
     4873bc46-6c2c-4e5a-8e84-cb8e312f20ad: Buttons # Buttons
     7947a42a-167a-4d11-a4c2-dcf9fa46eb65: 'Button variant' # Button variant
     8694ab8e-0843-4dd6-a487-9c714713b5fa: WAUW # WAUW
     09747a1d-81b5-43e9-9217-a3b2e06beb89: Categories # Categories
+    52649fa3-85e6-4725-9f40-699b1f061dd4: 'Navigation links list' # Navigation links list
+    72688bf2-9dcf-4032-9899-7d39ab1986f0: 'Navigation link + menu' # Navigation link + menu
     75069bbd-1332-4c8e-ac47-28324d336d36: 'Invoice numbers' # Invoice numbers
     92591f88-9d22-4b46-8cea-aaaee89e8549: Archived # Archived
     96747e9b-bba0-4c0b-bf51-99c294068b93: Video # Video
     704846e3-cfa0-4a1f-8f8f-f65b73c9de47: Text # Text
+    1383796c-c497-4943-94f8-10173287ff1c: Lightswitch # Lightswitch
     12957444-6e55-49bf-acc1-494d6c90f761: Primary # Primary
+    41893669-183e-4f95-9dd9-254bf1342b1f: Date # Date
     89865385-579d-42d4-a578-48a011a9342a: 'Picked up' # Picked up
-    a5a2f1d3-acc2-4a33-a038-a46d733df2d3: 'Discount code' # Discount code
     a6ca9637-b600-4055-806f-e672ad03c6e0: Header # Header
     a39dbc9c-b032-49c9-a591-538a0363dee5: 'Specification sheets' # Specification sheets
     a41c652a-eb3b-48a1-8a47-f9e2f617e3d1: Cancelled # Cancelled
-    a297f69a-7938-4b9d-8142-16f72d8e05bf: 'Credit notes' # Credit notes
-    a1470400-45d3-415d-b060-870a544144a2: '3D / interactive viewer' # 3D / interactive viewer
     a3045613-418c-483e-a666-fb4269b18c80: URL # URL
     aa95f819-8179-4afd-8972-f3d4b77f3056: Button # Button
     aa81478e-752d-4fbd-b670-ea469cfe058c: 'Product images' # Product images
-    af60e1a9-5a4f-44f7-bddd-9cd08c16a81a: Mobile # Mobile
     b6eaa061-d417-41eb-8ec0-acc8c19d1378: Media # Media
     b42148d9-c345-4a66-bb6d-085a6d131b74: Products # Products
     ba7f6370-bf87-4b80-8ed1-8d53cf300b28: Brand # Brand
@@ -380,7 +377,6 @@ meta:
     ca6f639a-12fb-4ecd-8e43-1c9b5e863711: Spacing # Spacing
     d0499f4d-e39e-4fab-80c5-595fadbfcf91: 'Multiline text' # Multiline text
     d1ab0c28-7124-4171-99dd-27b8f9805017: 'Rich Text' # Rich Text
-    d6ca0115-c4d6-401d-86df-d9c4e0c5b090: EAN # EAN
     d7e8d0bc-8052-499d-99b8-d622687dfee7: 'Extra page' # Extra page
     dadd71bc-7f88-40e2-9d64-d59c8af94500: Withdrawn # Withdrawn
     dba87475-a4e6-4b5e-9b21-5cb3156adbe0: Footer # Footer
@@ -390,9 +386,8 @@ meta:
     eb0d0935-3bc1-4cf1-86d9-275a753716de: 'Extra pages' # Extra pages
     f00a70c6-aa1e-4071-8916-4d0c690c5c66: 'Customer comment' # Customer comment
     f1b1f216-76e4-4246-a0ca-5c1545903517: New # New
+    f45ac18d-2903-4e31-8db0-5d1658a1c101: 'External URL' # External URL
     f3996e6e-c0b1-4e36-87e5-a7102b6061b6: 'Home page' # Home page
-    fc61cd9e-3c29-43ee-a4d0-ebbdab8cd7e5: 'Payment method' # Payment method
-    fcc04824-66bf-4fc5-911b-fe6ab7f2b6f3: 'Price on request' # Price on request
     fff6fb9b-173c-4adf-a139-9bc40669780d: 'VIP Members' # VIP Members
 plugins:
   ckeditor:
@@ -432,6 +427,110 @@ plugins:
     enabled: true
     licenseKey: E5BFNQOPFUNH3W1LWMRZ20P5
     schemaVersion: 4.0.104
+    settings:
+      ajaxTimeout: 10
+      alertEmails: null
+      alertEmailsUserGroup: null
+      allowHiddenFieldTemplates: false
+      allowHtmlFieldTemplateIncludes: false
+      allowHtmlFieldTwig: false
+      allowLegacySignatureImageUrls: true
+      allowMultiSelectDropdowns: true
+      allowPhoneCountrySelector: true
+      allowPublicVolumes: true
+      allowedSubmitMethods: both
+      anonymousFormBootstrapRateLimit: 30
+      anonymousFormRateWindowSeconds: 60
+      anonymousFormRefreshRateLimit: 120
+      compatibilityMode: true
+      completionQueryAllowlist:
+        - utm_source
+        - utm_medium
+        - utm_campaign
+        - utm_term
+        - utm_content
+      defaultCpSubmissionFieldConditions: follow
+      defaultEmailTemplate: ''
+      defaultErrorMessagePosition: verbb\formie\positions\BelowInput
+      defaultExportFolder: '@storage/formie-export'
+      defaultFormStencil: ''
+      defaultFormTemplate: ''
+      defaultInstructionsPosition: verbb\formie\positions\AboveInput
+      defaultLabelPosition: verbb\formie\positions\AboveInput
+      defaultPage: forms
+      deliveryEvidenceRetentionDays: 30
+      emptyValuePlaceholder: 'No response.'
+      enableBackSubmission: true
+      enableCsrfValidationForGuests: true
+      enableLargeFieldStorage: false
+      enableMultiPageForms: true
+      enableUnloadWarning: true
+      encryptionKey: null
+      errorAriaLive: polite
+      filterIntegrationMapping: true
+      includeDraftElementUsage: false
+      includeFlatpickrCss: true
+      includeRevisionElementUsage: false
+      integrationAlertEmails: null
+      integrationAlertEmailsUserGroup: null
+      integrationApiErrorHandling:
+        -
+          __assoc__:
+            -
+              - severity
+              - rejected
+            -
+              - action
+              - logWarning
+        -
+          __assoc__:
+            -
+              - severity
+              - rate_limited
+            -
+              - action
+              - failQueue
+        -
+          __assoc__:
+            -
+              - severity
+              - failure
+            -
+              - action
+              - failQueue
+      logSubmissionValues: true
+      maxEmailAttachmentSizeMb: 15
+      maxIncompleteSubmissionAge: 30
+      maxSentNotificationsAge: 30
+      maxStagedUploadBytes: 67108864
+      maxStagedUploadFiles: 50
+      outputConsoleMessages: true
+      paymentWebhookProxyUrl: null
+      pdfPaperOrientation: portrait
+      pdfPaperSize: letter
+      plainTextHtmlSanitizationMode: preserve
+      pluginName: Forms
+      queuePriority: null
+      redirectUri: null
+      reportAsyncExportRowThreshold: 1000
+      reportExportSingleUseDownload: true
+      reportInteractiveExportExpiryHours: 72
+      reportScheduledExportExpiryHours: 48
+      reportTablePageSize: 100
+      requireHtmlPurification: true
+      saveResumeTokenTtlDays: 14
+      sendEmailAlerts: false
+      sendIntegrationAlerts: false
+      sentNotifications: true
+      setOnlyCurrentPagePayload: false
+      staticCacheRefreshOnLoad: false
+      submissionSidebarFormOrder: dateCreatedDesc
+      submissionStateRetentionDays: 30
+      submissionsBehaviour: all
+      useCssLayers: false
+      useQueueForIntegrations: true
+      useQueueForNotifications: true
+      validateCustomTemplates: true
   vite:
     edition: standard
     enabled: true

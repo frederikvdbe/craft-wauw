@@ -1,0 +1,46 @@
+columnSuffix: null
+handle: customerTypeField
+instructions: null
+name: 'Customer type'
+searchable: false
+settings:
+  customOptions: false
+  options:
+    -
+      __assoc__:
+        -
+          - label
+          - ''
+        -
+          - value
+          - ''
+        -
+          - default
+          - false
+    -
+      __assoc__:
+        -
+          - label
+          - Private
+        -
+          - value
+          - private
+        -
+          - default
+          - false
+    -
+      __assoc__:
+        -
+          - label
+          - Company
+        -
+          - value
+          - company
+        -
+          - default
+          - false
+tip: null
+translationKeyFormat: null
+translationMethod: none
+type: craft\fields\Dropdown
+warning: null

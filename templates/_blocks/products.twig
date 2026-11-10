@@ -14,7 +14,7 @@
 
     <div class="b-products-content">
         {% for product in products %}
-            {% set image = product.productImages.one() %}
+            {% set image = product.productImagesField.one() %}
 
             <a class="b-products-item" href="{{ product.url }}">
                 {% include "_components/image" with {

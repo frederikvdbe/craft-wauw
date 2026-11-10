@@ -1,0 +1,18 @@
+columnSuffix: null
+handle: lightspeedIdField
+instructions: null
+name: 'Lightspeed ID'
+searchable: false
+settings:
+  byteLimit: null
+  charLimit: null
+  code: false
+  initialRows: 4
+  multiline: false
+  placeholder: null
+  uiMode: normal
+tip: null
+translationKeyFormat: null
+translationMethod: none
+type: craft\fields\PlainText
+warning: null

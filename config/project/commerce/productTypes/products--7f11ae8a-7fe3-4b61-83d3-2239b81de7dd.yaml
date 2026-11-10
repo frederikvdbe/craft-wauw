@@ -36,7 +36,7 @@ productFieldLayouts:
             autocomplete: false
             autocorrect: true
             class: null
-            dateAdded: '2026-11-07T15:57:57+00:00'
+            dateAdded: '2026-11-07T13:39:47+00:00'
             disabled: false
             elementCondition: null
             id: null
@@ -55,13 +55,13 @@ productFieldLayouts:
             tip: null
             title: null
             type: craft\commerce\fieldlayoutelements\ProductTitleField
-            uid: a602b74c-3179-439b-907f-8de22a19099e
+            uid: 6bfa4632-a4a0-48df-9807-3dbb0e1a3be9
             userCondition: null
             warning: null
             width: 100
           -
             attribute: variants
-            dateAdded: '2026-11-07T15:57:57+00:00'
+            dateAdded: '2026-11-07T13:39:47+00:00'
             elementCondition: null
             id: null
             instructions: null
@@ -77,64 +77,7 @@ productFieldLayouts:
             userCondition: null
             warning: null
           -
-            dateAdded: '2026-11-07T15:57:57+00:00'
-            editCondition: null
-            elementCondition: null
-            elementEditCondition: null
-            fieldUid: 51d0d58c-7b4f-4197-9c64-0b0d6d57a085 # Full title
-            handle: null
-            instructions: null
-            label: null
-            oldFieldUid: null
-            required: false
-            tip: null
-            type: craft\fieldlayoutelements\CustomField
-            uid: 8fdcf297-e216-48cb-b9bc-7348987fed7c
-            userCondition: null
-            warning: null
-            width: 100
-          -
-            dateAdded: '2026-11-07T15:57:57+00:00'
-            editCondition: null
-            elementCondition: null
-            elementEditCondition: null
-            fieldUid: 86ac5424-b08e-4c43-b203-dda2ce4318e3 # Short description
-            handle: null
-            instructions: null
-            label: null
-            oldFieldUid: null
-            required: false
-            tip: null
-            type: craft\fieldlayoutelements\CustomField
-            uid: 1a4cebba-cae5-44a9-93ca-54273e4cfdf3
-            userCondition: null
-            warning: null
-            width: 100
-          -
-            dateAdded: '2026-11-08T15:32:37+00:00'
-            elementCondition: null
-            type: craft\fieldlayoutelements\HorizontalRule
-            uid: ddc11ce6-788e-4c5d-87a0-17fa6c8af902
-            userCondition: null
-          -
-            dateAdded: '2026-11-07T15:57:57+00:00'
-            editCondition: null
-            elementCondition: null
-            elementEditCondition: null
-            fieldUid: 934a4695-ef0e-40a2-8e3c-aa126a626e87 # Text
-            handle: null
-            instructions: null
-            label: null
-            oldFieldUid: null
-            required: false
-            tip: null
-            type: craft\fieldlayoutelements\CustomField
-            uid: a57041af-7d2d-4cc7-8358-7b8ec53c7a22
-            userCondition: null
-            warning: null
-            width: 100
-          -
-            dateAdded: '2026-11-07T15:57:57+00:00'
+            dateAdded: '2026-11-07T13:39:47+00:00'
             editCondition: null
             elementCondition: null
             elementEditCondition: null
@@ -151,13 +94,7 @@ productFieldLayouts:
             warning: null
             width: 100
           -
-            dateAdded: '2026-11-08T15:32:37+00:00'
-            elementCondition: null
-            type: craft\fieldlayoutelements\HorizontalRule
-            uid: 6f629d13-e086-4bcf-9572-f5cb22f8f492
-            userCondition: null
-          -
-            dateAdded: '2026-11-07T15:57:57+00:00'
+            dateAdded: '2026-11-07T13:39:47+00:00'
             editCondition: null
             elementCondition: null
             elementEditCondition: null
@@ -174,7 +111,7 @@ productFieldLayouts:
             warning: null
             width: 100
           -
-            dateAdded: '2026-11-07T15:57:57+00:00'
+            dateAdded: '2026-11-07T13:39:47+00:00'
             editCondition: null
             elementCondition: null
             elementEditCondition: null
@@ -191,7 +128,7 @@ productFieldLayouts:
             warning: null
             width: 100
           -
-            dateAdded: '2026-11-07T15:57:57+00:00'
+            dateAdded: '2026-11-07T13:39:47+00:00'
             editCondition: null
             elementCondition: null
             elementEditCondition: null
@@ -208,83 +145,128 @@ productFieldLayouts:
             warning: null
             width: 100
           -
-            dateAdded: '2026-11-07T15:57:57+00:00'
+            dateAdded: '2026-11-07T13:39:47+00:00'
             editCondition: null
             elementCondition: null
             elementEditCondition: null
-            fieldUid: 96747e9b-bba0-4c0b-bf51-99c294068b93 # Video
-            handle: null
+            fieldUid: 4381ddb2-8940-4d25-8e42-5a770b533b71 # Single line text
+            handle: fullTitleField
             instructions: null
-            label: null
+            label: 'Full title'
             oldFieldUid: null
             required: false
             tip: null
             type: craft\fieldlayoutelements\CustomField
-            uid: 4c0625c4-bc30-40fe-93bf-f884e5ec094c
+            uid: 8cd6c691-2956-4ae7-835a-3c4950ba7f3b
             userCondition: null
             warning: null
             width: 100
           -
-            dateAdded: '2026-11-07T15:57:57+00:00'
+            dateAdded: '2026-11-07T13:39:47+00:00'
             editCondition: null
             elementCondition: null
             elementEditCondition: null
-            fieldUid: a1470400-45d3-415d-b060-870a544144a2 # 3D / interactive viewer
-            handle: null
+            fieldUid: d0499f4d-e39e-4fab-80c5-595fadbfcf91 # Multiline text
+            handle: shortDescriptionField
             instructions: null
-            label: null
+            label: 'Short description'
             oldFieldUid: null
             required: false
             tip: null
             type: craft\fieldlayoutelements\CustomField
-            uid: 35dd0d80-9c3b-4d38-b578-207178e44f89
+            uid: 660f2ced-6cc0-4021-a61d-f30fcb662d81
             userCondition: null
             warning: null
             width: 100
           -
-            dateAdded: '2026-11-07T15:57:57+00:00'
+            dateAdded: '2026-11-07T13:39:47+00:00'
             editCondition: null
             elementCondition: null
             elementEditCondition: null
-            fieldUid: fcc04824-66bf-4fc5-911b-fe6ab7f2b6f3 # Price on request
-            handle: null
+            fieldUid: d1ab0c28-7124-4171-99dd-27b8f9805017 # Rich Text
+            handle: richTextField
             instructions: null
-            label: null
+            label: Text
             oldFieldUid: null
             required: false
             tip: null
             type: craft\fieldlayoutelements\CustomField
-            uid: 89666906-4ead-4555-bb77-bededd400835
+            uid: 51e67891-9bce-47c2-9602-8b8c7809f0e6
             userCondition: null
             warning: null
             width: 100
           -
-            dateAdded: '2026-11-08T15:32:37+00:00'
-            elementCondition: null
-            type: craft\fieldlayoutelements\HorizontalRule
-            uid: 0a7af9db-a8fc-4282-80f4-76b5c550c8b2
-            userCondition: null
-          -
-            dateAdded: '2026-11-08T15:32:37+00:00'
+            dateAdded: '2026-11-10T19:53:12+00:00'
             editCondition: null
             elementCondition: null
             elementEditCondition: null
-            fieldUid: 2e4cae7a-2d4d-49bb-8f2a-b7ed384b49ef # SEO/GEO
-            handle: null
+            fieldUid: f45ac18d-2903-4e31-8db0-5d1658a1c101 # External URL
+            handle: videoField
             instructions: null
-            label: null
+            label: Video
             oldFieldUid: null
             required: false
             tip: null
             type: craft\fieldlayoutelements\CustomField
-            uid: d8674fa4-af0b-44d3-9c4a-66ac45b5cfb4
+            uid: 257f37dc-7916-4033-a917-94b00e0e306b
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: '2026-11-10T19:53:12+00:00'
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: f45ac18d-2903-4e31-8db0-5d1658a1c101 # External URL
+            handle: viewerUrlField
+            instructions: null
+            label: '3D / interactive viewer'
+            oldFieldUid: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 3d6972dd-e399-44d8-ad44-3640f21eb955
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: '2026-11-07T13:39:47+00:00'
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: 1383796c-c497-4943-94f8-10173287ff1c # Lightswitch
+            handle: priceOnRequestField
+            instructions: 'Hides the price. On import: on when the Lightspeed price was 0, 1 or 2 (also used for sold items). The real price was the old price.'
+            label: 'Price on request'
+            oldFieldUid: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 2ab2a208-a551-4269-a20e-0ba57c7601b9
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: '2026-11-07T13:39:47+00:00'
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: 29c263bc-c906-4bb4-af23-8671e323dbf5 # Product image
+            handle: featuredImageField
+            instructions: null
+            label: 'Featured image'
+            oldFieldUid: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: aff74d73-97af-4c00-8022-0e5471fb5eb3
             userCondition: null
             warning: null
             width: 100
         name: Variants
         uid: 000642b6-58cf-49cc-b2f7-497b1f620249
         userCondition: null
-    thumbFieldKey: 'layoutElement:814c4fa0-9623-4b59-b592-ac45544022fa'
+    thumbFieldKey: 'layoutElement:aff74d73-97af-4c00-8022-0e5471fb5eb3'
 productTitleFormat: ''
 productTitleTranslationKeyFormat: ''
 productTitleTranslationMethod: site
@@ -325,7 +307,7 @@ variantFieldLayouts:
             autocomplete: false
             autocorrect: true
             class: null
-            dateAdded: '2026-11-07T15:57:57+00:00'
+            dateAdded: '2026-11-07T13:39:47+00:00'
             disabled: false
             elementCondition: null
             id: null
@@ -344,13 +326,13 @@ variantFieldLayouts:
             tip: null
             title: null
             type: craft\commerce\fieldlayoutelements\VariantTitleField
-            uid: 32f8008d-db1c-4527-b894-c017842f23b6
+            uid: d2b21820-c35e-4e84-bed3-9a266e929cd2
             userCondition: null
             warning: null
             width: 100
           -
             attribute: sku
-            dateAdded: '2026-11-07T15:57:57+00:00'
+            dateAdded: '2026-11-07T13:39:47+00:00'
             elementCondition: null
             id: null
             instructions: null
@@ -362,13 +344,13 @@ variantFieldLayouts:
             tip: null
             translatable: false
             type: craft\commerce\fieldlayoutelements\PurchasableSkuField
-            uid: 0751c90b-3fc6-4a41-9cc8-0485522756ed
+            uid: 6327cf77-3496-4fd7-81bd-1b9be93eefb0
             userCondition: null
             warning: null
             width: 100
           -
             attribute: price
-            dateAdded: '2026-11-07T15:57:57+00:00'
+            dateAdded: '2026-11-07T13:39:47+00:00'
             elementCondition: null
             id: null
             instructions: null
@@ -380,13 +362,13 @@ variantFieldLayouts:
             tip: null
             translatable: false
             type: craft\commerce\fieldlayoutelements\PurchasablePriceField
-            uid: 94492a7e-8dd4-4a21-858c-ae8845e1d4ec
+            uid: 871eb0ae-770f-43d4-9934-82cdaff2f867
             userCondition: null
             warning: null
             width: 100
           -
             attribute: stock
-            dateAdded: '2026-11-07T15:57:57+00:00'
+            dateAdded: '2026-11-07T13:39:47+00:00'
             defaultAllowOutOfStockPurchases: false
             defaultInventoryTracked: false
             elementCondition: null
@@ -400,13 +382,13 @@ variantFieldLayouts:
             tip: null
             translatable: false
             type: craft\commerce\fieldlayoutelements\PurchasableStockField
-            uid: 6a5d5b86-4553-4c7a-9475-7a843e720517
+            uid: fd0d93ff-5440-4e19-ad99-13fc1c05891d
             userCondition: null
             warning: null
             width: 100
           -
             attribute: availableForPurchase
-            dateAdded: '2026-11-07T15:57:57+00:00'
+            dateAdded: '2026-11-07T13:39:47+00:00'
             defaultAvailableForPurchase: false
             elementCondition: null
             id: null
@@ -419,13 +401,13 @@ variantFieldLayouts:
             tip: null
             translatable: false
             type: craft\commerce\fieldlayoutelements\PurchasableAvailableForPurchaseField
-            uid: 24fa3ea1-8e2f-439b-968c-835a5868839e
+            uid: 2bee9bbe-4706-400c-9e6b-f49d0bebde8f
             userCondition: null
             warning: null
             width: 100
           -
             attribute: allowedQty
-            dateAdded: '2026-11-07T15:57:57+00:00'
+            dateAdded: '2026-11-07T13:39:47+00:00'
             elementCondition: null
             id: null
             instructions: null
@@ -437,13 +419,13 @@ variantFieldLayouts:
             tip: null
             translatable: false
             type: craft\commerce\fieldlayoutelements\PurchasableAllowedQtyField
-            uid: 2a8325a5-61a1-4f10-80e1-e08ad21b140a
+            uid: 00db8442-9c73-4825-81aa-93a102a04eac
             userCondition: null
             warning: null
             width: 100
           -
             attribute: freeShipping
-            dateAdded: '2026-11-07T15:57:57+00:00'
+            dateAdded: '2026-11-07T13:39:47+00:00'
             elementCondition: null
             id: null
             instructions: null
@@ -455,13 +437,13 @@ variantFieldLayouts:
             tip: null
             translatable: false
             type: craft\commerce\fieldlayoutelements\PurchasableFreeShippingField
-            uid: 85257d94-08f6-47a5-8a53-c26ffdeb59b0
+            uid: 51c69f74-bcd5-453d-9783-e725e6eaff93
             userCondition: null
             warning: null
             width: 100
           -
             attribute: promotable
-            dateAdded: '2026-11-07T15:57:57+00:00'
+            dateAdded: '2026-11-07T13:39:47+00:00'
             defaultPromotable: false
             elementCondition: null
             id: null
@@ -474,13 +456,13 @@ variantFieldLayouts:
             tip: null
             translatable: false
             type: craft\commerce\fieldlayoutelements\PurchasablePromotableField
-            uid: 13f6641f-b7ae-4723-ab86-2544f950f6dc
+            uid: 0a02c484-f702-4efd-a9fc-7630bfe1b2e3
             userCondition: null
             warning: null
             width: 100
           -
             attribute: dimensions
-            dateAdded: '2026-11-07T15:57:57+00:00'
+            dateAdded: '2026-11-07T13:39:47+00:00'
             elementCondition: null
             id: null
             instructions: null
@@ -492,13 +474,13 @@ variantFieldLayouts:
             tip: null
             translatable: false
             type: craft\commerce\fieldlayoutelements\PurchasableDimensionsField
-            uid: 800435ce-a572-43f7-a5d1-dcdd566c11e8
+            uid: b93ffec9-800e-4323-9043-0786e82b8e76
             userCondition: null
             warning: null
             width: 100
           -
             attribute: weight
-            dateAdded: '2026-11-07T15:57:57+00:00'
+            dateAdded: '2026-11-07T13:39:47+00:00'
             elementCondition: null
             id: null
             instructions: null
@@ -510,29 +492,12 @@ variantFieldLayouts:
             tip: null
             translatable: false
             type: craft\commerce\fieldlayoutelements\PurchasableWeightField
-            uid: 0da454dc-6c56-4d4c-a836-57cdf3e13fe9
+            uid: 65e7ce54-af90-4ed0-affe-9d8ea6c0f63e
             userCondition: null
             warning: null
             width: 100
           -
-            dateAdded: '2026-11-07T15:57:57+00:00'
-            editCondition: null
-            elementCondition: null
-            elementEditCondition: null
-            fieldUid: d6ca0115-c4d6-401d-86df-d9c4e0c5b090 # EAN
-            handle: null
-            instructions: null
-            label: null
-            oldFieldUid: null
-            required: false
-            tip: null
-            type: craft\fieldlayoutelements\CustomField
-            uid: 392a8e21-2752-4b60-b6d7-60cf0836178c
-            userCondition: null
-            warning: null
-            width: 100
-          -
-            dateAdded: '2026-11-07T15:57:57+00:00'
+            dateAdded: '2026-11-07T13:39:47+00:00'
             editCondition: null
             elementCondition: null
             elementEditCondition: null
@@ -545,6 +510,23 @@ variantFieldLayouts:
             tip: null
             type: craft\fieldlayoutelements\CustomField
             uid: be7feb57-e110-49ea-9674-51e31d558bee
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: '2026-11-07T13:39:47+00:00'
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: 4381ddb2-8940-4d25-8e42-5a770b533b71 # Single line text
+            handle: eanField
+            instructions: null
+            label: EAN
+            oldFieldUid: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: ee58b9dd-b837-42f7-94c4-fab45d243fe2
             userCondition: null
             warning: null
             width: 100

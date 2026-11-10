@@ -1,5 +1,5 @@
-{% set brand = product.brand.one() %}
-{% set categories = product.productCategories.all() %}
+{% set brand = product.brandField.one() %}
+{% set categories = product.productCategoriesField.all() %}
 <!doctype html>
 <html>
 <head>
@@ -110,19 +110,19 @@
             <img class="brand-image" src="{{ brandImageSrc }}" alt="{{ brand.title }}">
         {% endif %}
         <p class="eyebrow">{{ brand ? brand.title : 'Specification sheet' }}</p>
-        <h1>{{ product.fullTitle ?: product.title }}</h1>
+        <h1>{{ product.fullTitleField ?: product.title }}</h1>
         <div style="clear: both;"></div>
     </div>
 
     <div class="details">
-        {% if product.priceOnRequest %}
+        {% if product.priceOnRequestField %}
             <p class="price">Price on request</p>
         {% elseif variant and variant.price %}
             <p class="price">{{ variant.price|commerceCurrency }}</p>
         {% endif %}
 
-        {% if product.shortDescription %}
-            <p class="description">{{ product.shortDescription }}</p>
+        {% if product.shortDescriptionField %}
+            <p class="description">{{ product.shortDescriptionField }}</p>
         {% endif %}
 
         <table class="specs">
@@ -135,8 +135,8 @@
             {% if variant and variant.sku %}
                 <tr><td class="label">SKU</td><td>{{ variant.sku }}</td></tr>
             {% endif %}
-            {% if variant and variant.ean %}
-                <tr><td class="label">EAN</td><td>{{ variant.ean }}</td></tr>
+            {% if variant and variant.eanField %}
+                <tr><td class="label">EAN</td><td>{{ variant.eanField }}</td></tr>
             {% endif %}
             {% if variant and (variant.length or variant.width or variant.height) %}
                 <tr><td class="label">Dimensions (cm)</td><td>{{ [variant.length, variant.width, variant.height]|filter(v => v)|join(' x ') }}</td></tr>
@@ -146,29 +146,29 @@
             {% endif %}
         </table>
 
-        {% if product.video or product.viewerUrl %}
+        {% if product.videoField or product.viewerUrlField %}
             <div class="links">
-                {% if product.video %}<a href="{{ product.video }}">Video: {{ product.video }}</a>{% endif %}
-                {% if product.viewerUrl %}<a href="{{ product.viewerUrl }}">3D / interactive viewer: {{ product.viewerUrl }}</a>{% endif %}
+                {% if product.videoField %}<a href="{{ product.videoField }}">Video: {{ product.videoField }}</a>{% endif %}
+                {% if product.viewerUrlField %}<a href="{{ product.viewerUrlField }}">3D / interactive viewer: {{ product.viewerUrlField }}</a>{% endif %}
             </div>
         {% endif %}
     </div>
 
-    {% if product.richText %}
-        <div class="rich-text">{{ product.richText }}</div>
+    {% if product.richTextField %}
+        <div class="rich-text">{{ product.richTextField }}</div>
     {% endif %}
 
     {% if images %}
         <div class="images">
             {% for src in images %}
-                <img src="{{ src }}" alt="{{ product.fullTitle ?: product.title }}">
+                <img src="{{ src }}" alt="{{ product.fullTitleField ?: product.title }}">
             {% endfor %}
             <div style="clear: both;"></div>
         </div>
     {% endif %}
 
     <div class="footer">
-        {{ product.fullTitle ?: product.title }} &middot; generated {{ now|date('Y-m-d') }}
+        {{ product.fullTitleField ?: product.title }} &middot; generated {{ now|date('Y-m-d') }}
     </div>
 </body>
 </html>

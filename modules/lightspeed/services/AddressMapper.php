@@ -35,14 +35,14 @@ class AddressMapper
             'locality' => $field('City') ?: null,
             'administrativeArea' => $field('Region') ?: null,
             'countryCode' => ($data[$prefix . 'Country'] ?? false) ? strtoupper($data[$prefix . 'Country']['code']) : null,
-            'phone' => self::phone($data['phone']),
-            'mobile' => self::phone($data['mobile']),
+            'phoneField' => self::phone($data['phone']),
+            'mobileField' => self::phone($data['mobile']),
         ];
     }
 
     public static function fill(Address $address, array $values): void
     {
-        $fields = ['phone', 'mobile'];
+        $fields = ['phoneField', 'mobileField'];
         Craft::configure($address, array_diff_key($values, array_flip($fields)));
         $address->setFieldValues(array_intersect_key($values, array_flip($fields)));
     }

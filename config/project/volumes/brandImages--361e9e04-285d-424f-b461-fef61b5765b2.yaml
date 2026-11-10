@@ -59,6 +59,7 @@ fieldLayouts:
 fs: brandImages
 handle: brandImages
 name: 'Brand images'
+propagationMethod: all
 sortOrder: 2
 subpath: ''
 titleTranslationKeyFormat: null

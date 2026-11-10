@@ -2,7 +2,6 @@
 
 namespace modules\lightspeed\jobs;
 
-use Craft;
 use modules\lightspeed\Module;
 use modules\lightspeed\services\ApiData;
 use modules\lightspeed\services\CustomerImporter;
@@ -73,13 +72,13 @@ class ImportJob extends SyncJob
             : $importer->warnings;
 
         foreach ($warnings as $warning) {
-            Craft::warning("Lightspeed $this->part: $warning", 'lightspeed');
+            $this->warn($warning);
         }
     }
 
-    protected function defaultDescription(): ?string
+    public function label(): string
     {
-        return self::DESCRIPTION_PREFIX . " import: $this->part" . ($this->sample ? ' (sample)' : '');
+        return "import: $this->part" . ($this->sample ? ' (sample)' : '');
     }
 
     private function importer(): ProductImporter|CustomerImporter|OrderImporter
@@ -94,7 +93,7 @@ class ImportJob extends SyncJob
     private function apiData(): ApiData
     {
         if ($this->apiData === null) {
-            $this->apiData = ApiData::load(Module::getInstance()->store);
+            $this->apiData = ApiData::load(Module::getInstance()->store, $this->sample);
             if ($this->sample) {
                 $this->apiData = (new Sample($this->apiData))->apply();
             }

@@ -2,7 +2,7 @@
 {# PROPERTIES              #}
 {# ======================= #}
 {% set variant = variant|default(null) %}
-{% set priceOnRequest = variant.priceOnRequest|default(false) %}
+{% set priceOnRequest = variant.priceOnRequestField|default(false) %}
 {% set shippingCalculatorModalId = "shipping-calculator-modal-#{variant.id|default(random())}" %}
 
 {# ======================= #}

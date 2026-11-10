@@ -123,7 +123,7 @@ tabs:
         editCondition: null
         elementCondition: null
         elementEditCondition: null
-        fieldUid: 3c92137f-80db-453b-ab81-b93722ac4ab2 # Phone
+        fieldUid: 3c92137f-80db-453b-ab81-b93722ac4ab2
         handle: null
         instructions: null
         label: null
@@ -140,7 +140,7 @@ tabs:
         editCondition: null
         elementCondition: null
         elementEditCondition: null
-        fieldUid: af60e1a9-5a4f-44f7-bddd-9cd08c16a81a # Mobile
+        fieldUid: af60e1a9-5a4f-44f7-bddd-9cd08c16a81a
         handle: null
         instructions: null
         label: null
@@ -149,6 +149,40 @@ tabs:
         tip: null
         type: craft\fieldlayoutelements\CustomField
         uid: c098824a-929b-4557-8cfa-e8a25b844cf6
+        userCondition: null
+        warning: null
+        width: 100
+      -
+        dateAdded: null
+        editCondition: null
+        elementCondition: null
+        elementEditCondition: null
+        fieldUid: 4381ddb2-8940-4d25-8e42-5a770b533b71 # Single line text
+        handle: phoneField
+        instructions: null
+        label: Phone
+        oldFieldUid: null
+        required: false
+        tip: null
+        type: craft\fieldlayoutelements\CustomField
+        uid: cb6235e0-3eb6-4933-8098-2174ae8f503d
+        userCondition: null
+        warning: null
+        width: 100
+      -
+        dateAdded: null
+        editCondition: null
+        elementCondition: null
+        elementEditCondition: null
+        fieldUid: 4381ddb2-8940-4d25-8e42-5a770b533b71 # Single line text
+        handle: mobileField
+        instructions: null
+        label: Mobile
+        oldFieldUid: null
+        required: false
+        tip: null
+        type: craft\fieldlayoutelements\CustomField
+        uid: 15cc0aec-7f04-48a1-a0f0-87b260fcaf3a
         userCondition: null
         warning: null
         width: 100

@@ -1,0 +1,33 @@
+{% css %}
+    .docs { display: flex; gap: var(--xl); align-items: flex-start; }
+    .docs-nav { flex: 0 0 200px; position: sticky; top: var(--m); }
+    .docs-nav h2 { margin: var(--m) 0 var(--xs); font-size: 12px; text-transform: uppercase; color: var(--gray-500); }
+    .docs-nav h2:first-child { margin-top: 0; }
+    .docs-nav ul { margin: 0; padding: 0; list-style: none; }
+    .docs-nav a { display: block; padding: 4px 8px; border-radius: var(--small-border-radius); color: var(--text-color); }
+    .docs-nav a:hover { background: var(--gray-050); text-decoration: none; }
+    .docs-nav a.sel { background: var(--gray-100); font-weight: 600; }
+    .docs-content { flex: 1; min-width: 0; max-width: 760px; }
+    .docs-content table { width: 100%; }
+    @media (max-width: 999px) {
+        .docs { flex-direction: column; }
+        .docs-nav { position: static; flex-basis: auto; }
+    }
+{% endcss %}
+
+<div class="docs">
+    <nav class="docs-nav" aria-label="Handleiding">
+        {% for group, pages in nav %}
+            <h2>{{ group }}</h2>
+            <ul>
+                {% for key, title in pages %}
+                    <li><a href="{{ url('utilities/docs', { page: key }) }}"{% if key == page %} class="sel" aria-current="page"{% endif %}>{{ title }}</a></li>
+                {% endfor %}
+            </ul>
+        {% endfor %}
+    </nav>
+
+    <article class="docs-content readable">
+        {{ html|raw }}
+    </article>
+</div>
