@@ -22,6 +22,9 @@
         {% include "_components/button" with {
             label: "Go to check out"|t,
             class: "safe",
+            button: {
+                urlField: { url: url("checkout") }
+            },
         } only %}
     </div>
 {% endblock %}
