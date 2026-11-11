@@ -1,4 +1,4 @@
-dateModified: 1794341993
+dateModified: 1794406665
 elementSources:
   craft\commerce\elements\Product:
     -
@@ -318,7 +318,7 @@ meta:
     7f11ae8a-7fe3-4b61-83d3-2239b81de7dd: Products # Products
     7f1122a8-64c1-450d-9ac3-63cfad4e623d: Category # Category
     8a1b756e-f3c4-458d-a955-f955bc88b4d8: Draft # Draft
-    8c994610-9c3a-4b18-8ab5-8e1e5334089b: 'Lightspeed (old orders)' # Lightspeed (old orders)
+    8c994610-9c3a-4b18-8ab5-8e1e5334089b: Lightspeed # Lightspeed
     8da35481-725f-47fa-8876-76c117309522: 'Product categories' # Product categories
     9a80c602-8f9a-47fa-9f77-bec83a7c2418: Image # Image
     9a73018d-125f-47b1-9afa-e08cbc48a6ac: Anchor # Anchor
@@ -383,6 +383,7 @@ meta:
     dddd81ec-01f4-4458-b05e-1aefd414cd66: Media # Media
     e7c8d162-2de2-4ce8-bf03-5b10772f250b: 'Legal navigation' # Legal navigation
     e7f650f0-adf2-4ec9-95af-8db8542b1931: Title # Title
+    e669b53c-0b3d-4e93-ad38-5a452a101978: Mollie # Mollie
     eb0d0935-3bc1-4cf1-86d9-275a753716de: 'Extra pages' # Extra pages
     f00a70c6-aa1e-4071-8916-4d0c690c5c66: 'Customer comment' # Customer comment
     f1b1f216-76e4-4246-a0ca-5c1545903517: New # New
@@ -399,6 +400,10 @@ plugins:
     enabled: true
     licenseKey: FFYYQS5JS7LR8T0HO965MUBR
     schemaVersion: 5.7.0.0
+  commerce-mollie:
+    edition: standard
+    enabled: true
+    schemaVersion: 1.0.0
   core-seo-geo:
     edition: standard
     enabled: true

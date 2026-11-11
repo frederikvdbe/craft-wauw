@@ -24,6 +24,7 @@
 		"craftcms/ckeditor": "^5.9.0",
 		"craftcms/cms": "^5.12.1",
 		"craftcms/commerce": "^5.7.8",
+		"craftcms/commerce-mollie": "^4.4.3",
 		"digitalastronaut/craft-core-seo-geo": "*",
 		"nystudio107/craft-vite": "^5.0.2",
 		"verbb/formie": "^4.0.8",

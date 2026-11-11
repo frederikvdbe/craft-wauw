@@ -1,0 +1,29 @@
+{# ======================= #}
+{# PROPERTIES              #}
+{# ======================= #}
+{% set class = class|default("") %}
+{% set showCheckoutButton = showCheckoutButton is defined ? showCheckoutButton : true %}
+
+{# ======================= #}
+{# TEMPLATE                #}
+{# ======================= #}
+<div class="c-cart-overview {{ class }}">
+    <p class="c-cart-overview-title">{{ "Overview"|t }}</p>
+
+    <div class="c-cart-items" x-html="$store.cart.cartHtml"></div>
+
+    <div class="c-cart-overview-total">
+        <p>{{ "Total incl. tax"|t }}</p>
+        <p class="c-cart-overview-total-price" x-text="$store.cart.totalPrice"></p>
+    </div>
+
+    {% if showCheckoutButton %}
+        {% include "_components/button" with {
+            label: "Go to check out"|t,
+            class: "safe",
+            button: {
+                urlField: { url: url("checkout") }
+            },
+        } only %}
+    {% endif %}
+</div>

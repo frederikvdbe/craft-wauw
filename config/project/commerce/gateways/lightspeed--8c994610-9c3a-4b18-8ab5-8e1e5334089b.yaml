@@ -3,15 +3,15 @@ billingAddressCondition:
   elementType: null
   fieldContext: global
 handle: lightspeed
-isFrontendEnabled: false
-name: 'Lightspeed (old orders)'
+isFrontendEnabled: '0'
+name: Lightspeed
 orderCondition:
   class: craft\commerce\elements\conditions\orders\GatewayOrderCondition
   elementType: craft\commerce\elements\Order
   fieldContext: global
-paymentType: purchase
+paymentType: authorize
 settings:
-  onlyAllowForZeroPriceOrders: false
+  onlyAllowForZeroPriceOrders: '0'
 shippingAddressCondition:
   class: craft\commerce\elements\conditions\addresses\GatewayAddressCondition
   elementType: null
