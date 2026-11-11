@@ -31,7 +31,7 @@
     <div class="c-localization-config">
         <ul class="c-localization-options">
             {% for site in allSites %}
-                {% set languageBasedEntry = craft.entries.id(entry.id).site(site).one() %}
+                {% set languageBasedEntry = craft.entries.id(entry.id|default(null)).site(site).one() %}
                 {% set language = site.language|default("") %}
                 {% set url = languageBasedEntry.url|default(siteUrl) %}
                 {% set active = isActive(url) %}

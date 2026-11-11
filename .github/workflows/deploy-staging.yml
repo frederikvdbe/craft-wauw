@@ -1,0 +1,86 @@
+name: Deploy Staging
+
+on:
+    push:
+        branches: [ staging ]
+    workflow_dispatch:
+
+concurrency:
+    group: deploy-staging
+    cancel-in-progress: false
+
+jobs:
+
+    deploy:
+        runs-on: ubuntu-latest
+        environment: staging
+
+        env:
+            SSH_TARGET: ${{ vars.SSH_TARGET }}
+            DEPLOY_PATH: ${{ vars.DEPLOY_PATH }}
+            SSH: ssh -i ./deploy_key -o StrictHostKeyChecking=no -o LogLevel=ERROR
+
+        steps:
+            -   name: Checkout
+                uses: actions/checkout@v4
+
+            -   name: Setup PHP
+                uses: shivammathur/setup-php@v2
+                with:
+                    php-version: '8.5'
+                    tools: composer:v2
+
+            -   name: Setup node
+                uses: actions/setup-node@v4
+                with:
+                    node-version: '24'
+                    cache: npm
+
+            -   name: Install dependencies
+                run: |
+                    npm ci
+                    composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader
+
+            -   name: Build
+                run: npm run build
+
+            -   name: Setup SSH key
+                run: |
+                    echo "${{ secrets.DEPLOY_KEY }}" > deploy_key
+                    chmod 600 ./deploy_key
+
+            -   name: Sync
+                run: |
+                    rsync -avh \
+                      -e "$SSH" \
+                      --exclude /deploy_key \
+                      --exclude /.git/ \
+                      --exclude /.github/ \
+                      --exclude /.ddev/ \
+                      --exclude /.claude/ \
+                      --exclude /.vscode/ \
+                      --exclude /.env \
+                      --exclude /node_modules/ \
+                      --include '/storage/rebrand/***' \
+                      --exclude '/storage/*' \
+                      --exclude '/web/uploads/*' \
+                      --exclude '/web/cpresources/*' \
+                      --exclude /web/temp/ \
+                      ./ "$SSH_TARGET:$DEPLOY_PATH"
+
+            -   name: Remove old code
+                run: |
+                    for dir in templates modules translations config/project vendor web/dist; do
+                      rsync -ah --delete \
+                        -e "$SSH" \
+                        "./$dir/" "$SSH_TARGET:$DEPLOY_PATH/$dir/"
+                    done
+
+            -   name: Craft up
+                run: |
+                    $SSH "$SSH_TARGET" \
+                      "cd $DEPLOY_PATH && php craft clear-caches/all && php craft up --interactive=0"
+
+            -   name: Remove SSH key
+                if: always()
+                run: rm -f ./deploy_key

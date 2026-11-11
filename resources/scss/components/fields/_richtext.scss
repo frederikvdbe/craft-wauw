@@ -1,0 +1,51 @@
+.c-field.c-field-richtext {
+	margin-block: 0 var(--space-30);
+
+	.ck.ck-editor {
+		--ck-border-radius: var(--border-radius-4);
+		--ck-color-base-border: var(--clr-grey-300);
+		--ck-color-toolbar-background: var(--clr-white);
+		--ck-color-base-background: var(--clr-grey-100);
+
+		width: 100%;
+		border-radius: var(--ck-border-radius);
+	}
+
+	.ck-editor__editable {
+		min-height: 160px;
+	}
+
+	&.-plain .ck.ck-editor__main > .ck-editor__editable_root {
+		border-top-left-radius: var(--ck-border-radius);
+		border-top-right-radius: var(--ck-border-radius);
+	}
+
+	&-count {
+		display: block;
+		margin-block: var(--space-5) 0;
+	}
+
+	&:focus-within .ck.ck-editor {
+		outline: 2px solid var(--clr-blue-900);
+		outline-offset: 2px;
+	}
+
+	&.error .ck.ck-editor {
+		outline: 2px solid var(--clr-red-500);
+		outline-offset: 2px;
+	}
+
+	&.valid .ck.ck-editor {
+		outline: 2px solid var(--clr-black);
+		outline-offset: 2px;
+	}
+
+	.ck.ck-editor__editable:not(.ck-editor__nested-editable).ck-focused {
+		border-color: var(--clr-grey-300);
+		box-shadow: none;
+	}
+}
+
+.ck-powered-by-balloon {
+	display: none !important;
+}

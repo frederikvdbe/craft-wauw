@@ -3,13 +3,16 @@
 use craft\config\GeneralConfig;
 use craft\helpers\App;
 
+$viteManifest = dirname(__DIR__) . '/web/dist/.vite/manifest.json';
+
 return GeneralConfig::create()
     // EMERGENCY KIT
     // ->disabledPlugins("*")
     // ->safeMode(true)
     // ->allowAdminChanges(false)
 
-    ->buildId((string) time())
+    // New build ID per deploy (Vite build), not per request
+    ->buildId(is_file($viteManifest) ? (string) filemtime($viteManifest) : null)
 
     // LOCALIZATION & DEFAULTS
     ->defaultWeekStartDay(1)

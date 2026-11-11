@@ -1,0 +1,13 @@
+{# ======================= #}
+{# PROPERTIES              #}
+{# ======================= #}
+{% set cart = craft.commerce.carts.cart %}
+
+{# ======================= #}
+{# TEMPLATE                #}
+{# ======================= #}
+<div class="c-cart-items">
+    {% for lineItem in cart.lineItems %}
+        {% include "_components/cartItem" with { lineItem } only %}
+    {% endfor %}
+</div>

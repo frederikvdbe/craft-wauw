@@ -1,0 +1,31 @@
+{# ======================= #}
+{# PROPERTIES              #}
+{# ======================= #}
+{% set id = id|default("") %}
+{% set showMessages = showMessages is defined ? showMessages : true %}
+{% set async = async is defined ? async : true %}
+
+{# ======================= #}
+{# TEMPLATE                #}
+{# ======================= #}
+{% if showMessages %}
+    <p
+        class="c-form-message"
+        :class="{ 'is-error': message?.type === 'error' }"
+        x-show="message"
+        x-text="message?.text"
+        x-cloak
+    ></p>
+{% endif %}
+
+<form
+    id="{{ id }}"
+    class="c-form"
+    :class="{ 'is-loading': loading }"
+    @submit.prevent="submit($event)"
+    method="post"
+>
+    {{ csrfInput({ async: async }) }}
+
+    {% block fields %}{% endblock %}
+</form>

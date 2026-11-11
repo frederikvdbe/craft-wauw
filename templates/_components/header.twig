@@ -2,7 +2,6 @@
 {# PROPERTIES              #}
 {# ======================= #}
 {% set cartModalId = "cart-modal" %}
-{% set cartQty = craft.commerce.carts.cart.getTotalQty() %}
 
 {# ======================= #}
 {# TEMPLATE                #}
@@ -28,11 +27,14 @@
                 <button
                     type="button"
                     class="c-header-cart"
-                    @click="window.dispatchEvent(new CustomEvent('wauw:modal-open', { detail: { id: '{{ cartModalId }}' } }))"
+                    @click="openModal('{{ cartModalId }}')"
                 >
                     {% include "_components/icon" with { icon: "cart" } only %}
 
-                    <div class="c-header-cart-badge">{{ cartQty > 0 ? cartQty : "" }}</div>
+                    <div
+                        class="c-header-cart-badge"
+                        x-text="$store.cart.totalQuantity > 0 ? $store.cart.totalQuantity : ''"
+                    ></div>
                 </button>
             </div>
         </div>

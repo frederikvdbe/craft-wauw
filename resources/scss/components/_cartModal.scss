@@ -1,0 +1,36 @@
+@use "../base/typography" as *;
+
+.c-cart-overview {
+	display: flex;
+	flex-direction: column;
+
+	&-title {
+		margin-block: 0 var(--space-10);
+		padding-bottom: var(--space-10);
+		border-bottom: 1px solid var(--clr-grey-300);
+
+		@include typo-body-md;
+		font-weight: var(--fw-700);
+		text-transform: uppercase;
+	}
+
+	&-total {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		margin-top: var(--space-10);
+		padding-block: var(--space-30);
+		border-block: 1px solid var(--clr-black);
+
+		@include typo-body-md;
+
+		&-price {
+			font-weight: var(--fw-700);
+		}
+	}
+
+	& > .c-button {
+		margin-top: var(--space-30);
+		width: 100%;
+	}
+}

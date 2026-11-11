@@ -23,4 +23,7 @@
 /node_modules
 /web/dist
 /web/temp
-settings.local.json
+
+# Claude Code: personal settings
+.claude/settings.local.json
+.playwright-mcp/*

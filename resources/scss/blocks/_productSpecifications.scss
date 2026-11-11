@@ -17,11 +17,16 @@
 		}
 	}
 
-	&-left,
 	&-right {
 		display: flex;
 		flex-direction: column;
-		gap: var(--space-20);
+	}
+
+	&-dimensions-title {
+		margin-top: calc((var(--fs-24) * 1.2) + var(--space-20));
+
+		@include typo-body-sm;
+		font-weight: var(--fw-700);
 	}
 
 	&-left {
@@ -32,6 +37,14 @@
 			@include typo-h6;
 		}
 
+		.c-rich-text {
+			margin-top: 20px;
+		}
+
+		.b-product-actions {
+			margin-top: 50px;
+		}
+
 		@include styles-below(tablet) {
 			border-right: 0;
 			padding-right: 0;
@@ -39,6 +52,7 @@
 	}
 
 	&-actions {
+		margin-top: 60px;
 		display: grid;
 		grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
 		gap: var(--space-30);
@@ -61,9 +75,37 @@
 		dd {
 			margin: 0;
 			@include typo-body-sm;
+			font-size: var(--fs-16);
+		}
+	}
+
+	&-materials {
+		margin-top: var(--space-20);
+
+		@include typo-body-sm;
+
+		&-label {
+			font-weight: var(--fw-700);
+		}
+	}
+
+	&-download {
+		display: inline-flex;
+		align-items: center;
+		gap: var(--space-10);
+		margin-top: 50px;
+
+		&:hover {
+			cursor: pointer;
 		}
 
-		dt {
+		.c-icon {
+			height: 30px;
+			width: auto;
+		}
+
+		.c-text {
+			@include typo-body-md;
 			font-weight: var(--fw-700);
 		}
 	}

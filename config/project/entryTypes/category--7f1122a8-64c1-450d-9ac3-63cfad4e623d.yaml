@@ -41,7 +41,7 @@ fieldLayouts:
             editCondition: null
             elementCondition: null
             elementEditCondition: null
-            fieldUid: 51d0d58c-7b4f-4197-9c64-0b0d6d57a085 # Full title
+            fieldUid: 51d0d58c-7b4f-4197-9c64-0b0d6d57a085
             handle: null
             instructions: null
             label: null
@@ -58,7 +58,7 @@ fieldLayouts:
             editCondition: null
             elementCondition: null
             elementEditCondition: null
-            fieldUid: 934a4695-ef0e-40a2-8e3c-aa126a626e87 # Text
+            fieldUid: 934a4695-ef0e-40a2-8e3c-aa126a626e87
             handle: null
             instructions: null
             label: null
@@ -101,6 +101,57 @@ fieldLayouts:
             tip: null
             type: craft\fieldlayoutelements\CustomField
             uid: 9b057879-5ffe-43b6-91eb-a62dd0fda756
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: 4381ddb2-8940-4d25-8e42-5a770b533b71 # Single line text
+            handle: fullTitleField
+            instructions: null
+            label: 'Full title'
+            oldFieldUid: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 21ec7317-990f-4957-9a44-5bf09864e9bc
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: d0499f4d-e39e-4fab-80c5-595fadbfcf91 # Multiline text
+            handle: shortDescriptionField
+            instructions: null
+            label: 'Short description'
+            oldFieldUid: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: f9faab27-e3d2-4a49-bc14-9ce001d9456d
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: d1ab0c28-7124-4171-99dd-27b8f9805017 # Rich Text
+            handle: richTextField
+            instructions: null
+            label: Text
+            oldFieldUid: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 9c88816e-c88d-4532-b2cd-ed27d17614cf
             userCondition: null
             warning: null
             width: 100

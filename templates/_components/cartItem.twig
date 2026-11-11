@@ -1,0 +1,35 @@
+{# ======================= #}
+{# PROPERTIES              #}
+{# ======================= #}
+{% set lineItem = lineItem|default(null) %}
+{% set purchasable = lineItem.purchasable|default(null) %}
+{% set product = purchasable ? purchasable.product : null %}
+{% set image = product ? product.productImagesField.one() : null %}
+{% set title = product ? product.title %}
+
+{# ======================= #}
+{# TEMPLATE                #}
+{# ======================= #}
+{% if lineItem %}
+    <div class="c-cart-item">
+        {% include "_components/image" with {
+            image,
+            class: "c-cart-item-image",
+            targetWidths: [180],
+            sizes: "180px",
+            aspectRatio: 3 / 2,
+        } only %}
+
+        <div class="c-cart-item-content">
+            <div class="c-cart-item-details">
+                <p class="c-cart-item-title">{{ title }}</p>
+
+                {% if purchasable %}
+                    {% include "_components/removeFromCartButton" with { variant: purchasable, compact: true } only %}
+                {% endif %}
+            </div>
+
+            <p class="c-cart-item-price">{{ lineItem.salePriceAsCurrency }}</p>
+        </div>
+    </div>
+{% endif %}

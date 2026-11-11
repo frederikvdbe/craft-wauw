@@ -59,6 +59,7 @@ fieldLayouts:
 fs: productImages
 handle: productImages
 name: 'Product images'
+propagationMethod: all
 sortOrder: 1
 subpath: ''
 titleTranslationKeyFormat: null

@@ -1,3 +1,5 @@
 <?php
 
-return [];
+return [
+    'checkout' => ['template' => '_pages/checkout'],
+];

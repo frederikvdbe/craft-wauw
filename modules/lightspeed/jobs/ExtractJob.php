@@ -2,10 +2,11 @@
 
 namespace modules\lightspeed\jobs;
 
-use Craft;
 use GuzzleHttp\Exception\ClientException;
 use modules\lightspeed\Module;
+use modules\lightspeed\services\ApiData;
 use modules\lightspeed\services\Extractor;
+use modules\lightspeed\services\Sample;
 
 /**
  * Downloads 1 file of the API export. A list: 1 item per language. A relation: 1 item per ID of its list.
@@ -22,6 +23,12 @@ class ExtractJob extends SyncJob
      */
     public ?string $language = null;
 
+    /**
+     * @var bool per-item lists: only the items of the sample. They stay in the partial file,
+     * so a full extract later goes on from there.
+     */
+    public bool $sample = false;
+
     public int $batchSize = 50;
 
     /**
@@ -31,6 +38,7 @@ class ExtractJob extends SyncJob
 
     private ?Extractor $extractor = null;
     private array $partial = [];
+    private bool $onlySample = false;
 
     public function execute($queue): void
     {
@@ -45,9 +53,20 @@ class ExtractJob extends SyncJob
 
     protected function loadItems(): array
     {
-        return Extractor::isRelation($this->name)
-            ? $this->extractor()->relationIds($this->name)
-            : $this->extractor()->languagesOf($this->name);
+        if (!Extractor::isRelation($this->name)) {
+            return $this->extractor()->languagesOf($this->name);
+        }
+
+        $ids = $this->extractor()->relationIds($this->name);
+        $list = Extractor::RELATIONS[$this->name]['list'];
+        if (!$this->sample || !in_array($list, Sample::LIMITED_LISTS, true)) {
+            return $ids;
+        }
+
+        $sample = new Sample(ApiData::load(Module::getInstance()->store, sample: true));
+        $this->onlySample = true;
+
+        return array_values(array_intersect($ids, $sample->itemIds($list)));
     }
 
     protected function beforeBatch(): void
@@ -66,7 +85,7 @@ class ExtractJob extends SyncJob
                 $this->partial[$item] = $this->extractor()->fetchRelation($this->name, $this->language(), $item);
             }
         } catch (ClientException $e) {
-            Craft::warning("Lightspeed $this->name ($item): not available (HTTP {$e->getResponse()->getStatusCode()})", 'lightspeed');
+            $this->warn("$item: not available (HTTP {$e->getResponse()->getStatusCode()})");
         }
     }
 
@@ -79,14 +98,14 @@ class ExtractJob extends SyncJob
 
     protected function after(): void
     {
-        if (Extractor::isRelation($this->name)) {
+        if (Extractor::isRelation($this->name) && !$this->onlySample) {
             $this->extractor()->finishRelation($this->name, $this->language(), $this->partial);
         }
     }
 
-    protected function defaultDescription(): ?string
+    public function label(): string
     {
-        return self::DESCRIPTION_PREFIX . " extract: $this->name" . ($this->language ? " ($this->language)" : '');
+        return "extract: $this->name" . ($this->language ? " ($this->language)" : '') . ($this->sample ? ' (sample)' : '');
     }
 
     private function language(): string

@@ -49,14 +49,14 @@ class SpecSheetGenerator {
     }
 
     private function templateVariables(Product $product): array {
-        $brandImage = $product->brand->one()?->brandImage->one();
+        $brandImage = $product->brandField->one()?->brandImageField->one();
 
         return [
             'product' => $product,
             'variant' => $product->getDefaultVariant(),
             'images' => array_map(
                 $this->imageSrc(...),
-                array_slice($product->productImages->all(), 0, self::MAX_IMAGES),
+                array_slice($product->productImagesField->all(), 0, self::MAX_IMAGES),
             ),
             'brandImageSrc' => $brandImage ? $this->imageSrc($brandImage) : null,
         ];
@@ -136,7 +136,7 @@ class SpecSheetGenerator {
      * The asset's actual filename: product title + generation timestamp.
      */
     private function displayFilename(Product $product): string {
-        $title = $product->fullTitle ?: $product->title;
+        $title = $product->fullTitleField ?: $product->title;
         $timestamp = (new \DateTime())->format('Y-m-d-His');
 
         return FileHelper::sanitizeFilename("$title-$timestamp") . '.pdf';

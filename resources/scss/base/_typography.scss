@@ -64,14 +64,14 @@
 	font-family: var(--font-primary);
 	font-weight: var(--fw-400);
 	font-size: var(--fs-18);
-	line-height: 1.6;
+	line-height: 1.2;
 }
 
 @mixin typo-body-md {
 	font-family: var(--font-primary);
 	font-weight: var(--fw-400);
 	font-size: var(--fs-16);
-	line-height: 1.6;
+	line-height: 1.2;
 }
 
 @mixin typo-body-sm {

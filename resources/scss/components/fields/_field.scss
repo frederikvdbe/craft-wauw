@@ -1,0 +1,92 @@
+@use "../../base/typography" as *;
+
+.c-field {
+	margin-block: 0 var(--space-20);
+
+	&-label-row {
+		display: inline-flex;
+		align-items: center;
+		gap: var(--space-10);
+		margin-block: 0 var(--space-10);
+	}
+
+	&-label {
+		display: block;
+
+		@include typo-body-md;
+		font-weight: var(--fw-700);
+		color: var(--clr-black);
+	}
+
+	.c-icon.exclamation-circle,
+	.c-icon.check-circle {
+		display: none;
+		width: 20px;
+		height: 20px;
+	}
+
+	.c-icon.exclamation-circle {
+		color: var(--clr-red-500);
+	}
+
+	.c-icon.check-circle {
+		color: var(--clr-black);
+	}
+
+	&.error .c-icon.exclamation-circle,
+	&.valid .c-icon.check-circle {
+		display: flex;
+	}
+
+	&-input {
+		width: 100%;
+		min-height: 52px;
+		padding-inline: var(--space-10);
+		border: 1px solid var(--clr-grey-300);
+		border-radius: var(--border-radius-4);
+		background-color: var(--clr-grey-100);
+		color: var(--clr-black);
+
+		@include typo-body-lg;
+
+		&::placeholder {
+			color: var(--clr-grey-300);
+		}
+
+		&[aria-invalid="true"] {
+			border-color: var(--clr-red-500);
+		}
+
+		&:focus {
+			outline: 2px solid var(--clr-blue-900);
+			outline-offset: 2px;
+		}
+
+		&[readonly] {
+			opacity: 0.4;
+			pointer-events: none;
+		}
+	}
+
+	&-error {
+		display: block;
+		margin-block: var(--space-10) 0;
+
+		@include typo-body-sm;
+		color: var(--clr-red-500);
+	}
+
+	&.error {
+		.c-field-input {
+			outline: 2px solid var(--clr-red-500);
+			outline-offset: 2px;
+		}
+	}
+
+	&.valid {
+		.c-field-input {
+			outline: 2px solid var(--clr-black);
+			outline-offset: 2px;
+		}
+	}
+}

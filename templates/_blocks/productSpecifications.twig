@@ -1,15 +1,18 @@
 {# ======================= #}
 {# PROPERTIES              #}
 {# ======================= #}
-{% set text = entry.richText|default("") %}
+{% set text = entry.richTextField|default("") %}
 {% set variant = entry.defaultVariant %}
 
 {% set dimensions = [
-    { label: "Length"|t, value: variant.length|default(null), unit: "cm" },
-    { label: "Width"|t, value: variant.width|default(null), unit: "cm" },
-    { label: "Height"|t, value: variant.height|default(null), unit: "cm" },
-    { label: "Weight"|t, value: variant.weight|default(null), unit: "kg" },
+    { label: "Length"|t, value: variant.length|default(null), unit: "cm", altValue: variant.length|default(null)|inches, altUnit: "in" },
+    { label: "Width"|t, value: variant.width|default(null), unit: "cm", altValue: variant.width|default(null)|inches, altUnit: "in" },
+    { label: "Height"|t, value: variant.height|default(null), unit: "cm", altValue: variant.height|default(null)|inches, altUnit: "in" },
+    { label: "Weight"|t, value: variant.weight|default(null), unit: "kg", altValue: variant.weight|default(null)|pounds, altUnit: "lb" },
 ]|filter(dimension => dimension.value) %}
+
+{# TODO: no materials field yet #}
+{% set materials = [] %}
 
 {% set specSheetUrl = specSheetUrl(entry) %}
 
@@ -47,20 +50,31 @@
         </div>
 
         <div class="b-product-specifications-right">
+            <h3 class="b-product-specifications-dimensions-title">{{ "Dimensions"|t }}</h3>
+
             <dl class="b-product-specifications-dimensions">
                 {% for dimension in dimensions %}
                     <div class="b-product-specifications-dimension">
                         <dt>{{ dimension.label }}</dt>
-                        <dd>{{ dimension.value }} {{ dimension.unit }}</dd>
+                        <dd>{{ dimension.value }} {{ dimension.unit }} / {{ dimension.altValue }} {{ dimension.altUnit }}</dd>
                     </div>
                 {% endfor %}
             </dl>
 
+            <p class="b-product-specifications-materials">
+                <span class="b-product-specifications-materials-label">{{ "Materials"|t }}</span>
+
+                {% if materials %}
+                    <span class="b-product-specifications-materials-list">{{ materials|join(", ") }}</span>
+                {% endif %}
+            </p>
+
             {% if specSheetUrl %}
-                {% include "_components/button" with {
-                    button: { urlField: { url: specSheetUrl, label: "Download specification sheet"|t, download: true } },
-                    class: "tertiary",
-                } only %}
+                <a class="b-product-specifications-download" href="{{ specSheetUrl }}" label="{{ "Download specification sheet"|t }}" download>
+                    {% include "_components/icon" with { icon: "pdf-file" } only %}
+
+                    {% include "_components/text" with { text: "Download\n specification sheet"|t|nl2br } only %}
+                </a>
             {% endif %}
         </div>
     </div>

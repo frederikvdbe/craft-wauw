@@ -1,0 +1,85 @@
+{% extends "_components/fields/field" %}
+
+{# ======================= #}
+{# PROPERTIES              #}
+{# ======================= #}
+{% set fieldHandle = fieldHandle|default("") %}
+{% set id = id|default(fieldHandle) %}
+{% set label = label|default("") %}
+{% set class = class|default("") %}
+{% set storageKey = storageKey|default("") %}
+{% set initialIds = initialIds|default([]) %}
+{% set owner = owner|default(currentUser) %}
+
+{% set videoModalId = "#{id}-video-modal" %}
+{% set libraryModalId = "#{id}-library-modal" %}
+{% set hasLibrary = owner and craft.assets.volume("uploadsVolume").uploader(owner).exists() %}
+
+{% set fieldType = "media" %}
+{% set labelFor = "" %}
+{% set wrapperAttributes = {
+    "x-data": "media(#{initialIds|json_encode|raw}, '#{videoModalId}', '#{libraryModalId}', #{owner.id != currentUser.id ? owner.id : 'null'})",
+    "x-on:streettheater:media-change": "form['#{fieldHandle}'] = $event.detail.ids; validate('#{fieldHandle}')",
+} %}
+
+{# ======================= #}
+{# TEMPLATE                #}
+{# ======================= #}
+{% block input %}
+    <div class="c-field-media-actions">
+        {% include "_components/button" with {
+            label: "Add images"|t,
+            attributes: { id: id, type: "button", "@click": "$refs.input.click()" },
+        } only %}
+
+        {% include "_components/button" with {
+            label: "Add a video"|t,
+            attributes: { type: "button", "@click": "openVideoModal()" },
+        } only %}
+
+        {% if hasLibrary %}
+            {% include "_components/button" with {
+                label: "Browse library"|t,
+                attributes: { type: "button", "@click": "openLibraryModal()" },
+            } only %}
+        {% endif %}
+
+        {% include "_components/button" with {
+            label: "Remove"|t,
+            attributes: { type: "button", "x-show": "selectedIds.length > 0", "@click": "removeSelected()" },
+        } only %}
+    </div>
+
+    <input
+        type="file"
+        x-ref="input"
+        class="c-field-media-input"
+        accept="image/*"
+        hidden
+        multiple
+        @change="upload($event)"
+    >
+
+    <p class="c-field-media-status" x-show="uploading">{{ "Bezig met uploaden…"|t }}</p>
+
+    <p class="c-field-media-placeholder" x-show="!ids.length" x-cloak>{{ "No media added"|t }}</p>
+
+    <div
+        class="c-field-media-gallery"
+        x-html="galleryHtml"
+        @click="handleGalleryClick($event)"
+        @change="handleGalleryChange($event)"
+    ></div>
+
+    {% include "_components/modals/addVideoModal" with { id: videoModalId, fieldId: id } only %}
+
+    {% if hasLibrary %}
+        {% include "_components/modals/browseLibraryModal" with { id: libraryModalId, owner: owner } only %}
+    {% endif %}
+
+    {{ hiddenInput("fields[#{fieldHandle}]", "") }}
+
+    <template x-for="assetId in (form['{{ fieldHandle }}'] ?? [])" :key="assetId">
+        <input type="hidden" name="fields[{{ fieldHandle }}][]" :value="assetId">
+    </template>
+{% endblock %}

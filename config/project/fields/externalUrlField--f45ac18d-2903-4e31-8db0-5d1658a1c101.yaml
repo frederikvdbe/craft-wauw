@@ -1,0 +1,16 @@
+columnSuffix: null
+handle: externalUrlField
+instructions: null
+name: 'External URL'
+searchable: false
+settings:
+  fullGraphqlData: true
+  maxLength: 255
+  showLabelField: false
+  types:
+    - url
+tip: null
+translationKeyFormat: null
+translationMethod: none
+type: craft\fields\Link
+warning: null

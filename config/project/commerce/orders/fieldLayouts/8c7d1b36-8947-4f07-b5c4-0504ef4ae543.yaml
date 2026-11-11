@@ -29,7 +29,7 @@ tabs:
         editCondition: null
         elementCondition: null
         elementEditCondition: null
-        fieldUid: a297f69a-7938-4b9d-8142-16f72d8e05bf # Credit notes
+        fieldUid: a297f69a-7938-4b9d-8142-16f72d8e05bf
         handle: null
         instructions: null
         label: null
@@ -46,7 +46,7 @@ tabs:
         editCondition: null
         elementCondition: null
         elementEditCondition: null
-        fieldUid: fc61cd9e-3c29-43ee-a4d0-ebbdab8cd7e5 # Payment method
+        fieldUid: fc61cd9e-3c29-43ee-a4d0-ebbdab8cd7e5
         handle: null
         instructions: null
         label: null
@@ -63,7 +63,7 @@ tabs:
         editCondition: null
         elementCondition: null
         elementEditCondition: null
-        fieldUid: a5a2f1d3-acc2-4a33-a038-a46d733df2d3 # Discount code
+        fieldUid: a5a2f1d3-acc2-4a33-a038-a46d733df2d3
         handle: null
         instructions: null
         label: null
@@ -97,7 +97,7 @@ tabs:
         editCondition: null
         elementCondition: null
         elementEditCondition: null
-        fieldUid: 0bc16e16-73a2-43b3-9929-9c7b600b2b62 # Memo
+        fieldUid: 0bc16e16-73a2-43b3-9929-9c7b600b2b62
         handle: null
         instructions: null
         label: null
@@ -140,6 +140,108 @@ tabs:
         tip: null
         type: craft\fieldlayoutelements\CustomField
         uid: bcd3edf1-39ae-42c4-8b72-82fcba3a95da
+        userCondition: null
+        warning: null
+        width: 100
+      -
+        dateAdded: null
+        editCondition: null
+        elementCondition: null
+        elementEditCondition: null
+        fieldUid: 4381ddb2-8940-4d25-8e42-5a770b533b71 # Single line text
+        handle: invoiceNumbersField
+        instructions: null
+        label: 'Invoice numbers'
+        oldFieldUid: null
+        required: false
+        tip: null
+        type: craft\fieldlayoutelements\CustomField
+        uid: d7bfab58-3e6e-4be9-8af5-148c5141bf4c
+        userCondition: null
+        warning: null
+        width: 100
+      -
+        dateAdded: null
+        editCondition: null
+        elementCondition: null
+        elementEditCondition: null
+        fieldUid: 4381ddb2-8940-4d25-8e42-5a770b533b71 # Single line text
+        handle: creditNotesField
+        instructions: null
+        label: 'Credit notes'
+        oldFieldUid: null
+        required: false
+        tip: null
+        type: craft\fieldlayoutelements\CustomField
+        uid: 9c7e7b59-93c0-4910-868e-02060f9c1d0e
+        userCondition: null
+        warning: null
+        width: 100
+      -
+        dateAdded: null
+        editCondition: null
+        elementCondition: null
+        elementEditCondition: null
+        fieldUid: 4381ddb2-8940-4d25-8e42-5a770b533b71 # Single line text
+        handle: paymentMethodField
+        instructions: null
+        label: 'Payment method'
+        oldFieldUid: null
+        required: false
+        tip: null
+        type: craft\fieldlayoutelements\CustomField
+        uid: 2945cca5-8295-4477-b4fd-2b179ef37863
+        userCondition: null
+        warning: null
+        width: 100
+      -
+        dateAdded: null
+        editCondition: null
+        elementCondition: null
+        elementEditCondition: null
+        fieldUid: 4381ddb2-8940-4d25-8e42-5a770b533b71 # Single line text
+        handle: discountCodeField
+        instructions: null
+        label: 'Discount code'
+        oldFieldUid: null
+        required: false
+        tip: null
+        type: craft\fieldlayoutelements\CustomField
+        uid: ec3a0d29-6f12-4300-b2cb-04dc133b1576
+        userCondition: null
+        warning: null
+        width: 100
+      -
+        dateAdded: null
+        editCondition: null
+        elementCondition: null
+        elementEditCondition: null
+        fieldUid: d0499f4d-e39e-4fab-80c5-595fadbfcf91 # Multiline text
+        handle: customerCommentField
+        instructions: null
+        label: 'Customer comment'
+        oldFieldUid: null
+        required: false
+        tip: null
+        type: craft\fieldlayoutelements\CustomField
+        uid: f4c0e39b-7b6e-490b-b866-315b8fb72007
+        userCondition: null
+        warning: null
+        width: 100
+      -
+        dateAdded: null
+        editCondition: null
+        elementCondition: null
+        elementEditCondition: null
+        fieldUid: d0499f4d-e39e-4fab-80c5-595fadbfcf91 # Multiline text
+        handle: memoField
+        instructions: null
+        label: Memo
+        oldFieldUid: null
+        required: false
+        tip: null
+        type: craft\fieldlayoutelements\CustomField
+        uid: 04276835-6c63-4e62-8caa-7bd1344976f3
         userCondition: null
         warning: null
         width: 100

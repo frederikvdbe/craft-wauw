@@ -1,0 +1,46 @@
+columnSuffix: null
+handle: genderField
+instructions: null
+name: Gender
+searchable: false
+settings:
+  customOptions: false
+  options:
+    -
+      __assoc__:
+        -
+          - label
+          - ''
+        -
+          - value
+          - ''
+        -
+          - default
+          - false
+    -
+      __assoc__:
+        -
+          - label
+          - Male
+        -
+          - value
+          - male
+        -
+          - default
+          - false
+    -
+      __assoc__:
+        -
+          - label
+          - Female
+        -
+          - value
+          - female
+        -
+          - default
+          - false
+tip: null
+translationKeyFormat: null
+translationMethod: none
+type: craft\fields\Dropdown
+warning: null

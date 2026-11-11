@@ -9,11 +9,22 @@ namespace modules\lightspeed\services;
  */
 class Sample
 {
+    /**
+     * Lists the sample limits the per-item data (Extractor::RELATIONS) of. Other lists: all items.
+     * Orders: all, because the sample is chosen by their order lines.
+     */
+    public const LIMITED_LISTS = ['products', 'invoices'];
+
     private const ORDERS_PER_CUSTOMER = 3;
     private const VIP_MEMBERS = 3;
     private const EMAIL_SUFFIX = 'x';
 
     private ApiData $data;
+
+    /**
+     * @var array{orders: int[], products: int[], customers: int[], invoices: int[]}|null
+     */
+    private ?array $ids = null;
 
     public function __construct(ApiData $data)
     {
@@ -22,9 +33,7 @@ class Sample
 
     public function apply(): ApiData
     {
-        $orderIds = $this->selectOrders();
-        $productIds = $this->selectProducts($orderIds);
-        $customerIds = $this->selectCustomers($orderIds);
+        ['orders' => $orderIds, 'products' => $productIds, 'customers' => $customerIds] = $this->ids();
 
         foreach ($this->data->products as $language => $products) {
             $this->data->products[$language] = array_intersect_key($products, array_flip($productIds));
@@ -34,6 +43,32 @@ class Sample
         $this->data->customers = array_map($this->breakEmail(...), array_intersect_key($this->data->customers, array_flip($customerIds)));
 
         return $this->data;
+    }
+
+    /**
+     * @param string $list one of LIMITED_LISTS
+     * @return int[]
+     */
+    public function itemIds(string $list): array
+    {
+        return $this->ids()[$list];
+    }
+
+    private function ids(): array
+    {
+        if ($this->ids === null) {
+            $orderIds = $this->selectOrders();
+            $invoices = array_merge(...array_map(fn(int $id) => $this->data->invoices[$id] ?? [], $orderIds));
+
+            $this->ids = [
+                'orders' => $orderIds,
+                'products' => $this->selectProducts($orderIds),
+                'customers' => $this->selectCustomers($orderIds),
+                'invoices' => array_column($invoices, 'id'),
+            ];
+        }
+
+        return $this->ids;
     }
 
     /**

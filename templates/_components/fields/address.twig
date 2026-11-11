@@ -1,0 +1,111 @@
+{# ======================= #}
+{# PROPERTIES              #}
+{# ======================= #}
+{% set fieldHandle = fieldHandle|default("") %}
+{% set address = address ?? null %}
+{% set addressKey = address.id ?? "new1" %}
+{% set namePrefix = "fields[#{fieldHandle}][#{addressKey}]" %}
+{% set idPrefix = idPrefix|default(fieldHandle) %}
+
+{% set label = label|default("") %}
+{% set class = class|default("") %}
+{% set defaultCountryCode = defaultCountryCode|default("BE") %}
+{% set countryCode = address.countryCode ?? defaultCountryCode %}
+
+{% set addressTitle = addressTitle|default("") %}
+{% set addressTitle = addressTitle != "" ? addressTitle : (label != "" ? label : "Adres"|t) %}
+
+{% set addressFormat = craft.app.addresses.getAddressFormatRepository().get(countryCode) %}
+{% set usedFields = addressFormat.getUsedFields() %}
+{% set requiredFields = addressFormat.getRequiredFields() %}
+
+{% set countryOptions = [] %}
+{% set countryLabel = "" %}
+
+{% for code, name in craft.app.addresses.getCountryList() %}
+    {% set countryOptions = countryOptions|merge([{ value: code, label: name }]) %}
+
+    {% if code == countryCode %}
+        {% set countryLabel = name %}
+    {% endif %}
+{% endfor %}
+
+{# ======================= #}
+{# TEMPLATE                #}
+{# ======================= #}
+<fieldset class="c-field-address {{ class }}">
+    {% if label %}
+        <legend class="c-field-address-label">{{ label }}</legend>
+    {% endif %}
+
+    {{ hiddenInput("#{namePrefix}[title]", addressTitle) }}
+
+    {% include "_components/fields/autocomplete" with {
+        id: "#{idPrefix}-countryCode",
+        name: "#{namePrefix}[countryCode]",
+        label: "Land"|t,
+        options: countryOptions,
+        value: countryCode,
+        valueLabel: countryLabel,
+        required: true,
+    } only %}
+
+    <div class="c-field-address-row">
+        <div class="c-field-address-row-primary">
+            {% include "_components/fields/text" with {
+                id: "#{idPrefix}-addressLine1",
+                name: "#{namePrefix}[addressLine1]",
+                label: "Straat en nummer"|t,
+                required: "addressLine1" in requiredFields,
+                autocomplete: "address-line1",
+            } only %}
+        </div>
+
+        <div class="c-field-address-row-secondary">
+            {% include "_components/fields/text" with {
+                id: "#{idPrefix}-addressLine2",
+                name: "#{namePrefix}[addressLine2]",
+                label: "Toevoeging"|t,
+                autocomplete: "address-line2",
+            } only %}
+        </div>
+    </div>
+
+    {% if "postalCode" in usedFields or "locality" in usedFields %}
+        <div class="c-field-address-row">
+            {% if "postalCode" in usedFields %}
+                <div class="c-field-address-row-secondary">
+                    {% include "_components/fields/text" with {
+                        id: "#{idPrefix}-postalCode",
+                        name: "#{namePrefix}[postalCode]",
+                        label: craft.app.addresses.getFieldLabel("postalCode", countryCode),
+                        required: "postalCode" in requiredFields,
+                        autocomplete: "postal-code",
+                    } only %}
+                </div>
+            {% endif %}
+
+            {% if "locality" in usedFields %}
+                <div class="c-field-address-row-primary">
+                    {% include "_components/fields/text" with {
+                        id: "#{idPrefix}-locality",
+                        name: "#{namePrefix}[locality]",
+                        label: craft.app.addresses.getFieldLabel("locality", countryCode),
+                        required: "locality" in requiredFields,
+                        autocomplete: "address-level2",
+                    } only %}
+                </div>
+            {% endif %}
+        </div>
+    {% endif %}
+
+    {% if "administrativeArea" in usedFields %}
+        {% include "_components/fields/text" with {
+            id: "#{idPrefix}-administrativeArea",
+            name: "#{namePrefix}[administrativeArea]",
+            label: craft.app.addresses.getFieldLabel("administrativeArea", countryCode),
+            required: "administrativeArea" in requiredFields,
+            autocomplete: "address-level1",
+        } only %}
+    {% endif %}
+</fieldset>

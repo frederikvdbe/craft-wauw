@@ -1,0 +1,52 @@
+@use "../../base/typography" as *;
+
+// `.c-field-input`/`.c-field-label` come from `_field.scss` -- the trigger
+// button reuses that same visual style since it stands in for a text input.
+.c-field-date-trigger {
+	display: block;
+	width: 100%;
+	min-height: 52px;
+	padding-inline: var(--space-10);
+	border: 1px solid var(--clr-grey-300);
+	border-radius: var(--border-radius-4);
+	background-color: var(--clr-grey-100);
+	text-align: left;
+	cursor: pointer;
+
+	@include typo-body-lg;
+	color: var(--clr-black);
+}
+
+// Shared by both `date.twig` and `daterange.twig` -- matched on the common
+// `.c-field` wrapper rather than `.c-field-date`/`.c-field-daterange` since
+// both field types reuse this same trigger button.
+.c-field.error .c-field-date-trigger {
+	border-color: var(--clr-red-500);
+}
+
+.c-field.valid .c-field-date-trigger {
+	border-color: var(--clr-black);
+}
+
+.c-field-date-panel {
+	position: fixed;
+	z-index: 100;
+	padding: var(--space-10);
+	border: 1px solid var(--clr-grey-300);
+	border-radius: var(--border-radius-4);
+	background-color: var(--clr-white);
+	box-shadow: 0 var(--space-5) var(--space-10) rgb(0 0 0 / 12%);
+
+	calendar-date,
+	calendar-range {
+		--color-accent: var(--clr-black);
+	}
+
+	// cally ships no layout for the slot that holds the `calendar-month`
+	// children, so a two-month range view stacks vertically by default.
+	calendar-range::part(months) {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--space-20);
+	}
+}

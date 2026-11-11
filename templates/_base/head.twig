@@ -1,14 +1,12 @@
 {# ======================= #}
 {# TEMPLATE                #}
 {# ======================= #}
-{% cache %}
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- Website assets -->
-    <link rel="stylesheet" href="{{ craft.vite.asset('resources/scss/index.scss') }}">
+    {% cache %}
+        <!-- Website assets -->
+        <link rel="stylesheet" href="{{ craft.vite.asset('resources/scss/index.scss') }}">
+    {% endcache %}
 </head>
-
-{% endcache %}

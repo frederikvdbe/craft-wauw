@@ -1,0 +1,36 @@
+{# ======================= #}
+{# PROPERTIES              #}
+{# ======================= #}
+{% set variant = variant|default(null) %}
+{% set compact = compact|default(false) %}
+
+{# ======================= #}
+{# TEMPLATE                #}
+{# ======================= #}
+<div 
+    x-data="removeFromCartButton({{ variant.id }})" 
+    x-show="$store.cart.isInCart({{ variant.id }})" 
+    x-cloak
+>
+    {% embed "_components/fields/form" with { 
+        id: "remove-from-cart-form-#{variant.id}", 
+        showMessages: false, async: not compact } 
+    %}
+        {% block fields %}
+            {{ actionInput('commerce/cart/update-cart') }}
+            {{ hiddenInput("clearNotices", "1") }}
+            {{ hiddenInput("", "1", { ":name": "`lineItems[${lineItemId}][remove]`" }) }}
+
+            {% include "_components/button" with {
+                label: "Remove from cart"|t,
+                class: compact ? "plain icon-only" : "danger",
+                iconBefore: compact ? "trash" : "",
+                attributes: {
+                    type: "submit",
+                    ":class": "{ 'is-loading': loading }",
+                    ":disabled": "loading",
+                },
+            } only %}
+        {% endblock %}
+    {% endembed %}
+</div>

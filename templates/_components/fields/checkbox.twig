@@ -1,0 +1,50 @@
+{% extends "_components/fields/field" %}
+
+{# ======================= #}
+{# PROPERTIES              #}
+{# ======================= #}
+{% set id = id|default("") %}
+{% set name = name|default(id) %}
+{% set checkboxLabel = label|default("") %}
+{% set value = value|default("1") %}
+{% set checked = checked|default(false) %}
+{% set required = required|default(false) %}
+{% set class = class|default("") %}
+{% set attributes = attributes|default({}) %}
+{% set externalLabel = externalLabel|default(false) %}
+
+{% set fieldType = "checkbox" %}
+{% set label = "" %}
+{% set valid = "" %}
+
+{# ======================= #}
+{# TEMPLATE                #}
+{# ======================= #}
+{% set baseAttributes = {
+    type: "checkbox",
+    id: id,
+    name: name,
+    value: value,
+    required: required,
+    checked: checked,
+} %}
+
+{% set labelTag = externalLabel ? "div" : "label" %}
+
+{% block input %}
+    <{{ labelTag }}
+        {{ attr({
+            class: "c-field-checkbox-label",
+            for: externalLabel ? null : id,
+        }) }}
+    >
+        <input class="c-field-checkbox-input" {{ attr(baseAttributes|merge(attributes)) }}>
+        <span class="c-field-checkbox-box" aria-hidden="true"></span>
+
+        {% if checkboxLabel %}
+            <span class="c-field-checkbox-text">{{ checkboxLabel }}</span>
+        {% endif %}
+
+        {% include "_components/icon" with { icon: "exclamation-circle" } only %}
+    </{{ labelTag }}>
+{% endblock %}

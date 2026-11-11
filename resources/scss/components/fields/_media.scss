@@ -1,0 +1,36 @@
+@use "../../base/breakpoints" as *;
+@use "../../base/typography" as *;
+
+// `.c-media` already comes from `_components/_media.scss`.
+
+.c-field.c-field-media {
+	margin-block: 0 var(--space-30);
+}
+
+.c-field-media-actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--space-10);
+	margin-block: 0 var(--space-20);
+}
+
+.c-field-media-status {
+	margin-block: 0 var(--space-10);
+}
+
+.c-field-media-placeholder {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	min-height: 120px;
+	margin-block: 0 var(--space-20);
+	border: 1px solid var(--clr-grey-100);
+	border-radius: var(--border-radius-4);
+	color: var(--clr-grey-300);
+
+	@include typo-body-md;
+}
+
+.c-field-media-gallery {
+	margin-block: 0 var(--space-20);
+}

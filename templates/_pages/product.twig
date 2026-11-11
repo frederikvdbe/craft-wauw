@@ -6,7 +6,7 @@
 {% set pageClass = "product" %}
 
 {% set entry = product %}
-{% set productImages = entry.productImages.all() %}
+{% set productImages = entry.productImagesField.all() %}
 {% set shippingCalculatorModalId = "shipping-calculator-modal-#{entry.defaultVariant.id|default(random())}" %}
 
 {% set otherProducts = craft.products

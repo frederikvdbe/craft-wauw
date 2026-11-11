@@ -9,7 +9,6 @@
 {% set download = data.download|default(false) %}
 
 {% set variant = button.buttonVariantConfig|default("primary") %}
-
 {% set tag = url ? "a" : "button" %}
 {% set iconBefore = iconBefore|default("") %}
 {% set iconAfter = iconAfter|default("") %}
@@ -39,5 +38,7 @@
         {% if iconAfter %}
             {% include "_components/icon" with { icon: iconAfter } only %}
         {% endif %}
+
+        <span class="c-button-loader"></span>
     </{{ tag }}>
 {% endif %}
