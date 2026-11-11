@@ -1,0 +1,50 @@
+{% extends "_components/fields/field" %}
+
+{# ======================= #}
+{# PROPERTIES              #}
+{# ======================= #}
+{% set id = id|default("") %}
+
+{% set namePrefix = namePrefix is defined ? namePrefix : "fields" %}
+{% set name = name|default(id and namePrefix ? "#{namePrefix}[#{id}][]" : id) %}
+
+{% set label = label|default("") %}
+{% set options = options|default([]) %}
+{% set value = value|default([]) %}
+{% set class = class|default("") %}
+
+{% set fieldType = "checkboxGroup" %}
+{# No single input shares this id, so the field label can't point `for` at one. #}
+{% set labelFor = "" %}
+{% set wrapperAttributes = {
+    "x-data": "checkboxGroup(#{id|json_encode}, #{value|json_encode})",
+} %}
+
+{# ======================= #}
+{# TEMPLATE                #}
+{# ======================= #}
+{% block input %}
+    {% set groupAttributes = { class: "c-field-checkboxGroup-options", role: "group" } %}
+    {% if label %}
+        {% set groupAttributes = groupAttributes|merge({ "aria-label": label }) %}
+    {% endif %}
+
+    <div {{ attr(groupAttributes) }}>
+        {% for option in options %}
+            {% set checkboxAttributes = {
+                type: "checkbox",
+                class: "c-field-checkbox-input",
+                name: name,
+                value: option.value,
+                ":checked": "values.includes(#{option.value|json_encode})",
+                "@change": "toggle(#{option.value|json_encode}); #{validate}",
+            } %}
+
+            <label class="c-field-checkbox-label">
+                <input {{ attr(checkboxAttributes) }}>
+                <span class="c-field-checkbox-box" aria-hidden="true"></span>
+                <span class="c-field-checkbox-text">{{ option.label }}</span>
+            </label>
+        {% endfor %}
+    </div>
+{% endblock %}

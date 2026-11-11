@@ -14,8 +14,11 @@
 		"vite": "^8.1.0"
 	},
 	"dependencies": {
+		"@floating-ui/dom": "^1.8.0",
 		"@videojs/html": "^10.1.0",
 		"alpinejs": "^3.15.9",
+		"cally": "^0.9.2",
+		"ckeditor5": "^49.0.1",
 		"gsap": "^3.15.1"
 	}
 }

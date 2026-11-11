@@ -1,0 +1,44 @@
+{# ======================= #}
+{# PROPERTIES              #}
+{# ======================= #}
+{% set fieldType = fieldType|default("") %}
+{% set wrapperAttributes = wrapperAttributes|default({}) %}
+
+{% set id = id|default("") %}
+{% set label = label|default("") %}
+{% set labelFor = labelFor is defined ? labelFor : id %}
+
+{% set class = class|default("") %}
+{% set error = id ? "formErrors['#{id}']" : "" %}
+{% set valid = valid is defined ? valid : (id ? "('#{id}' in formErrors) && !formErrors['#{id}']" : "") %}
+{% set validate = id ? "validate('#{id}')" : "" %}
+
+{# ======================= #}
+{# TEMPLATE                #}
+{# ======================= #}
+{% set wrapperAttributes = {
+    class: "c-field c-field-#{fieldType} #{class}",
+    ":class": "{ 'error': #{error ?: 'false'}, 'valid': #{valid ?: 'false'} }",
+}|merge(wrapperAttributes) %}
+
+<div {{ attr(wrapperAttributes) }}>
+    {% if label %}
+        <span class="c-field-label-row">
+            <label {% if labelFor %}for="{{ labelFor }}"{% endif %} class="c-field-label">{{ label }}</label>
+
+            {% include "_components/icon" with { icon: "exclamation-circle" } only %}
+            {% include "_components/icon" with { icon: "check-circle" } only %}
+        </span>
+    {% endif %}
+
+    {% block input %}{% endblock %}
+
+    {% if error %}
+        <span
+            id="{{ id }}-error"
+            class="c-field-error"
+            x-show="{{ error }}"
+            x-text="{{ error }}"
+        ></span>
+    {% endif %}
+</div>

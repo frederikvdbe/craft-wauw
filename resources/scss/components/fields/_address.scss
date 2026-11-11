@@ -1,0 +1,48 @@
+@use "../../base/breakpoints" as *;
+@use "../../base/typography" as *;
+
+.c-field-address {
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-15);
+	margin: 0 0 var(--space-20);
+	padding: 0;
+	border: 0;
+
+	// Nested fields (the country autocomplete, the street/postal/locality
+	// rows) sit inside this fieldset's own flex gap already -- their own
+	// `.c-field` margin-block would double up the spacing.
+	.c-field {
+		margin-block: 0;
+	}
+
+	&-label {
+		margin-block: 0 var(--space-10);
+		padding: 0;
+
+		@include typo-h4;
+		color: var(--clr-black);
+	}
+
+	&-row {
+		display: flex;
+		gap: var(--space-15);
+
+		@include styles-below(mobileL) {
+			flex-direction: column;
+		}
+
+		> .c-field-address-row-primary,
+		> .c-field-address-row-secondary {
+			min-width: 0;
+		}
+
+		> .c-field-address-row-primary {
+			flex: 2 1 0%;
+		}
+
+		> .c-field-address-row-secondary {
+			flex: 1 1 0%;
+		}
+	}
+}

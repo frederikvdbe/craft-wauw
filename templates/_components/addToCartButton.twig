@@ -1,0 +1,31 @@
+{# ======================= #}
+{# PROPERTIES              #}
+{# ======================= #}
+{% set variant = variant|default(null) %}
+
+{# ======================= #}
+{# TEMPLATE                #}
+{# ======================= #}
+<div 
+    x-data="addToCartButton({{ variant.id }})" 
+    x-show="!$store.cart.isInCart({{ variant.id }})" 
+    x-cloak
+>
+    {% embed "_components/fields/form" with { id: "add-to-cart-form-#{variant.id}", showMessages: false } %}
+        {% block fields %}
+            {{ actionInput('commerce/cart/update-cart') }}
+            {{ hiddenInput("clearNotices", "1") }}
+            {{ hiddenInput("purchasables[0][id]", variant.id) }}
+            {{ hiddenInput("purchasables[0][qty]", 1) }}
+
+            {% include "_components/button" with {
+                label: "Add to cart"|t,
+                attributes: {
+                    type: "submit",
+                    ":class": "{ 'is-loading': loading }",
+                    ":disabled": "loading",
+                },
+            } only %}
+        {% endblock %}
+    {% endembed %}
+</div>

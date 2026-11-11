@@ -1,0 +1,44 @@
+@use "../base/typography" as *;
+
+.c-cart-items {
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-20);
+}
+
+.c-cart-item {
+	display: flex;
+	align-items: center;
+	gap: var(--space-20);
+
+	&-image {
+		flex-shrink: 0;
+		width: auto;
+		height: 90px;
+		aspect-ratio: 3 / 2;
+
+		img {
+			width: 100%;
+			height: 100%;
+		}
+	}
+
+	&-content {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		flex: 1;
+		gap: var(--space-20);
+	}
+
+	&-details {
+		display: flex;
+		align-items: center;
+		gap: var(--space-10);
+	}
+
+	&-title,
+	&-price {
+		@include typo-body-md;
+	}
+}

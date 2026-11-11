@@ -1,0 +1,64 @@
+{% extends "_components/fields/field" %}
+
+{# ======================= #}
+{# PROPERTIES              #}
+{# ======================= #}
+{% set id = id|default("") %}
+
+{% set namePrefix = namePrefix is defined ? namePrefix : "fields" %}
+{% set name = name|default(id and namePrefix ? "#{namePrefix}[#{id}]" : id) %}
+
+{% set label = label|default("") %}
+{% set value = value|default([]) %}
+{% set placeholder = placeholder|default("") %}
+{% set class = class|default("") %}
+
+{% set fieldType = "tags" %}
+{% set wrapperAttributes = {
+    "x-data": "tagList(#{id|json_encode}, #{value|json_encode})",
+} %}
+
+{# ======================= #}
+{# TEMPLATE                #}
+{# ======================= #}
+{% block input %}
+    <div class="c-field-tags-input">
+        <input
+            type="text"
+            id="{{ id }}"
+            class="c-field-input"
+            placeholder="{{ placeholder }}"
+            autocomplete="off"
+            x-model="inputValue"
+            @keydown.enter.prevent="add()"
+        >
+
+        {% include "_components/button" with {
+            label: "Toevoegen"|t,
+            attributes: { type: "button", "@click": "add()" },
+        } only %}
+    </div>
+
+    <ul class="c-field-tags-list" x-show="values.length">
+        <template x-for="(tag, index) in values" :key="tag">
+            <li>
+                <button
+                    type="button"
+                    class="c-field-tags-tag"
+                    aria-label="{{ 'Verwijder tag'|t }}"
+                    @click="remove(index)"
+                >
+                    <span x-text="tag"></span>
+
+                    <span class="c-field-tags-tag-icon">
+                        {% include "_components/icon" with { icon: "remove" } only %}
+                    </span>
+                </button>
+            </li>
+        </template>
+    </ul>
+
+    <template x-for="tag in values" :key="tag">
+        <input type="hidden" name="{{ name }}" :value="tag">
+    </template>
+{% endblock %}

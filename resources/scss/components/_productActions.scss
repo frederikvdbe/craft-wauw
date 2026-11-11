@@ -1,4 +1,9 @@
 .b-product-actions {
 	display: flex;
 	gap: var(--space-10);
+
+	.c-form {
+		width: auto;
+		max-width: none;
+	}
 }

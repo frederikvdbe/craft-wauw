@@ -1,24 +1,31 @@
+import { jsonRequest } from "../common/helpers";
+
 export function favorite(productId, isFavorite = false) {
 	return {
 		productId,
 		isFavorite,
+		loading: false,
 
 		async toggle() {
-			const response = await fetch("/actions/site/favorite/toggle", {
-				method: "POST",
-				headers: {
-					"X-CSRF-Token": window.site.csrfTokenValue,
-					"Content-Type": "application/x-www-form-urlencoded",
-					Accept: "application/json",
-				},
-				body: new URLSearchParams({ productId: this.productId }),
-			});
+			this.loading = true;
 
-			if (!response.ok) return;
+			try {
+				const [data] = await Promise.all([
+					jsonRequest("/actions/site/favorite/toggle", {
+						method: "POST",
+						headers: {
+							"X-CSRF-Token": window.site.csrfTokenValue,
+							"Content-Type": "application/x-www-form-urlencoded",
+						},
+						body: new URLSearchParams({ productId: this.productId }),
+					}),
+					new Promise((resolve) => setTimeout(resolve, 1000)),
+				]);
 
-			const data = await response.json();
-
-			this.isFavorite = data.isFavorite;
+				this.isFavorite = data.isFavorite;
+			} finally {
+				this.loading = false;
+			}
 		},
 	};
 }

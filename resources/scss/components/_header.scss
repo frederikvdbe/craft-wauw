@@ -50,8 +50,8 @@
 
 	&-cart-badge {
 		position: absolute;
-		top: 4px;
-		right: 4px;
+		top: 8px;
+		right: 24px;
 		display: flex;
 		align-items: center;
 		justify-content: center;
@@ -62,7 +62,7 @@
 		color: var(--clr-white);
 		line-height: 1;
 
-		@include typo-body-sm;
+		@include typo-body-xs;
 		font-weight: var(--fw-700);
 
 		&:empty {

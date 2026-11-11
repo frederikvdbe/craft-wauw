@@ -6,6 +6,7 @@
 {% set image = productImages[1] %}
 {% set variant = entry.defaultVariant %}
 {% set priceOnRequest = variant.priceOnRequestField|default(false) %}
+{% set outOfStock = variant and not variant.hasStock() %}
 {% set isFavorite = currentUser ? (entry.id in currentUser.favoriteProductsField.ids()) : false %}
 
 {# ======================= #}
@@ -21,48 +22,59 @@
         } only %}
 
         <div class="b-product-intro-main">
+            <button type="button" class="b-product-intro-back-button" @click="history.back()">
+                {% include "_components/icon" with { icon: "circle-chevron-left" } only %}
+
+                {% include "_components/text" with { text: "Go back"|t } only %}
+            </button>
+
             {% include "_components/title" with { title, tag: "h2" } only %}
 
             {% include "_components/richText" with { text } only %}
 
-            <div class="b-product-intro-links">
-                {% include "_components/button" with {
-                    button: { urlField: { url: "#product-specifications", label: "View specification sheet"|t } },
-                    class: "tertiary",
+            {% if outOfStock %}
+                <p class="b-product-intro-sold">{{ "Sold"|t }}</p>
+            {% else %}
+                <div class="b-product-intro-links">
+                    {% include "_components/button" with {
+                        button: { urlField: { url: "#product-specifications", label: "View specification sheet"|t } },
+                        class: "tertiary",
+                    } only %}
+
+                    {% include "_components/button" with {
+                        label: "Watch video"|t,
+                        class: "tertiary",
+                    } only %}
+
+                    {% include "_components/button" with {
+                        label: "Add to favorites"|t,
+                        iconBefore: "heart",
+                        class: "tertiary icon-only",
+                        attributes: {
+                            "x-data": "favorite(#{entry.id}, #{isFavorite ? 'true' : 'false'})",
+                            ":class": "{ 'is-favorite': isFavorite, 'is-loading': loading }",
+                            ":disabled": "loading",
+                            "@click": "toggle()",
+                        },
+                    } only %}
+
+                    {% include "_components/button" with {
+                        label: "Share"|t,
+                        iconBefore: "share",
+                        class: "tertiary icon-only",
+                        attributes: {
+                            "x-data": "share('#{entry.fullTitleField|default(entry.title)|e('js')}', '#{entry.url|e('js')}')",
+                            "@click": "share()",
+                        },
+                    } only %}
+                </div>
+
+                {% include "_components/text" with {
+                    text: priceOnRequest ? "Price on request"|t : variant.salePriceAsCurrency
                 } only %}
 
-                {% include "_components/button" with {
-                    label: "Watch video"|t,
-                    class: "tertiary",
-                } only %}
-
-                {% include "_components/button" with {
-                    label: "Add to favorites"|t,
-                    iconBefore: "heart",
-                    class: "tertiary icon-only",
-                    attributes: {
-                        "x-data": "favorite(#{entry.id}, #{isFavorite ? 'true' : 'false'})",
-                        ":class": "{ 'is-favorite': isFavorite }",
-                        "@click": "toggle()",
-                    },
-                } only %}
-
-                {% include "_components/button" with {
-                    label: "Share"|t,
-                    iconBefore: "share",
-                    class: "tertiary icon-only",
-                    attributes: {
-                        "x-data": "share('#{entry.fullTitleField|default(entry.title)|e('js')}', '#{entry.url|e('js')}')",
-                        "@click": "share()",
-                    },
-                } only %}
-            </div>
-
-            {% include "_components/text" with {
-                text: priceOnRequest ? "Price on request"|t : variant.salePriceAsCurrency
-            } only %}
-
-            {% include "_components/productActions" with { variant } only %}
+                {% include "_components/productActions" with { variant } only %}
+            {% endif %}
         </div>
     </div>
 </section>

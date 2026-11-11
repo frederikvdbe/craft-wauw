@@ -16,9 +16,6 @@
 	}
 
 	&-main {
-		display: flex;
-		flex-direction: column;
-		gap: var(--space-20);
 		padding: var(--space-60) var(--space-80);
 		border: 1px solid var(--clr-grey-300);
 		border-radius: var(--border-radius-2);
@@ -29,16 +26,23 @@
 		}
 
 		.c-title {
+			margin-top: var(--space-30);
+
 			@include typo-body-lg;
 			text-transform: uppercase;
 			font-weight: var(--fw-700);
+		}
+
+		.c-rich-text {
+			margin-top: var(--space-10);
 		}
 
 		.c-text {
 			@include typo-body-sm;
 		}
 
-		.c-text:nth-child(4) {
+		.c-text:nth-child(5) {
+			margin-top: 50px;
 			padding-block: var(--space-15);
 			border-block: 1px solid var(--clr-grey-300);
 			width: 100%;
@@ -47,7 +51,34 @@
 		}
 	}
 
+	.c-image {
+		height: 100%;
+	}
+
+	&-back-button {
+		display: inline-flex;
+		align-items: center;
+		gap: var(--space-10);
+		background: none;
+		border: none;
+		padding: 0;
+
+		&:hover {
+			cursor: pointer;
+		}
+
+		.c-icon {
+			width: 30px;
+			height: 30px;
+		}
+
+		.c-text {
+			@include typo-body-xs;
+		}
+	}
+
 	&-links {
+		margin-top: 50px;
 		display: flex;
 		flex-wrap: wrap;
 		gap: var(--space-10);
@@ -57,7 +88,17 @@
 		}
 	}
 
+	&-sold {
+		margin-top: 50px;
+		padding-block: var(--space-15);
+		border-block: 1px solid var(--clr-grey-300);
+		width: 100%;
+		text-transform: uppercase;
+
+		@include typo-h6;
+	}
+
 	.b-product-actions {
-		margin-top: auto;
+		margin-top: 30px;
 	}
 }

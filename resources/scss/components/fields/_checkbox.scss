@@ -1,0 +1,70 @@
+@use "../../base/typography" as *;
+
+.c-field-checkbox {
+	margin-block: 0 var(--space-15);
+
+	&-label {
+		display: inline-flex;
+		align-items: center;
+		gap: var(--space-10);
+		cursor: pointer;
+	}
+
+	&-input {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		opacity: 0;
+	}
+
+	&-box {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		flex-shrink: 0;
+		width: 24px;
+		height: 24px;
+		border: 1px solid var(--clr-grey-300);
+		border-radius: var(--border-radius-4);
+		background-color: var(--clr-white);
+		transition:
+			background-color 0.15s ease,
+			border-color 0.15s ease;
+
+		&::after {
+			content: "";
+			width: 10px;
+			height: 6px;
+			margin-bottom: 2px;
+			border-left: 2px solid var(--clr-white);
+			border-bottom: 2px solid var(--clr-white);
+			transform: rotate(-45deg) scale(0);
+			transition: transform 0.15s ease;
+		}
+	}
+
+	&-text {
+		@include typo-body-md;
+		color: var(--clr-black);
+	}
+
+	&-input:checked + &-box {
+		border-color: var(--clr-black);
+		background-color: var(--clr-black);
+
+		&::after {
+			transform: rotate(-45deg) scale(1);
+		}
+	}
+
+	&-input:focus-visible + &-box {
+		outline: 2px solid var(--clr-black);
+		outline-offset: 2px;
+	}
+
+	&.error {
+		.c-field-checkbox-box {
+			border-color: var(--clr-red-500);
+		}
+	}
+}

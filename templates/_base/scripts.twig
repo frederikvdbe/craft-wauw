@@ -8,7 +8,9 @@
         id: {{ currentSite.id }},
         handle: `{{ currentSite.handle }}`,
         name: `{{ currentSite.name }}`,
-        csrfTokenValue: `{{ craft.app.request.getCsrfToken() }}`
+        baseUrl: `{{ siteUrl }}`,
+        csrfTokenValue: `{{ craft.app.request.getCsrfToken() }}`,
+        csrfTokenName: `{{ craft.app.config.general.csrfTokenName }}`
     }
 </script>
 

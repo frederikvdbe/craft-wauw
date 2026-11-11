@@ -1,0 +1,79 @@
+{% extends "_components/fields/field" %}
+
+{# ======================= #}
+{# PROPERTIES              #}
+{# ======================= #}
+{% set id = id|default("") %}
+
+{# See text.twig for `namePrefix`/`model` -- same convention, same opt-out. #}
+{% set namePrefix = namePrefix is defined ? namePrefix : "fields" %}
+{% set name = name|default(id and namePrefix ? "#{namePrefix}[#{id}]" : id) %}
+{% set model = model is defined ? model : (id ? "form['#{id}']" : "") %}
+
+{% set label = label|default("") %}
+{% set startName = startName|default("#{name}[start]") %}
+{% set endName = endName|default("#{name}[end]") %}
+{% set value = value|default("") %}
+{% set placeholder = placeholder|default("Selecteer een periode"|t) %}
+{% set required = required|default(false) %}
+{% set min = min|default("") %}
+{% set max = max|default("") %}
+{% set class = class|default("") %}
+{% set attributes = attributes|default({}) %}
+
+{% set fieldType = "daterange" %}
+{% set wrapperAttributes = {
+    "x-data": "daterangepicker(#{value|json_encode}, #{min|json_encode}, #{max|json_encode})",
+    "@click.outside": "closePicker()",
+} %}
+
+{# ======================= #}
+{# TEMPLATE                #}
+{# ======================= #}
+{% set startAttributes = { type: "hidden", name: startName, required: required } %}
+{% set endAttributes = { type: "hidden", name: endName, required: required } %}
+
+{% if model %}
+    {% set startAttributes = startAttributes|merge({ "x-model": "#{model}.start" }) %}
+    {% set endAttributes = endAttributes|merge({ "x-model": "#{model}.end" }) %}
+{% else %}
+    {% set startAttributes = startAttributes|merge({ ":value": "start" }) %}
+    {% set endAttributes = endAttributes|merge({ ":value": "end" }) %}
+{% endif %}
+
+{% block input %}
+    <button
+        type="button"
+        id="{{ id }}"
+        class="c-field-date-trigger"
+        aria-haspopup="dialog"
+        :aria-expanded="open ? 'true' : 'false'"
+        x-ref="trigger"
+        x-text="displayValue || {{ placeholder|json_encode }}"
+        @click="open ? closePicker() : openPicker()"
+        {{ attr(attributes) }}
+    ></button>
+
+    <input {{ attr(startAttributes) }}>
+    <input {{ attr(endAttributes) }}>
+
+    <div
+        x-ref="panel"
+        x-show="open"
+        x-cloak
+        class="c-field-date-panel"
+        role="dialog"
+        @keydown.escape="closePicker(); $refs.trigger.focus()"
+    >
+        <calendar-range
+            months="2"
+            :value="value"
+            {% if min %}min="{{ min }}"{% endif %}
+            {% if max %}max="{{ max }}"{% endif %}
+            @change="onChange($event)"
+        >
+            <calendar-month></calendar-month>
+            <calendar-month offset="1"></calendar-month>
+        </calendar-range>
+    </div>
+{% endblock %}

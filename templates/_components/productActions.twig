@@ -10,18 +10,8 @@
 {# ======================= #}
 <div class="b-product-actions">
     {% if variant and not priceOnRequest %}
-        <form method="post">
-            {{ csrfInput() }}
-            {{ actionInput('commerce/cart/update-cart') }}
-
-            <input type="hidden" name="purchasables[0][id]" value="{{ variant.id }}">
-            <input type="hidden" name="purchasables[0][qty]" value="1">
-
-            {% include "_components/button" with {
-                label: "Add to cart"|t,
-                attributes: { type: "submit" },
-            } only %}
-        </form>
+        {% include "_components/addToCartButton" with { variant } only %}
+        {% include "_components/removeFromCartButton" with { variant } only %}
     {% endif %}
 
     {% include "_components/button" with {
@@ -29,7 +19,7 @@
         class: "tertiary",
         attributes: {
             type: "button",
-            "@click": "window.dispatchEvent(new CustomEvent('wauw:modal-open', { detail: { id: '#{shippingCalculatorModalId}' } }))",
+            "@click": "openModal('#{shippingCalculatorModalId}')",
         },
     } only %}
 </div>

@@ -20,7 +20,7 @@
                 <button
                     type="button"
                     class="c-cta-card-link"
-                    @click="window.dispatchEvent(new CustomEvent('wauw:modal-open', { detail: { id: '{{ modalId }}' } }))"
+                    @click="openModal('{{ modalId }}')"
                 >
                     {{ linkLabel }}
                 </button>

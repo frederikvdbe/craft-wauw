@@ -1,0 +1,50 @@
+@use "../../base/typography" as *;
+
+// `.c-field-input`/`.c-field-label` come from `_field.scss` -- this file
+// only styles the text+button row and the tag list beneath it.
+.c-field-tags-list {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--space-10);
+	margin-block: var(--space-10) 0;
+	padding: 0;
+	list-style: none;
+}
+
+.c-field-tags-tag {
+	display: flex;
+	align-items: center;
+	gap: var(--space-10);
+	padding-inline: var(--space-10);
+	padding-block: var(--space-5);
+	border-radius: var(--border-radius-4);
+	background-color: var(--clr-grey-100);
+	cursor: pointer;
+
+	@include typo-body-md;
+	color: var(--clr-black);
+
+	&:hover .c-field-tags-tag-icon {
+		color: var(--clr-red-500);
+	}
+}
+
+.c-field-tags-tag-icon {
+	display: flex;
+	align-items: center;
+	color: var(--clr-grey-300);
+
+	.c-icon {
+		width: 18px;
+		height: 18px;
+	}
+}
+
+.c-field-tags-input {
+	display: flex;
+	gap: var(--space-10);
+
+	.c-field-input {
+		flex: 1;
+	}
+}

@@ -139,10 +139,11 @@
                 <tr><td class="label">EAN</td><td>{{ variant.eanField }}</td></tr>
             {% endif %}
             {% if variant and (variant.length or variant.width or variant.height) %}
-                <tr><td class="label">Dimensions (cm)</td><td>{{ [variant.length, variant.width, variant.height]|filter(v => v)|join(' x ') }}</td></tr>
+                {% set dims = [variant.length, variant.width, variant.height]|filter(v => v) %}
+                <tr><td class="label">Dimensions</td><td>{{ dims|join(' x ') }} cm ({{ dims|map(v => v|inches)|join(' x ') }} in)</td></tr>
             {% endif %}
             {% if variant and variant.weight %}
-                <tr><td class="label">Weight (kg)</td><td>{{ variant.weight }}</td></tr>
+                <tr><td class="label">Weight</td><td>{{ variant.weight }} kg ({{ variant.weight|pounds }} lb)</td></tr>
             {% endif %}
         </table>
 

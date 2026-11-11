@@ -1,0 +1,13 @@
+// `.c-field-checkbox-label`/`-box`/`-text` come from `_checkbox.scss` -- this
+// file only lays out the group of checkboxes and handles its own error state.
+.c-field-checkboxGroup-options {
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-10);
+}
+
+.c-field-checkboxGroup.error {
+	.c-field-checkbox-box {
+		border-color: var(--clr-red-500);
+	}
+}

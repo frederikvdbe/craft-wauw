@@ -1,0 +1,42 @@
+{# ======================= #}
+{# PROPERTIES              #}
+{# ======================= #}
+{% extends "_components/fields/field" %}
+
+{% set id = id|default("") %}
+
+{% set namePrefix = namePrefix is defined ? namePrefix : "fields" %}
+{% set name = name|default(id and namePrefix ? "#{namePrefix}[#{id}]" : id) %}
+{% set model = model is defined ? model : (id ? "form['#{id}']" : "") %}
+
+{% set label = label|default("") %}
+{% set type = type|default("text") %}
+{% set placeholder = placeholder|default("") %}
+{% set required = required|default(false) %}
+{% set autocomplete = autocomplete|default("") %}
+{% set class = class|default("") %}
+{% set attributes = attributes|default({}) %}
+
+{% set fieldType = "text" %}
+
+{# ======================= #}
+{# TEMPLATE                #}
+{# ======================= #}
+{% set baseAttributes = {
+    type: type,
+    id: id,
+    name: name,
+    placeholder: placeholder,
+    required: required,
+    autocomplete: autocomplete,
+} %}
+
+{% if model %}
+    {% set baseAttributes = baseAttributes|merge({ "x-model": model }) %}
+{% endif %}
+
+{% block input %}
+    {% set baseAttributes = validate ? baseAttributes|merge({ "@blur": validate }) : baseAttributes %}
+    
+    <input class="c-field-input" {{ attr(baseAttributes|merge(attributes)) }}>
+{% endblock %}

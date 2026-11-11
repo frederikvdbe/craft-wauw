@@ -7,6 +7,7 @@ use craft\commerce\elements\Product;
 use craft\helpers\UrlHelper;
 
 use Twig\Extension\AbstractExtension;
+use Twig\TwigFilter;
 use Twig\TwigFunction;
 
 use modules\site\services\SpecSheetGenerator;
@@ -17,6 +18,13 @@ class SiteTwigExtension extends AbstractExtension {
             new TwigFunction('getTransformsMap', [$this, 'getTransformsMap']),
             new TwigFunction('isActive', [$this, 'isActive']),
             new TwigFunction('specSheetUrl', [$this, 'specSheetUrl']),
+        ];
+    }
+
+    public function getFilters(): array {
+        return [
+            new TwigFilter('inches', fn(?float $cm): ?float => $cm === null ? null : round($cm / 2.54, 1)),
+            new TwigFilter('pounds', fn(?float $kg): ?float => $kg === null ? null : round($kg * 2.20462, 1)),
         ];
     }
 
