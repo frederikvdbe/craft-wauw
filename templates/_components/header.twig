@@ -20,7 +20,7 @@
             {% include "_components/localization" %}
 
             <div class="c-header-important-actions">
-                <a class="c-header-account" href="">
+                <a class="c-header-account" href="{{ currentUser ? url('member-zone') : url('login') }}">
                     {% include "_components/icon" with { icon: "account" } only %}
                 </a>
 

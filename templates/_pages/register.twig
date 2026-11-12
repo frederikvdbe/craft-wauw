@@ -1,0 +1,64 @@
+{# ======================= #}
+{# PROPERTIES              #}
+{# ======================= #}
+{% set successMessage = "Bedankt voor je registratie! Check je e-mail om je wachtwoord in te stellen."|t %}
+
+{# ======================= #}
+{# TEMPLATE                #}
+{# ======================= #}
+{% extends "_base/layout" %}
+
+{% set pageClass = "auth" %}
+
+{% block content %}
+    <section class="b-auth container" x-data="registerForm({{ { successMessage: successMessage }|json_encode }})">
+        {% include "_components/title" with { title: "Account aanmaken"|t, tag: "h1" } only %}
+
+        {% embed "_components/fields/form" with { id: "register-form" } %}
+            {% block fields %}
+                {{ actionInput("users/save-user") }}
+                {{ hiddenInput("sendActivationEmail", "1") }}
+
+                {% include "_components/fields/text" with {
+                    id: "firstName",
+                    namePrefix: "",
+                    label: "Voornaam"|t,
+                    required: true,
+                    autocomplete: "given-name",
+                } only %}
+
+                {% include "_components/fields/text" with {
+                    id: "lastName",
+                    namePrefix: "",
+                    label: "Achternaam"|t,
+                    required: true,
+                    autocomplete: "family-name",
+                } only %}
+
+                {% include "_components/fields/text" with {
+                    id: "email",
+                    namePrefix: "",
+                    label: "E-mailadres"|t,
+                    type: "email",
+                    required: true,
+                    autocomplete: "email",
+                } only %}
+
+                {% include "_components/button" with {
+                    label: "Registreren"|t,
+                    attributes: {
+                        type: "submit",
+                        ":class": "{ 'is-loading': loading }",
+                        ":disabled": "loading",
+                    },
+                } only %}
+            {% endblock %}
+        {% endembed %}
+
+        <div class="b-auth-links">
+            <a href="{{ url(craft.app.config.general.loginPath) }}" class="b-auth-link">
+                {{ "Heb je al een account? Log in"|t }}
+            </a>
+        </div>
+    </section>
+{% endblock %}

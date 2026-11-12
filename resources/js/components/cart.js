@@ -3,7 +3,16 @@ import { jsonRequest, templateRequest } from "../common/helpers";
 export function cart() {
 	return {
 		cartHtml: "",
-		cart: { totalQty: 0, totalPrice: 0, totalPriceAsCurrency: "", lineItems: [] },
+		cart: {
+			totalQty: 0,
+			totalPrice: 0,
+			totalPriceAsCurrency: "",
+			lineItems: [],
+			shippingMethodHandle: "",
+			shippingOptions: {},
+			paymentMethodHandle: "",
+			paymentOptions: {},
+		},
 
 		init() {
 			this.refresh();
@@ -14,11 +23,23 @@ export function cart() {
 		async refresh() {
 			const [{ content }, cart] = await Promise.all([
 				templateRequest(new URL("api/cart", window.site.baseUrl).toString()),
-				jsonRequest("/actions/site/cart/data"),
+				jsonRequest("/actions/wauw/cart/data"),
 			]);
 
 			this.cartHtml = content;
 			this.cart = cart;
+		},
+
+		shippingOptionPrice(handle) {
+			return this.cart.shippingOptions[handle]?.priceAsCurrency ?? "€ _";
+		},
+
+		get shippingPrice() {
+			return this.shippingOptionPrice(this.cart.shippingMethodHandle);
+		},
+
+		get paymentPrice() {
+			return this.cart.paymentOptions[this.cart.paymentMethodHandle]?.priceAsCurrency ?? "€ _";
 		},
 
 		get totalQuantity() {

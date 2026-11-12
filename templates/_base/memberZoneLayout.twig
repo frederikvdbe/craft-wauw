@@ -1,0 +1,54 @@
+{# ======================= #}
+{# PROPERTIES              #}
+{# ======================= #}
+{% requireLogin %}
+
+{% set showFooter = false %}
+
+{% set memberNavigation = [
+    { label: "Overview"|t, url: url("member-zone") },
+    { label: "My details"|t, url: url("member-zone/my-details") },
+    { label: "Invoicing"|t, url: url("member-zone/invoicing") },
+    { label: "Shipping address"|t, url: url("member-zone/shipping-address") },
+    { label: "Order history"|t, url: url("member-zone/order-history") },
+    { label: "VIP preview"|t, url: url("member-zone/vip-preview") },
+    { label: "Your favourites"|t, url: url("member-zone/favourites") },
+    { label: "Security"|t, url: url("member-zone/security") },
+] %}
+
+{# ======================= #}
+{# TEMPLATE                #}
+{# ======================= #}
+{% extends "_base/layout" %}
+
+{% block content %}
+    <div class="b-member-zone container">
+        <div class="b-member-zone-content">
+            <aside class="b-member-zone-aside">
+                {% include "_components/title" with { title: "Your account"|t, tag: "h1" } only %}
+
+                <nav class="b-member-zone-nav">
+                    <ul class="b-member-zone-nav-links">
+                        {% for link in memberNavigation %}
+                            <li class="b-member-zone-nav-link">
+                                <a class="{{ link.url == craft.app.request.absoluteUrl ? "active" : "" }}" href="{{ link.url }}">{{ link.label }}</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </nav>
+
+                <div class="b-member-zone-brand">
+                    {% include "_components/icon" with { icon: "wauw-wordmark" } only %}
+
+                    <span class="b-member-zone-brand-label">{{ "Member zone"|t }}</span>
+
+                    <a href="{{ url('logout') }}" class="b-member-zone-logout">{{ "Log-Out"|t }}</a>
+                </div>
+            </aside>
+
+            <div class="b-member-zone-main">
+                {% block memberContent %}{% endblock %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

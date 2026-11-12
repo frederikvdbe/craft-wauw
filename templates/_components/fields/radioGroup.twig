@@ -12,6 +12,8 @@
 {% set options = options|default([]) %}
 {% set value = value|default("") %}
 {% set class = class|default("") %}
+{% set onChange = onChange|default("") %}
+{% set showPrice = showPrice is defined ? showPrice : true %}
 
 {% set fieldType = "radioGroup" %}
 {% set labelFor = "" %}
@@ -46,7 +48,7 @@
                 name: name,
                 value: option.value,
                 ":checked": "value === #{option.value|json_encode}",
-                "@change": "value = #{option.value|json_encode}; #{validate}",
+                "@change": "value = #{option.value|json_encode}; #{validate}#{onChange ? '; ' ~ onChange : ''}",
             } %}
 
             <label class="c-field-radioGroup-option" for="{{ optionId }}">
@@ -80,9 +82,11 @@
                     {% endif %}
                 </span>
 
-                <span class="c-field-radioGroup-price">
-                    {{ option.price ? "€ #{option.price}" : "Free"|t }}
-                </span>
+                {% if showPrice %}
+                    <span class="c-field-radioGroup-price">
+                        {{ option.price ? "€ #{option.price}" : "Free"|t }}
+                    </span>
+                {% endif %}
             </label>
         {% endfor %}
     </div>

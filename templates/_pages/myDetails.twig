@@ -1,0 +1,96 @@
+{# ======================= #}
+{# PROPERTIES              #}
+{# ======================= #}
+{% set user = currentUser %}
+
+{% set customerTypeValue = user.customerTypeField.value|default("") %}
+
+{% set customerTypeField = craft.app.fields.getFieldByHandle("customerTypeField") %}
+{% set customerTypeOptions = [] %}
+{% set customerTypeValueLabel = "" %}
+
+{% for option in customerTypeField.options %}
+    {% if option.value %}
+        {% set customerTypeOptions = customerTypeOptions|merge([{ value: option.value, label: option.label }]) %}
+
+        {% if option.value == customerTypeValue %}
+            {% set customerTypeValueLabel = option.label %}
+        {% endif %}
+    {% endif %}
+{% endfor %}
+
+{% set initialData = {
+    customerTypeField: customerTypeValue,
+    firstName: user.firstName ?? "",
+    lastName: user.lastName ?? "",
+    email: user.email ?? "",
+    phoneField: user.phoneField ?? "",
+} %}
+
+{% set successMessage = "Your details have been saved."|t %}
+
+{# ======================= #}
+{# TEMPLATE                #}
+{# ======================= #}
+{% extends "_base/memberZoneLayout" %}
+
+{% set pageClass = "member-zone-my-details" %}
+
+{% block memberContent %}
+    {% include "_components/title" with { title: "My details"|t, tag: "h2" } only %}
+
+    <div x-data="myDetailsForm({{ { successMessage: successMessage, initialData: initialData }|json_encode }})">
+        {% embed "_components/fields/form" with { id: "my-details-form" } %}
+            {% block fields %}
+                {{ actionInput("users/save-user") }}
+                {{ hiddenInput("userId", user.id) }}
+
+                {% include "_components/fields/autocomplete" with {
+                    id: "customerTypeField",
+                    label: "Customer type"|t,
+                    options: customerTypeOptions,
+                    value: customerTypeValue,
+                    valueLabel: customerTypeValueLabel,
+                } only %}
+
+                {% include "_components/fields/text" with {
+                    id: "firstName",
+                    namePrefix: "",
+                    label: "First name"|t,
+                    autocomplete: "given-name",
+                } only %}
+
+                {% include "_components/fields/text" with {
+                    id: "lastName",
+                    namePrefix: "",
+                    label: "Last name"|t,
+                    autocomplete: "family-name",
+                } only %}
+
+                {% include "_components/fields/text" with {
+                    id: "email",
+                    namePrefix: "",
+                    label: "Email address"|t,
+                    type: "email",
+                    autocomplete: "email",
+                } only %}
+
+                {% include "_components/fields/text" with {
+                    id: "phoneField",
+                    label: "Phone number"|t,
+                    type: "tel",
+                    autocomplete: "tel",
+                } only %}
+
+                {% include "_components/button" with {
+                    label: "Save"|t,
+                    attributes: {
+                        type: "submit",
+                        ":class": "{ 'is-loading': loading }",
+                        ":disabled": "loading",
+                    },
+                } only %}
+            {% endblock %}
+        {% endembed %}
+    </div>
+{% endblock %}

@@ -1,0 +1,98 @@
+@use "../base/breakpoints" as *;
+@use "../base/typography" as *;
+
+.b-member-zone {
+	.c-title {
+		@include typo-body-md;
+		text-transform: uppercase;
+		font-weight: var(--fw-700);
+		letter-spacing: normal;
+	}
+
+	&-content {
+		grid-column: 1 / 6;
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		height: calc(100vh - var(--header-height));
+
+		@include styles-below(tablet) {
+			grid-template-columns: 1fr;
+			height: auto;
+		}
+	}
+
+	&-aside {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-end;
+		text-align: right;
+		height: 100%;
+		padding: var(--space-80);
+		background-color: var(--clr-yellow-500);
+		overflow-y: auto;
+
+		.c-title {
+			margin-bottom: var(--space-40);
+		}
+
+		@include styles-below(tablet) {
+			height: auto;
+			overflow-y: visible;
+		}
+	}
+
+	&-nav {
+		&-links {
+			display: flex;
+			flex-direction: column;
+			gap: var(--space-30);
+		}
+	}
+
+	&-nav-link a {
+		@include typo-body-sm;
+		text-decoration: none;
+
+		&.active {
+			font-weight: var(--fw-700);
+		}
+	}
+
+	&-brand {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-end;
+		text-align: right;
+		gap: var(--space-10);
+		margin-top: auto;
+
+		.c-icon {
+			height: var(--space-30);
+		}
+
+		&-label {
+			@include typo-body-lg;
+			text-transform: uppercase;
+		}
+	}
+
+	&-logout {
+		text-decoration: underline;
+		@include typo-body-sm;
+	}
+
+	&-main {
+		height: 100%;
+		padding: var(--space-80);
+		overflow-y: auto;
+
+		& > .c-title {
+			margin-bottom: var(--space-40);
+		}
+
+		@include styles-below(tablet) {
+			height: auto;
+			overflow-y: visible;
+		}
+	}
+}

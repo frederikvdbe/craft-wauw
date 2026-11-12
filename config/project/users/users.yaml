@@ -1,4 +1,4 @@
-allowPublicRegistration: false
+allowPublicRegistration: true
 defaultGroup: fff6fb9b-173c-4adf-a139-9bc40669780d # VIP Members
 photoSubpath: null
 photoVolumeUid: 78f386d8-ccbe-4fa9-b24b-f527005175e6 # Uploads

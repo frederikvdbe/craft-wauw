@@ -1,0 +1,46 @@
+{# ======================= #}
+{# PROPERTIES              #}
+{# ======================= #}
+{% set user = currentUser %}
+{% set value = user.subscribedToVipPreviewField ? "1" : "0" %}
+
+{% set vipPreviewOptions = [
+    { value: "1", title: "Yes"|t, description: "I want to receive the weekly VIP preview"|t },
+    { value: "0", title: "No"|t, description: "I don't want to receive the weekly VIP preview"|t },
+] %}
+
+{% set successMessage = "Your preference has been saved."|t %}
+
+{# ======================= #}
+{# TEMPLATE                #}
+{# ======================= #}
+{% extends "_base/memberZoneLayout" %}
+
+{% set pageClass = "member-zone-vip-preview" %}
+
+{% block memberContent %}
+    {% include "_components/title" with { title: "VIP preview"|t, tag: "h2" } only %}
+
+    <div class="b-vip-preview" x-data="vipPreviewForm({{ { successMessage: successMessage }|json_encode }})">
+        {% include "_components/title" with { title: "Stay ahead of the release"|t, tag: "h3" } only %}
+
+        <p class="b-vip-preview-text">
+            {{ "Receive the weekly preview a private 24-hour window before pieces are released publicly. Preview emails are sent once per week"|t }}
+        </p>
+
+        {% embed "_components/fields/form" with { id: "vip-preview-form", showMessages: false } %}
+            {% block fields %}
+                {{ actionInput("users/save-user") }}
+                {{ hiddenInput("userId", user.id) }}
+
+                {% include "_components/fields/radioGroup" with {
+                    id: "subscribedToVipPreviewField",
+                    value: value,
+                    options: vipPreviewOptions,
+                    showPrice: false,
+                    onChange: "$el.closest('form').requestSubmit()",
+                } only %}
+            {% endblock %}
+        {% endembed %}
+    </div>
+{% endblock %}

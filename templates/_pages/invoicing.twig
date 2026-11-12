@@ -1,0 +1,168 @@
+{# ======================= #}
+{# PROPERTIES              #}
+{# ======================= #}
+{% set user = currentUser %}
+{% set address = user.primaryBillingAddress %}
+
+{% set idPrefix = "invoicingAddress" %}
+{% set defaultCountryCode = "BE" %}
+{% set countryCode = address.countryCode ?? defaultCountryCode %}
+
+{% set addressFormat = craft.app.addresses.getAddressFormatRepository().get(countryCode) %}
+{% set usedFields = addressFormat.getUsedFields() %}
+{% set requiredFields = addressFormat.getRequiredFields() %}
+
+{% set countryOptions = [] %}
+{% set countryLabel = "" %}
+
+{% for code, name in craft.app.addresses.getCountryList() %}
+    {% set countryOptions = countryOptions|merge([{ value: code, label: name }]) %}
+
+    {% if code == countryCode %}
+        {% set countryLabel = name %}
+    {% endif %}
+{% endfor %}
+
+{% set initialData = {
+    organization: address.organization ?? "",
+    organizationTaxId: address.organizationTaxId ?? "",
+    (idPrefix ~ "-bus"): address.addressLine2 ?? "",
+    locality: address.locality ?? "",
+    postalCode: address.postalCode ?? "",
+    countryCode: countryCode,
+} %}
+
+{% set successMessage = "Your invoicing details have been saved."|t %}
+
+{# ======================= #}
+{# TEMPLATE                #}
+{# ======================= #}
+{% extends "_base/memberZoneLayout" %}
+
+{% set pageClass = "member-zone-invoicing" %}
+
+{% block memberContent %}
+    {% include "_components/title" with { title: "Invoicing"|t, tag: "h2" } only %}
+
+    <div x-data="invoicingForm({{ { successMessage: successMessage, initialData: initialData }|json_encode }})">
+        {% embed "_components/fields/form" with { id: "invoicing-form" } %}
+            {% block fields %}
+                {{ actionInput("users/save-address") }}
+
+                {% if address %}
+                    {{ hiddenInput("addressId", address.id) }}
+                {% endif %}
+
+                {{ hiddenInput("isPrimaryBilling", "1") }}
+
+                {# Addresses require a title ("label") -- this page represents one fixed-purpose
+                   address rather than a multi-address book, so set it automatically. #}
+                {{ hiddenInput("title", "Invoicing address"|t) }}
+
+                {% include "_components/fields/text" with {
+                    id: "organization",
+                    namePrefix: "",
+                    label: "Company name"|t,
+                } only %}
+
+                {% include "_components/fields/text" with {
+                    id: "organizationTaxId",
+                    namePrefix: "",
+                    label: "VAT number"|t,
+                } only %}
+
+                <div class="c-field-address-row" x-data="address({{ idPrefix|json_encode }}, {{ (address.addressLine1 ?? "")|json_encode }})">
+                    <div class="c-field-address-row-primary">
+                        {% embed "_components/fields/field" with {
+                            fieldType: "text",
+                            label: "Street name"|t,
+                            labelFor: "#{idPrefix}-streetName",
+                        } %}
+                            {% block input %}
+                                <input
+                                    type="text"
+                                    id="{{ idPrefix }}-streetName"
+                                    class="c-field-input"
+                                    autocomplete="address-line1"
+                                    x-model="streetName"
+                                    {{ "addressLine1" in requiredFields ? "required" : "" }}
+                                >
+                            {% endblock %}
+                        {% endembed %}
+                    </div>
+
+                    <div class="c-field-address-row-secondary">
+                        {% embed "_components/fields/field" with {
+                            fieldType: "text",
+                            label: "Number"|t,
+                            labelFor: "#{idPrefix}-number",
+                        } %}
+                            {% block input %}
+                                <input
+                                    type="text"
+                                    id="{{ idPrefix }}-number"
+                                    class="c-field-input"
+                                    x-model="number"
+                                >
+                            {% endblock %}
+                        {% endembed %}
+                    </div>
+
+                    <div class="c-field-address-row-secondary">
+                        {% include "_components/fields/text" with {
+                            id: "#{idPrefix}-bus",
+                            name: "addressLine2",
+                            namePrefix: "",
+                            label: "Bus"|t,
+                        } only %}
+                    </div>
+
+                    <input type="hidden" name="addressLine1" :value="addressLine1">
+                </div>
+
+                <div class="c-field-address-row">
+                    {% if "locality" in usedFields %}
+                        <div class="c-field-address-row-primary">
+                            {% include "_components/fields/text" with {
+                                id: "locality",
+                                namePrefix: "",
+                                label: "City"|t,
+                                required: "locality" in requiredFields,
+                            } only %}
+                        </div>
+                    {% endif %}
+
+                    {% if "postalCode" in usedFields %}
+                        <div class="c-field-address-row-secondary">
+                            {% include "_components/fields/text" with {
+                                id: "postalCode",
+                                namePrefix: "",
+                                label: "Zip / Postal code"|t,
+                                required: "postalCode" in requiredFields,
+                            } only %}
+                        </div>
+                    {% endif %}
+                </div>
+
+                {% include "_components/fields/autocomplete" with {
+                    id: "countryCode",
+                    namePrefix: "",
+                    label: "Country"|t,
+                    options: countryOptions,
+                    value: countryCode,
+                    valueLabel: countryLabel,
+                    required: true,
+                } only %}
+
+                {% include "_components/button" with {
+                    label: "Save"|t,
+                    attributes: {
+                        type: "submit",
+                        ":class": "{ 'is-loading': loading }",
+                        ":disabled": "loading",
+                    },
+                } only %}
+            {% endblock %}
+        {% endembed %}
+    </div>
+{% endblock %}

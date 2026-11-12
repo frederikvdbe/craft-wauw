@@ -1,0 +1,66 @@
+{# ======================= #}
+{# PROPERTIES              #}
+{# ======================= #}
+{% set user = currentUser %}
+
+{% set passwordSuccessMessage = "Your password has been changed."|t %}
+
+{# ======================= #}
+{# TEMPLATE                #}
+{# ======================= #}
+{% extends "_base/memberZoneLayout" %}
+
+{% set pageClass = "account-security" %}
+
+{% block memberContent %}
+    {% include "_components/title" with { title: "Security"|t, tag: "h2" } only %}
+
+    <div class="b-account-section" x-data="changePasswordForm({{ { successMessage: passwordSuccessMessage }|json_encode }})">
+        {% include "_components/title" with { title: "Change password"|t, tag: "h3" } only %}
+
+        {% embed "_components/fields/form" with { id: "password-form" } %}
+            {% block fields %}
+                {{ actionInput("users/save-user") }}
+                {{ hiddenInput("userId", user.id) }}
+
+                {% include "_components/fields/text" with {
+                    id: "password-currentPassword",
+                    name: "currentPassword",
+                    namePrefix: "",
+                    label: "Current password"|t,
+                    type: "password",
+                    required: true,
+                    autocomplete: "current-password",
+                } only %}
+
+                {% include "_components/fields/text" with {
+                    id: "newPassword",
+                    namePrefix: "",
+                    label: "New password"|t,
+                    type: "password",
+                    required: true,
+                    autocomplete: "new-password",
+                } only %}
+
+                {% include "_components/fields/text" with {
+                    id: "confirmNewPassword",
+                    name: "",
+                    namePrefix: "",
+                    label: "Confirm new password"|t,
+                    type: "password",
+                    required: true,
+                    autocomplete: "new-password",
+                } only %}
+
+                {% include "_components/button" with {
+                    label: "Change password"|t,
+                    attributes: {
+                        type: "submit",
+                        ":class": "{ 'is-loading': loading }",
+                        ":disabled": "loading",
+                    },
+                } only %}
+            {% endblock %}
+        {% endembed %}
+    </div>
+{% endblock %}

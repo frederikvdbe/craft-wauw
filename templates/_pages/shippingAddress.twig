@@ -1,0 +1,10 @@
+{# ======================= #}
+{# TEMPLATE                #}
+{# ======================= #}
+{% extends "_base/memberZoneLayout" %}
+
+{% set pageClass = "account-shipping-address" %}
+
+{% block memberContent %}
+    {% include "_components/title" with { title: "Shipping address"|t, tag: "h2" } only %}
+{% endblock %}

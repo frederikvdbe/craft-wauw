@@ -1,0 +1,61 @@
+{# ======================= #}
+{# TEMPLATE                #}
+{# ======================= #}
+{% extends "_base/layout" %}
+
+{% set pageClass = "auth" %}
+
+{% block content %}
+    <section class="b-auth container" x-data="loginForm()">
+        {% include "_components/title" with { title: "Inloggen"|t, tag: "h1" } only %}
+
+        {% embed "_components/fields/form" with { id: "login-form" } %}
+            {% block fields %}
+                {{ actionInput("users/login") }}
+                {{ redirectInput("member-zone") }}
+
+                {% include "_components/fields/text" with {
+                    id: "loginName",
+                    namePrefix: "",
+                    label: "E-mailadres"|t,
+                    type: "email",
+                    required: true,
+                    autocomplete: "username",
+                } only %}
+
+                {% include "_components/fields/text" with {
+                    id: "password",
+                    namePrefix: "",
+                    label: "Wachtwoord"|t,
+                    type: "password",
+                    required: true,
+                    autocomplete: "current-password",
+                } only %}
+
+                {% include "_components/fields/checkbox" with {
+                    id: "rememberMe",
+                    label: "Onthoud mij"|t,
+                } only %}
+
+                {% include "_components/button" with {
+                    label: "Inloggen"|t,
+                    attributes: {
+                        type: "submit",
+                        ":class": "{ 'is-loading': loading }",
+                        ":disabled": "loading",
+                    },
+                } only %}
+            {% endblock %}
+        {% endembed %}
+
+        <div class="b-auth-links">
+            <a href="{{ url(craft.app.config.general.setPasswordRequestPath) }}" class="b-auth-link">
+                {{ "Wachtwoord vergeten?"|t }}
+            </a>
+
+            <a href="{{ url('register') }}" class="b-auth-link">
+                {{ "Nog geen account? Registreer"|t }}
+            </a>
+        </div>
+    </section>
+{% endblock %}

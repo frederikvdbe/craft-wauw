@@ -1,6 +1,6 @@
 <?php
 
-namespace modules\site\web\twig;
+namespace modules\wauw\web\twig;
 
 use Craft;
 use craft\commerce\elements\Product;
@@ -10,7 +10,7 @@ use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
 
-use modules\site\services\SpecSheetGenerator;
+use modules\wauw\services\SpecSheetGenerator;
 
 class SiteTwigExtension extends AbstractExtension {
     public function getFunctions() {
@@ -29,9 +29,6 @@ class SiteTwigExtension extends AbstractExtension {
     }
 
     /**
-     * The download URL of a product's specification sheet, or null if it hasn't been generated yet.
-     * A stable route (not the backing asset's own URL, which changes on every regeneration).
-     *
      * @param Product $product
      * @return string|null
      */
@@ -44,8 +41,6 @@ class SiteTwigExtension extends AbstractExtension {
     }
 
     /**
-     * Gives back an array of Craft transforms
-     * 
      * @param array $widths
      * @param array $formats
      * @return array{format: mixed, width: mixed[]}
@@ -64,8 +59,6 @@ class SiteTwigExtension extends AbstractExtension {
     }
 
     /**
-     * Return wether a certain url should be marked active
-     * 
      * @param string $url
      * @return string|null
      */

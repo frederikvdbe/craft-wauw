@@ -9,24 +9,23 @@
 {% set shippingAddress = cart.shippingAddress %}
 {% set mollieGateway = craft.commerce.gateways.getGatewayByHandle('mollie') %}
 
-{# Commerce shipping methods have no description/tooltip field, so that copy lives here, keyed by handle. #}
-{% set shippingMethodCopy = {
-    "galleryPickup": { tooltip: "More info"|t, description: "Pickup at WAUW by appointment."|t },
-    "standardDoorstepDelivery": { tooltip: "More info"|t, description: "Careful delivery to your door."|t },
-    "whiteGlove": { tooltip: "More info"|t, description: "Delivery and ground-floor placement."|t },
-} %}
-
 {% set shippingOptions = [] %}
 {% for handle, option in cart.availableShippingMethodOptions %}
-    {% set copy = shippingMethodCopy[handle] ?? {} %}
     {% set shippingOptions = shippingOptions|merge([{
         title: option.name,
         value: option.handle,
-        tooltip: copy.tooltip ?? "",
-        description: copy.description ?? "",
+        tooltip: option.shippingMethod.tooltip ? option.shippingMethod.tooltip|t : "",
+        description: option.shippingMethod.description ? option.shippingMethod.description|t : "",
         price: option.price,
     }]) %}
 {% endfor %}
+
+{% set paymentOptions = [
+    { title: "Bancontact", value: "bancontact", image: "bancontact" },
+    { title: "Ideal / Wero", value: "ideal", image: "wero" },
+    { title: "Creditcard", value: "creditcard", image: "creditcard", price: 108 },
+    { title: "Wire transfer", value: "wire", image: "banktransfer" },
+] %}
 
 {% set initialData = {
     "shippingAddress-firstName": shippingAddress.firstName ?? "",
@@ -36,24 +35,20 @@
     "shippingAddress-locality": shippingAddress.locality ?? "",
     "shippingAddress-postalCode": shippingAddress.postalCode ?? "",
     "shippingAddress-administrativeArea": shippingAddress.administrativeArea ?? "",
-    "shippingAddress-phone": shippingAddress.phoneField ?? "",
+    "shippingAddress-phone": shippingAddress.mobileField ?? "",
 } %}
 
 {% block content %}
-    <pre>
-    {{ dump(shippingOptions) }}
-</pre>
-{% exit %}
     <section class="b-checkout container" x-data="checkout({{ initialData|json_encode }})">
-        {% embed "_components/fields/form" with { id: "checkout-form", showMessages: false } %}
-            {% block fields %}
-                {{ actionInput('commerce/cart/update-cart') }}
-                {{ redirectInput(url('checkout')) }}
-                {{ hiddenInput('cancelUrl', url('checkout')|hash) }}
-                {{ hiddenInput('gatewayId', mollieGateway.id) }}
+        <div class="b-checkout-content" :class="{ 'is-loading': loading }">
+            {% embed "_components/fields/form" with { id: "checkout-form", showMessages: false } %}
+                {% block fields %}
+                    {{ actionInput('commerce/cart/update-cart') }}
+                    {{ redirectInput(siteUrl) }}
+                    {{ hiddenInput('cancelUrl', url('checkout')|hash) }}
+                    {{ hiddenInput('gatewayId', mollieGateway.id) }}
 
-                <div class="b-checkout-content">
-                    <div class="b-checkout-column">
+                    <div class="b-checkout-column b-checkout-column--address">
                         {% include "_components/checkoutSectionTitle" with { index: 1, title: "Shipping address"|t } only %}
 
                         {% include "_components/fields/address" with {
@@ -69,42 +64,56 @@
                             name: "shippingMethodHandle",
                             value: cart.shippingMethodHandle ?? "",
                             options: shippingOptions,
+                            onChange: "updateShippingMethod(value)",
                         } only %}
                     </div>
 
-                    <div class="b-checkout-column">
+                    <div class="b-checkout-column b-checkout-column--payment">
                         {% include "_components/checkoutSectionTitle" with { index: 2, title: "Payment methods"|t } only %}
 
                         {% include "_components/fields/radioGroup" with {
                             id: "payment-methods",
                             name: "paymentForm[#{mollieGateway.handle}][paymentMethod]",
                             value: "creditcard",
-                            options: [
-                                { title: "Bancontact", value: "bancontact", image: "bancontact" },
-                                { title: "Ideal / Wero", value: "ideal", image: "wero" },
-                                { title: "Creditcard", value: "creditcard", image: "creditcard", price: 108 },
-                                { title: "Wire transfer", value: "wire", image: "banktransfer" },
-                            ],
+                            options: paymentOptions,
+                            onChange: "updatePaymentMethod(value)",
                         } only %}
                     </div>
+                {% endblock %}
+            {% endembed %}
 
-                    <div class="b-checkout-column">
-                        {% include "_components/cartOverview" with {
-                            showCheckoutButton: false,
-                        } only %}
+            <div class="b-checkout-column b-checkout-column--summary">
+                {% include "_components/cartOverview" with {
+                    showCheckoutButton: false,
+                    showCosts: true,
+                } only %}
 
-                        {% include "_components/button" with {
-                            label: "Pay"|t,
-                            class: "safe",
-                            attributes: {
-                                type: "submit",
-                                ":class": "{ 'is-loading': loading }",
-                                ":disabled": "loading",
-                            },
-                        } only %}
-                    </div>
+                {% include "_components/button" with {
+                    label: "Place order"|t,
+                    class: "safe",
+                    attributes: {
+                        type: "submit",
+                        form: "checkout-form",
+                        ":class": "{ 'is-loading': loading }",
+                        ":disabled": "loading",
+                    },
+                } only %}
+    
+                <div class="b-checkout-opt-ins">
+                    {% include "_components/fields/checkbox" with {
+                        id: "vipSignup",
+                        label: "Yess! add me to the <strong>VIP MEMBER LIST</strong> Receive our new arrivals 1 day before they go online!"|t,
+                        attributes: { form: "checkout-form" },
+                    } only %}
+
+                    {% include "_components/fields/checkbox" with {
+                        id: "termsAccepted",
+                        label: "I acknowledge that I have to pay for this item and agree with the <a href='#'>general terms and conditions</a>"|t,
+                        required: true,
+                        attributes: { form: "checkout-form" },
+                    } only %}
                 </div>
-            {% endblock %}
-        {% endembed %}
+            </div>
+        </div>
     </section>
 {% endblock %}

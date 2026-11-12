@@ -38,12 +38,23 @@ return GeneralConfig::create()
     ->cpTrigger(App::env('CRAFT_CP_TRIGGER') ?? 'launchpad')
     ->postCpLoginRedirect('entries')
 
+    // FRONT-END AUTH ROUTES
+    ->loginPath('login')
+    ->logoutPath('logout')
+    ->setPasswordPath('set-password')
+    ->setPasswordRequestPath('forgot-password')
+    ->setPasswordSuccessPath('login')
+    ->verifyEmailPath('verify-email')
+    ->verifyEmailSuccessPath('member-zone')
+    ->activateAccountSuccessPath('member-zone')
+    ->autoLoginAfterAccountActivation(true)
+
     // TEMPLATE RELATED SETTINGS
     ->errorTemplatePrefix('_pages/errors/')
-    ->partialTemplatesPath('_elements') 
+    ->partialTemplatesPath('_elements')
     ->enableTemplateCaching(!(App::env('CRAFT_DEV_MODE') ?? false))
     ->preloadSingles()
-    
+
     // USER & AUTHENTICATION
     ->deferPublicRegistrationPassword(true)
     ->showFirstAndLastNameFields()

@@ -1,0 +1,66 @@
+@use "../base/breakpoints" as *;
+@use "../base/typography" as *;
+
+.b-order-history {
+	display: flex;
+	flex-direction: column;
+	margin-block-start: var(--space-40);
+
+	&-order {
+		&:last-child {
+			border-bottom: 1px solid var(--clr-grey-300);
+		}
+	}
+
+	&-date-row {
+		display: flex;
+		justify-content: space-between;
+		padding-block: var(--space-10);
+
+		@include typo-body-xs;
+		text-transform: uppercase;
+	}
+
+	&-item {
+		display: grid;
+		grid-template-columns: 160px 1fr auto;
+		align-items: center;
+		gap: var(--space-20);
+		padding-block: var(--space-10);
+		border-top: 1px solid var(--clr-grey-300);
+
+		@include styles-below(mobileL) {
+			grid-template-columns: 1fr;
+		}
+
+		&-media {
+			width: 160px;
+
+			@include styles-below(mobileL) {
+				width: 100%;
+			}
+		}
+
+		&-title {
+			@include typo-body-md;
+		}
+
+		&-price {
+			@include typo-body-md;
+			white-space: nowrap;
+
+			@include styles-below(mobileL) {
+				justify-self: start;
+			}
+		}
+	}
+
+	&-item-actions {
+		display: flex;
+		justify-content: flex-end;
+		flex-wrap: wrap;
+		gap: var(--space-10);
+		padding-block: var(--space-10);
+		border-top: 1px solid var(--clr-grey-300);
+	}
+}

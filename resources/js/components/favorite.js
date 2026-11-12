@@ -11,7 +11,7 @@ export function favorite(productId, isFavorite = false) {
 
 			try {
 				const [data] = await Promise.all([
-					jsonRequest("/actions/site/favorite/toggle", {
+					jsonRequest("/actions/wauw/favorite/toggle", {
 						method: "POST",
 						headers: {
 							"X-CSRF-Token": window.site.csrfTokenValue,

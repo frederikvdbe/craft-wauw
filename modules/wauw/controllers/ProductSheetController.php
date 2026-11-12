@@ -1,12 +1,12 @@
 <?php
 
-namespace modules\site\controllers;
+namespace modules\wauw\controllers;
 
 use Craft;
 use craft\commerce\elements\Product;
 use craft\web\Controller;
 use craft\web\Response;
-use modules\site\services\SpecSheetGenerator;
+use modules\wauw\services\SpecSheetGenerator;
 use yii\web\NotFoundHttpException;
 
 /**
@@ -20,9 +20,7 @@ class ProductSheetController extends Controller {
         $product = Product::find()->slug($slug)->status(null)->one();
         $asset = $product ? SpecSheetGenerator::assetFor($product) : null;
 
-        if (!$asset) {
-            throw new NotFoundHttpException();
-        }
+        if (!$asset) throw new NotFoundHttpException();
 
         return Craft::$app->getResponse()->sendContentAsFile($asset->getContents(), $asset->filename, [
             'mimeType' => 'application/pdf',

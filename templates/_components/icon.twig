@@ -3,10 +3,11 @@
 {# ======================= #}
 {% set class = class|default("") %}
 {% set icon = icon|default("") %}
+{% set attributes = attributes|default({}) %}
 
 {% set svgAttributes = {
     class: "c-icon " ~ class ~ " " ~ icon,
-} %}
+}|merge(attributes) %}
 
 {# ======================= #}
 {# TEMPLATE                #}

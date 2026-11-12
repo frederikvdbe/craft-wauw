@@ -1,6 +1,6 @@
 <?php
 
-namespace modules\site\controllers;
+namespace modules\wauw\controllers;
 
 use Craft;
 use craft\commerce\elements\Product;

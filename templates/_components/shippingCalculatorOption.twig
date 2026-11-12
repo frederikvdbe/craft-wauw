@@ -1,0 +1,37 @@
+{# ======================= #}
+{# PROPERTIES              #}
+{# ======================= #}
+{% set handle = handle|default("") %}
+{% set title = title|default("") %}
+{% set description = description|default("") %}
+{% set tooltip = tooltip|default("") %}
+{% set selected = selected|default(false) %}
+{% set class = class|default("") %}
+
+{# ======================= #}
+{# TEMPLATE                #}
+{# ======================= #}
+<div class="c-shipping-option {{ selected ? "is-selected" : "" }} {{ class }}">
+    <div class="c-shipping-option-content">
+        <span class="c-shipping-option-heading">
+            <span class="c-shipping-option-title">{{ title }}</span>
+
+            {% if tooltip %}
+                <span
+                    class="c-shipping-option-tooltip"
+                    tabindex="0"
+                    title="{{ tooltip }}"
+                    aria-label="{{ tooltip }}"
+                >
+                    {% include "_components/icon" with { icon: "info" } only %}
+                </span>
+            {% endif %}
+        </span>
+
+        {% if description %}
+            <span class="c-shipping-option-description">{{ description }}</span>
+        {% endif %}
+    </div>
+
+    <span class="c-shipping-option-price" x-text="$store.cart.shippingOptionPrice({{ handle|json_encode }})"></span>
+</div>

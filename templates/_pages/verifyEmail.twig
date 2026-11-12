@@ -1,0 +1,38 @@
+{# ======================= #}
+{# PROPERTIES              #}
+{# ======================= #}
+{% set code = code|default("") %}
+{% set id = id|default("") %}
+
+{# ======================= #}
+{# TEMPLATE                #}
+{# ======================= #}
+{% extends "_base/layout" %}
+
+{% set pageClass = "auth" %}
+
+{% block content %}
+    <section class="b-auth container">
+        {% include "_components/title" with { title: "E-mailadres bevestigen"|t, tag: "h1" } only %}
+
+        <p class="b-auth-notice">{{ "Een moment, we bevestigen je e-mailadres..."|t }}</p>
+
+        <form class="b-auth-verify-form" method="post" accept-charset="UTF-8">
+            {{ csrfInput({ async: false }) }}
+            {{ actionInput("users/verify-email") }}
+            {{ hiddenInput("code", code) }}
+            {{ hiddenInput("uid", id) }}
+
+            <noscript>
+                {% include "_components/button" with {
+                    label: "Bevestig e-mailadres"|t,
+                    attributes: { type: "submit" },
+                } only %}
+            </noscript>
+        </form>
+    </section>
+
+    <script>
+        document.querySelector(".b-auth-verify-form").submit();
+    </script>
+{% endblock %}

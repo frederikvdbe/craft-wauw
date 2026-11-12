@@ -1,0 +1,43 @@
+@use "../base/breakpoints" as *;
+
+.b-auth {
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-20);
+	max-width: 28rem;
+	padding-block: var(--space-60);
+
+	.c-form {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-15);
+	}
+
+	&-links {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-10);
+	}
+
+	&-link {
+		text-decoration: underline;
+	}
+
+	&-notice {
+		color: var(--clr-grey-500);
+	}
+}
+
+.b-account-section {
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-15);
+	max-width: 28rem;
+	margin-block-end: var(--space-40);
+
+	.c-form {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-15);
+	}
+}

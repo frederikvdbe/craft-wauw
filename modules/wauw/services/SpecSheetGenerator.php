@@ -1,6 +1,6 @@
 <?php
 
-namespace modules\site\services;
+namespace modules\wauw\services;
 
 use Craft;
 use craft\commerce\elements\Product;

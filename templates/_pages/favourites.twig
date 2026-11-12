@@ -1,0 +1,35 @@
+{# ======================= #}
+{# PROPERTIES              #}
+{# ======================= #}
+{% set user = currentUser %}
+{% set products = user.favoriteProductsField.all() %}
+
+{# ======================= #}
+{# TEMPLATE                #}
+{# ======================= #}
+{% extends "_base/memberZoneLayout" %}
+
+{% set pageClass = "member-zone-favourites" %}
+
+{% block memberContent %}
+    {% include "_components/title" with { title: "Your favourites"|t, tag: "h2" } only %}
+
+    {% if products|length %}
+        <div class="b-favourites-grid">
+            {% for product in products %}
+                {% set image = product.productImagesField.one() %}
+
+                <a class="b-favourites-item" href="{{ product.url }}">
+                    {% include "_components/image" with {
+                        image,
+                        targetWidths: [800, 400],
+                        sizes: "(min-width: 768px) 50vw, 100vw",
+                        aspectRatio: 3 / 2,
+                    } only %}
+                </a>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>{{ "You haven't added any favourites yet."|t }}</p>
+    {% endif %}
+{% endblock %}

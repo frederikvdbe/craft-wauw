@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "252f6be01a8abc3088f78c2cf243159c",
+    "content-hash": "ab545e340eb84ee28e7e1b261143898c",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -2153,6 +2153,46 @@
             "time": "2026-09-28T17:51:46+00:00"
         },
         {
+            "name": "fostercommerce/klaviyoconnect",
+            "version": "7.5.0",
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/FosterCommerce/klaviyoconnect/zipball/951c9d251792086bf15eb4355d4a4b82924abe8b",
+                "reference": "951c9d251792086bf15eb4355d4a4b82924abe8b",
+                "shasum": ""
+            },
+            "require": {
+                "craftcms/cms": "^5.6.0",
+                "giggsey/libphonenumber-for-php-lite": "^8.13 || ^9.0",
+                "klaviyo/api": "^20.0.0",
+                "php": "^8.2"
+            },
+            "conflict": {
+                "craftcms/commerce": "<5.1.0"
+            },
+            "type": "craft-plugin",
+            "extra": {
+                "handle": "klaviyoconnect",
+                "name": "Klaviyo Connect",
+                "developer": "Foster Commerce",
+                "documentationUrl": "https://www.fostercommerce.com/craft-cms-plugins/klaviyo-connect/docs"
+            },
+            "autoload": {
+                "psr-4": {
+                    "fostercommerce\\klaviyoconnect\\": "src/"
+                }
+            },
+            "license": [
+                "proprietary"
+            ],
+            "description": "Sends Craft Commerce carts, orders and customers to Klaviyo, so you can run email and SMS flows from what shoppers do.",
+            "homepage": "https://fostercommerce.com",
+            "keywords": [
+                "klaviyo"
+            ],
+            "time": "2026-11-07T19:28:58+00:00"
+        },
+        {
             "name": "giggsey/libphonenumber-for-php",
             "version": "8.13.55",
             "source": {
@@ -2563,16 +2603,16 @@
         },
         {
             "name": "guzzlehttp/psr7",
-            "version": "2.13.2",
+            "version": "2.13.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/psr7.git",
-                "reference": "adee536f95101929f262b8c59e8a61472f347d58"
+                "reference": "6d3cd8285a97eaa352956a4ada92fa03ecce1c4e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/psr7/zipball/adee536f95101929f262b8c59e8a61472f347d58",
-                "reference": "adee536f95101929f262b8c59e8a61472f347d58",
+                "url": "https://api.github.com/repos/guzzle/psr7/zipball/6d3cd8285a97eaa352956a4ada92fa03ecce1c4e",
+                "reference": "6d3cd8285a97eaa352956a4ada92fa03ecce1c4e",
                 "shasum": ""
             },
             "require": {
@@ -2662,7 +2702,7 @@
             ],
             "support": {
                 "issues": "https://github.com/guzzle/psr7/issues",
-                "source": "https://github.com/guzzle/psr7/tree/2.13.2"
+                "source": "https://github.com/guzzle/psr7/tree/2.13.3"
             },
             "funding": [
                 {
@@ -2678,7 +2718,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-10-17T23:49:46+00:00"
+            "time": "2026-11-12T15:57:42+00:00"
         },
         {
             "name": "html2text/html2text",
@@ -3068,6 +3108,61 @@
                 "source": "https://github.com/laravel/framework"
             },
             "time": "2025-09-08T19:05:53+00:00"
+        },
+        {
+            "name": "klaviyo/api",
+            "version": "20.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/klaviyo/klaviyo-api-php.git",
+                "reference": "d84fdb71575bcfdc5b28a27b236d37785169cac2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/klaviyo/klaviyo-api-php/zipball/d84fdb71575bcfdc5b28a27b236d37785169cac2",
+                "reference": "d84fdb71575bcfdc5b28a27b236d37785169cac2",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "ext-json": "*",
+                "ext-mbstring": "*",
+                "guzzlehttp/guzzle": "^7.3",
+                "guzzlehttp/psr7": "^1.7 || ^2.0",
+                "php": "^8.1"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "KlaviyoAPI\\": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Klaviyo",
+                    "homepage": "https://www.klaviyo.com/"
+                }
+            ],
+            "description": "PHP SDK for Klaviyo's API.",
+            "homepage": "https://developers.klaviyo.com",
+            "keywords": [
+                "api",
+                "openapi",
+                "openapi-generator",
+                "openapitools",
+                "php",
+                "rest",
+                "sdk"
+            ],
+            "support": {
+                "issues": "https://github.com/klaviyo/klaviyo-api-php/issues",
+                "source": "https://github.com/klaviyo/klaviyo-api-php/tree/v20.0.0"
+            },
+            "time": "2026-07-15T18:38:21+00:00"
         },
         {
             "name": "lcobucci/jwt",
@@ -11613,6 +11708,59 @@
                 "rss": "https://github.com/verbb/formie/commits/v2.atom"
             },
             "time": "2026-11-09T22:16:52+00:00"
+        },
+        {
+            "name": "verbb/social-login",
+            "version": "2.0.30",
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/verbb/social-login/zipball/e7623522c5f7a37cbb97017607c792a24f228d36",
+                "reference": "e7623522c5f7a37cbb97017607c792a24f228d36",
+                "shasum": ""
+            },
+            "require": {
+                "craftcms/cms": "^5.0.0",
+                "craftcms/url-validator": "^1.1",
+                "php": "^8.2",
+                "verbb/auth": "^2.0.57",
+                "verbb/base": "^3.0.20"
+            },
+            "type": "craft-plugin",
+            "extra": {
+                "name": "Social Login",
+                "handle": "social-login",
+                "changelogUrl": "https://raw.githubusercontent.com/verbb/social-login/craft-5/CHANGELOG.md",
+                "class": "verbb\\sociallogin\\SocialLogin"
+            },
+            "autoload": {
+                "psr-4": {
+                    "verbb\\sociallogin\\": "src/"
+                }
+            },
+            "license": [
+                "proprietary"
+            ],
+            "authors": [
+                {
+                    "name": "Verbb",
+                    "homepage": "https://verbb.io"
+                }
+            ],
+            "description": "A Craft CMS plugin for sign-in, registration and account connections through identity providers.",
+            "keywords": [
+                "cms",
+                "craft",
+                "craft-plugin",
+                "craftcms"
+            ],
+            "support": {
+                "email": "support@verbb.io",
+                "issues": "https://github.com/verbb/social-login/issues?state=open",
+                "source": "https://github.com/verbb/social-login",
+                "docs": "https://github.com/verbb/social-login",
+                "rss": "https://github.com/verbb/social-login/commits/v2.atom"
+            },
+            "time": "2026-11-05T12:16:25+00:00"
         },
         {
             "name": "verbb/tiptap",

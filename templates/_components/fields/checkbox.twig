@@ -5,6 +5,7 @@
 {# ======================= #}
 {% set id = id|default("") %}
 {% set name = name|default(id) %}
+{% set model = model is defined ? model : (id ? "form['#{id}']" : "") %}
 {% set checkboxLabel = label|default("") %}
 {% set value = value|default("1") %}
 {% set checked = checked|default(false) %}
@@ -26,8 +27,13 @@
     name: name,
     value: value,
     required: required,
-    checked: checked,
 } %}
+
+{% if model %}
+    {% set baseAttributes = baseAttributes|merge({ "x-model": model }) %}
+{% else %}
+    {% set baseAttributes = baseAttributes|merge({ checked: checked }) %}
+{% endif %}
 
 {% set labelTag = externalLabel ? "div" : "label" %}
 
@@ -42,7 +48,9 @@
         <span class="c-field-checkbox-box" aria-hidden="true"></span>
 
         {% if checkboxLabel %}
-            <span class="c-field-checkbox-text">{{ checkboxLabel }}</span>
+            <span class="c-field-checkbox-text">
+                {% include "_components/richText" with { text: checkboxLabel|striptags("<a><u><strong>") } only %}
+            </span>
         {% endif %}
 
         {% include "_components/icon" with { icon: "exclamation-circle" } only %}

@@ -26,6 +26,27 @@ export const jsonRequest = async (url, options = {}) => {
 	return response.json();
 };
 
+// Craft/Commerce error bags (`errors`, `paymentFormErrors`, …) are an object keyed by
+// attribute name, where each value is either an array of messages or, when the attribute
+// itself is keyed by id (e.g. a line item id), a nested object of the same shape.
+function collectMessages(value, messages = []) {
+	if (typeof value === "string") {
+		if (value) messages.push(value);
+	} else if (value && typeof value === "object") {
+		for (const item of Object.values(value)) {
+			collectMessages(item, messages);
+		}
+	}
+
+	return messages;
+}
+
+function errorText(...errorBags) {
+	const messages = errorBags.flatMap((bag) => collectMessages(bag));
+
+	return [...new Set(messages)].join(" ");
+}
+
 export async function submitForm(component, event) {
 	component.loading = true;
 	component.message = null;
@@ -46,27 +67,25 @@ export async function submitForm(component, event) {
 
 		const data = await response.json();
 
-		if (response.ok && data.redirect) {
-			window.location.assign(new URL(data.redirect, `${window.location.origin}/`));
-			return data;
-		}
-
 		if (data.csrfTokenValue) {
 			window.site.csrfTokenValue = data.csrfTokenValue;
 			form.querySelector(`[name="${window.site.csrfTokenName}"]`)?.setAttribute("value", data.csrfTokenValue);
 		}
 
-		const errorList = data.errors ? Object.values(data.errors).flat().join(" ") : null;
+		const errorList = errorText(data.errors, data.paymentFormErrors);
 		const successMessage = response.ok ? component.successMessage : null;
 
-		component.message = {
+		const message = {
 			type: response.ok ? "success" : "error",
 			text: errorList || successMessage || data.message || "Er ging iets mis. Probeer het later opnieuw.",
 		};
 
-		return data;
+		const redirect = response.ok && data.redirect ? new URL(data.redirect, `${window.location.origin}/`) : null;
+
+		return { data, message, redirect };
 	} catch {
-		component.message = { type: "error", text: "Er ging iets mis. Probeer het later opnieuw." };
+		const message = { type: "error", text: "Er ging iets mis. Probeer het later opnieuw." };
+		return { data: null, message, redirect: null };
 	} finally {
 		component.loading = false;
 		component.formErrors = {};
@@ -75,16 +94,16 @@ export async function submitForm(component, event) {
 }
 
 export async function submitCartForm(component, event) {
-	const data = await submitForm(component, event);
+	const { data, message, redirect } = await submitForm(component, event);
 	const notices = data?.cart?.notices ?? [];
 
-	if (notices.length) {
-		component.message = { type: "error", text: notices.map((notice) => notice.message).join(" ") };
-	}
+	const cartMessage = notices.length ? { type: "error", text: notices.map((notice) => notice.message).join(" ") } : message;
 
-	if (component.message?.type !== "error") {
+	if (cartMessage.type !== "error") {
 		window.dispatchEvent(new CustomEvent("wauw:cart-change"));
 	}
+
+	return { data, message: cartMessage, redirect };
 }
 
 export function buildQueryString(params) {

@@ -1,0 +1,19 @@
+@use "../base/breakpoints" as *;
+
+.b-favourites {
+	&-grid {
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		gap: var(--space-30);
+		margin-block-start: var(--space-40);
+
+		@include styles-below(mobileL) {
+			grid-template-columns: 1fr;
+		}
+	}
+
+	&-item {
+		display: block;
+		text-decoration: none;
+	}
+}

@@ -1,4 +1,4 @@
-dateModified: 1794406665
+dateModified: 1794515698
 elementSources:
   craft\commerce\elements\Product:
     -
@@ -536,6 +536,27 @@ plugins:
       useQueueForIntegrations: true
       useQueueForNotifications: true
       validateCustomTemplates: true
+  klaviyoconnect:
+    edition: standard
+    enabled: true
+    schemaVersion: 1.0.0
+  social-login:
+    edition: standard
+    enabled: true
+    licenseKey: STA5WPD48D7FOMX87S0UXPL7
+    schemaVersion: 1.0.3
+    settings:
+      cpLoginTemplate: ''
+      enableCpLogin: false
+      enableLogin: true
+      enableRegistration: true
+      forceActivate: true
+      populateProfile: true
+      redirectUri: null
+      sendActivationEmail: true
+      syncProfile: false
+      userGroups:
+        - 3a4636ce-ae5f-41b6-a380-04d42765f6a7 # Customers
   vite:
     edition: standard
     enabled: true

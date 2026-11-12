@@ -38,11 +38,7 @@
 {# ======================= #}
 {# TEMPLATE                #}
 {# ======================= #}
-{# The firstName / lastName / street / number / city / postal code / country fields below
-   belong to the address itself. Email, customer type and phone don't -- the design puts
-   them in this same block regardless, so they post under their own top-level names instead
-   of the address's, to keep the Craft address data clean. #}
-<fieldset class="c-field-address {{ class }}" x-data="address({{ idPrefix|json_encode }})">
+<fieldset class="c-field-address {{ class }}" x-data="address({{ idPrefix|json_encode }}, {{ (address.addressLine1 ?? "")|json_encode }})">
     {% if label %}
         <legend class="c-field-address-label">{{ label }}</legend>
     {% endif %}
@@ -195,7 +191,7 @@
         <div class="c-field-address-row-secondary">
             {% include "_components/fields/text" with {
                 id: "#{idPrefix}-phone",
-                name: "phone",
+                name: "#{namePrefix}[fields][mobileField]",
                 type: "tel",
                 label: "Phone nr."|t,
                 autocomplete: "tel",

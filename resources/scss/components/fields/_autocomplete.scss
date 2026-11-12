@@ -1,39 +1,60 @@
 @use "../../base/typography" as *;
 
-// `.c-field-input`/`.c-field-label` come from `_field.scss` -- this file
-// only styles the floating option list, which is teleported to <body> and
-// positioned by floating-ui, so it lives outside `.c-field-autocomplete`.
-.c-field-autocomplete-list {
-	position: fixed;
-	z-index: 100;
-	max-height: 240px;
-	margin: 0;
-	padding: var(--space-5);
-	overflow-y: auto;
-	list-style: none;
-	border: 1px solid var(--clr-grey-300);
-	border-radius: var(--border-radius-4);
-	background-color: var(--clr-white);
-	box-shadow: 0 var(--space-5) var(--space-10) rgb(0 0 0 / 12%);
-}
-
-.c-field-autocomplete-option {
-	padding: var(--space-10) var(--space-10);
-	border-radius: var(--border-radius-4);
-	cursor: pointer;
-
-	@include typo-body-md;
-	color: var(--clr-black);
-
-	&.is-active,
-	&:hover {
-		background-color: var(--clr-grey-100);
+.c-field-autocomplete {
+	.c-field-input {
+		padding-right: var(--space-32);
 	}
-}
 
-.c-field-autocomplete-empty {
-	padding: var(--space-10) var(--space-10);
+	&-control {
+		position: relative;
 
-	@include typo-body-md;
-	color: var(--clr-grey-300);
+		.c-icon {
+			position: absolute;
+			top: 50%;
+			transform: translateY(-50%);
+			right: var(--space-20);
+			transition: transform 200ms ease-out;
+		}
+
+		&:has(.c-field-input[aria-expanded="true"]) {
+			.c-icon {
+				transform: translateY(-50%) scaleY(-1);
+			}
+		}
+	}
+
+	&-list {
+		position: fixed;
+		z-index: 100;
+		max-height: 240px;
+		margin: 0;
+		padding: var(--space-5);
+		overflow-y: auto;
+		list-style: none;
+		border: 1px solid var(--clr-grey-300);
+		border-radius: var(--border-radius-4);
+		background-color: var(--clr-white);
+		box-shadow: 0 var(--space-5) var(--space-10) rgb(0 0 0 / 12%);
+	}
+
+	&-option {
+		padding: var(--space-10) var(--space-10);
+		border-radius: var(--border-radius-4);
+		cursor: pointer;
+
+		@include typo-body-md;
+		color: var(--clr-black);
+
+		&.is-active,
+		&:hover {
+			background-color: var(--clr-grey-100);
+		}
+	}
+
+	&-empty {
+		padding: var(--space-10) var(--space-10);
+
+		@include typo-body-md;
+		color: var(--clr-grey-500);
+	}
 }

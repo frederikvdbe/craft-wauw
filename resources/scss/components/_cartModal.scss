@@ -14,11 +14,25 @@
 		text-transform: uppercase;
 	}
 
+	&-summary {
+		margin-top: var(--space-10);
+	}
+
+	&-line {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: var(--space-10);
+		padding-block: var(--space-20);
+		border-top: 1px solid var(--clr-black);
+
+		@include typo-body-sm;
+	}
+
 	&-total {
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		margin-top: var(--space-10);
 		padding-block: var(--space-30);
 		border-block: 1px solid var(--clr-black);
 

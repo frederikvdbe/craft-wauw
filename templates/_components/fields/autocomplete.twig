@@ -16,6 +16,7 @@
 {% set placeholder = placeholder|default("") %}
 {% set required = required|default(false) %}
 {% set class = class|default("") %}
+{% set teleportTarget = teleportTarget|default("body") %}
 
 {% set fieldType = "autocomplete" %}
 {% set wrapperAttributes = {
@@ -26,30 +27,34 @@
 {# TEMPLATE                #}
 {# ======================= #}
 {% block input %}
-    <input
-        type="text"
-        id="{{ id }}"
-        class="c-field-input"
-        autocomplete="off"
-        role="combobox"
-        aria-autocomplete="list"
-        aria-controls="{{ id }}-list"
-        :aria-expanded="open ? 'true' : 'false'"
-        placeholder="{{ placeholder }}"
-        x-ref="input"
-        x-model="query"
-        @focus="onFocus()"
-        @input="onInput()"
-        @keydown.arrow-down.prevent="moveActive(1)"
-        @keydown.arrow-up.prevent="moveActive(-1)"
-        @keydown.enter.prevent="selectActive()"
-        @keydown.escape="closeList()"
-        @blur="onBlur(); {{ validate }}"
-    >
+    <div class="c-field-autocomplete-control">
+        <input
+            type="text"
+            id="{{ id }}"
+            class="c-field-input"
+            autocomplete="off"
+            role="combobox"
+            aria-autocomplete="list"
+            aria-controls="{{ id }}-list"
+            :aria-expanded="open ? 'true' : 'false'"
+            placeholder="{{ placeholder }}"
+            x-ref="input"
+            x-model="query"
+            @focus="onFocus()"
+            @input="onInput()"
+            @keydown.arrow-down.prevent="moveActive(1)"
+            @keydown.arrow-up.prevent="moveActive(-1)"
+            @keydown.enter.prevent="selectActive()"
+            @keydown.escape="closeList()"
+            @blur="onBlur(); {{ validate }}"
+        >
+
+        {% include "_components/icon" with { icon: "chevron-down" } only %}
+    </div>
 
     <input type="hidden" name="{{ name }}" {{ required ? "required" : "" }} :value="value">
 
-    <template x-teleport="body">
+    <template x-teleport="{{ teleportTarget }}">
         <ul
             id="{{ id }}-list"
             x-ref="list"
@@ -64,7 +69,8 @@
                     class="c-field-autocomplete-option"
                     :class="{ 'is-active': index === activeIndex }"
                     :aria-selected="index === activeIndex"
-                    @mousedown.prevent="select(option)"
+                    @mousedown.prevent
+                    @click="select(option)"
                     x-text="option.label"
                 ></li>
             </template>

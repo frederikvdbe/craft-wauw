@@ -58,52 +58,52 @@ html:has(.c-modal[open]) {
 			background-color: color-mix(in srgb, var(--clr-black) 0%, transparent);
 		}
 	}
-}
 
-.c-modal-panel {
-	display: flex;
-	flex: 1;
-	flex-direction: column;
-	background-color: var(--clr-white);
-	overflow-y: auto;
-}
-
-.c-modal-header {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	gap: var(--space-15);
-	flex-shrink: 0;
-	padding: var(--space-40) var(--space-30);
-	background-color: var(--clr-yellow-500);
-
-	.c-title {
-		@include typo-body-lg;
-		text-transform: uppercase;
+	&-panel {
+		display: flex;
+		flex: 1;
+		flex-direction: column;
+		background-color: var(--clr-white);
+		overflow-y: auto;
 	}
-}
 
-.c-modal-close {
-	display: inline-flex;
-	align-items: center;
-	justify-content: center;
-	flex-shrink: 0;
-	padding: 0;
-	border: none;
-	background: none;
-	color: inherit;
-	cursor: pointer;
+	&-header {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: var(--space-15);
+		flex-shrink: 0;
+		padding: var(--space-40) var(--space-30);
+		background-color: var(--clr-yellow-500);
 
-	.c-icon {
-		width: 25px;
-		height: 25px;
+		.c-title {
+			@include typo-body-lg;
+			text-transform: uppercase;
+		}
 	}
-}
 
-.c-modal-content {
-	@include typo-body-md;
-	display: flex;
-	flex-direction: column;
-	gap: var(--space-15);
-	padding: var(--space-40) var(--space-30);
+	&-close {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		flex-shrink: 0;
+		padding: 0;
+		border: none;
+		background: none;
+		color: inherit;
+		cursor: pointer;
+
+		.c-icon {
+			width: 25px;
+			height: 25px;
+		}
+	}
+
+	&-content {
+		@include typo-body-md;
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-15);
+		padding: var(--space-40) var(--space-30);
+	}
 }

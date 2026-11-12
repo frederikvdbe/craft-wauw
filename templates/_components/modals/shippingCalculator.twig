@@ -5,6 +5,83 @@
 {# ======================= #}
 {% set title = "Shipping calculator"|t %}
 
+{# The embedded form below passes its own `id` to "_components/fields/form", which would
+   otherwise shadow this modal's `id` (used for the autocomplete's teleport target). #}
+{% set modalId = id %}
+
+{% set cart = craft.commerce.carts.cart %}
+{% set shippingAddress = cart.shippingAddress %}
+{% set defaultCountryCode = shippingAddress.countryCode ?? "BE" %}
+
+{% set countryOptions = [] %}
+{% set countryLabel = "" %}
+{% for code, name in craft.app.addresses.getCountryList() %}
+    {% set countryOptions = countryOptions|merge([{ value: code, label: name }]) %}
+
+    {% if code == defaultCountryCode %}
+        {% set countryLabel = name %}
+    {% endif %}
+{% endfor %}
+
+{% set shippingOptions = [] %}
+{% for handle, option in cart.availableShippingMethodOptions %}
+    {% set shippingOptions = shippingOptions|merge([{
+        handle: option.handle,
+        title: option.name,
+        tooltip: option.shippingMethod.tooltip ? option.shippingMethod.tooltip|t : "",
+        description: option.shippingMethod.description ? option.shippingMethod.description|t : "",
+        selected: option.handle == cart.shippingMethodHandle,
+    }]) %}
+{% endfor %}
+
+{% set initialData = {
+    "shippingAddress-countryCode": defaultCountryCode,
+    "shippingAddress-postalCode": shippingAddress.postalCode ?? "",
+} %}
+
 {# ======================= #}
 {# TEMPLATE                #}
 {# ======================= #}
+{% block content %}
+    <div class="c-shipping-calculator" x-data="shippingCalculator({{ initialData|json_encode }})">
+        <span class="c-shipping-calculator-label">{{ "Your location"|t }}</span>
+
+        {% embed "_components/fields/form" with { id: "shipping-calculator-form", showMessages: false } %}
+            {% block fields %}
+                {{ actionInput('commerce/cart/update-cart') }}
+
+                <div class="c-shipping-calculator-location">
+                    {% include "_components/fields/autocomplete" with {
+                        id: "shippingAddress-countryCode",
+                        name: "shippingAddress[countryCode]",
+                        options: countryOptions,
+                        value: defaultCountryCode,
+                        valueLabel: countryLabel,
+                        teleportTarget: "[data-modal-id='#{modalId}']",
+                    } only %}
+
+                    {% include "_components/fields/text" with {
+                        id: "shippingAddress-postalCode",
+                        name: "shippingAddress[postalCode]",
+                    } only %}
+                </div>
+
+                {% include "_components/button" with {
+                    label: "Calculate"|t,
+                    class: "safe",
+                    attributes: {
+                        type: "submit",
+                        ":class": "{ 'is-loading': loading }",
+                        ":disabled": "loading",
+                    },
+                } only %}
+            {% endblock %}
+        {% endembed %}
+
+        <div class="c-shipping-calculator-options">
+            {% for option in shippingOptions %}
+                {% include "_components/shippingCalculatorOption" with option only %}
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

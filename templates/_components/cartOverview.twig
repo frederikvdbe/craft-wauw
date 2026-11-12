@@ -3,6 +3,7 @@
 {# ======================= #}
 {% set class = class|default("") %}
 {% set showCheckoutButton = showCheckoutButton is defined ? showCheckoutButton : true %}
+{% set showCosts = showCosts is defined ? showCosts : false %}
 
 {# ======================= #}
 {# TEMPLATE                #}
@@ -12,9 +13,28 @@
 
     <div class="c-cart-items" x-html="$store.cart.cartHtml"></div>
 
-    <div class="c-cart-overview-total">
-        <p>{{ "Total incl. tax"|t }}</p>
-        <p class="c-cart-overview-total-price" x-text="$store.cart.totalPrice"></p>
+    <div class="c-cart-overview-summary">
+        {% if showCosts %}
+            <div class="c-cart-overview-line">
+                <p>
+                    {{ "Shipping cost"|t }}
+                    <span x-show="$store.cart.shippingOptions[$store.cart.shippingMethodHandle]"
+                        x-text="'  -  ' + ($store.cart.shippingOptions[$store.cart.shippingMethodHandle]?.name ?? '')"
+                    ></span>
+                </p>
+                <p class="c-cart-overview-line-price" x-text="$store.cart.shippingPrice"></p>
+            </div>
+
+            <div class="c-cart-overview-line">
+                <p>{{ "Payment processing"|t }}</p>
+                <p class="c-cart-overview-line-price" x-text="$store.cart.paymentPrice"></p>
+            </div>
+        {% endif %}
+
+        <div class="c-cart-overview-total">
+            <p>{{ "Total incl. tax"|t }}</p>
+            <p class="c-cart-overview-total-price" x-text="$store.cart.totalPrice"></p>
+        </div>
     </div>
 
     {% if showCheckoutButton %}

@@ -1,0 +1,17 @@
+{# ======================= #}
+{# PROPERTIES              #}
+{# ======================= #}
+{% set user = currentUser %}
+
+{# ======================= #}
+{# TEMPLATE                #}
+{# ======================= #}
+{% extends "_base/memberZoneLayout" %}
+
+{% set pageClass = "account-overview" %}
+
+{% block memberContent %}
+    {% include "_components/title" with { title: "Overview"|t, tag: "h2" } only %}
+
+    <p>{{ "Welcome back, {name}"|t({ name: user.friendlyName }) }}</p>
+{% endblock %}
