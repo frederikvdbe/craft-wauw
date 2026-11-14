@@ -21,6 +21,7 @@
   - No `craft off` during deploy: it writes `system.live` to project config, and `craft up` turns the site on again anyway
   - Not atomic (rsync into the live folder); release folders + symlink = later, if needed
   - To do on Combell: cron `*/5 * * * * php /abs/path/craft queue/run` (Lightspeed sync + Commerce order emails), then `.env`: `CRAFT_RUN_QUEUE_AUTOMATICALLY=false`, dev mode off, admin changes off, robots off; check server PHP = 8.5 (CI builds `vendor/` with 8.5)
+- Email: SMTP transport from env (`SMTP_HOST`, `SMTP_PORT`, `SMTP_AUTH`, `SMTP_USERNAME`, `SMTP_PASSWORD`; DDEV = Mailpit `127.0.0.1:1025`). `CRAFT_DISABLE_EMAIL=true` → null transport, no mail leaves the server (Craft, Commerce, Formie) → **always on for staging**. Production needs real SMTP (Combell or e.g. Postmark)
 - Craft **Pro** (customer accounts; Solo = 1 user) → client needs a Pro license before go-live
 - System time zone: Europe/Brussels
 - Commerce 5.7 installed (1 store, dummy gateway)

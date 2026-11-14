@@ -1,4 +1,4 @@
-dateModified: 1794406665
+dateModified: 1794650780
 elementSources:
   craft\commerce\elements\Product:
     -
@@ -250,8 +250,12 @@ email:
   replyToEmail: null
   template: _emails/system.twig
   transportSettings:
-    command: '/usr/local/bin/mailpit sendmail -t --smtp-addr 127.0.0.1:1025'
-  transportType: craft\mail\transportadapters\Sendmail
+    host: $SMTP_HOST
+    password: $SMTP_PASSWORD
+    port: $SMTP_PORT
+    useAuthentication: $SMTP_AUTH
+    username: $SMTP_USERNAME
+  transportType: craft\mail\transportadapters\Smtp
 fs:
   brandImages:
     hasUrls: true

@@ -9,6 +9,13 @@ use modules\site\Site;
 return [
     'id' => App::env('CRAFT_APP_ID') ?: 'CraftCMS',
     'components' => [
+        'mailer' => function() {
+            $config = App::mailerConfig();
+            if (App::env('CRAFT_DISABLE_EMAIL')) {
+                $config['transport'] = ['dsn' => 'null://null'];
+            }
+            return Craft::createObject($config);
+        },
         'queue' => [
             'ttr' => 300, // Increase for long running queue jobs
         ]
