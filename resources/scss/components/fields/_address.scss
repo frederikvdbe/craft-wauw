@@ -5,13 +5,10 @@
 	display: flex;
 	flex-direction: column;
 	gap: var(--space-15);
-	margin: 0 0 var(--space-20);
+	margin: 0 0 var(--space-60);
 	padding: 0;
 	border: 0;
 
-	// Nested fields (the country autocomplete, the street/postal/locality
-	// rows) sit inside this fieldset's own flex gap already -- their own
-	// `.c-field` margin-block would double up the spacing.
 	.c-field {
 		margin-block: 0;
 	}
@@ -20,7 +17,9 @@
 		margin-block: 0 var(--space-10);
 		padding: 0;
 
-		@include typo-h4;
+		@include typo-body-md;
+		text-transform: uppercase;
+		font-weight: var(--fw-700);
 		color: var(--clr-black);
 	}
 

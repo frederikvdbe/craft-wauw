@@ -5,6 +5,7 @@ import * as components from "../components";
 window.Alpine = Alpine;
 
 Alpine.data("site", components.site);
+Alpine.data("address", components.address);
 Alpine.data("search", components.search);
 Alpine.data("modal", components.modal);
 Alpine.data("favorite", components.favorite);
@@ -13,6 +14,8 @@ Alpine.data("addToCartButton", components.addToCartButton);
 Alpine.data("removeFromCartButton", components.removeFromCartButton);
 Alpine.data("autocomplete", components.autocomplete);
 Alpine.data("checkboxGroup", components.checkboxGroup);
+Alpine.data("checkout", components.checkout);
+Alpine.data("radioGroup", components.radioGroup);
 Alpine.data("datepicker", components.datepicker);
 Alpine.data("daterangepicker", components.daterangepicker);
 Alpine.data("richText", components.richText);

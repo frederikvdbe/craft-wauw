@@ -1,0 +1,89 @@
+{% extends "_components/fields/field" %}
+
+{# ======================= #}
+{# PROPERTIES              #}
+{# ======================= #}
+{% set id = id|default("") %}
+
+{% set namePrefix = namePrefix is defined ? namePrefix : "fields" %}
+{% set name = name|default(id and namePrefix ? "#{namePrefix}[#{id}]" : id) %}
+
+{% set label = label|default("") %}
+{% set options = options|default([]) %}
+{% set value = value|default("") %}
+{% set class = class|default("") %}
+
+{% set fieldType = "radioGroup" %}
+{% set labelFor = "" %}
+{% set wrapperAttributes = {
+    "x-data": "radioGroup(#{id|json_encode}, #{value|json_encode})",
+} %}
+
+{# ======================= #}
+{# TEMPLATE                #}
+{# ======================= #}
+{% block input %}
+    {% set groupAttributes = { class: "c-field-radioGroup-options", role: "radiogroup" } %}
+    {% if label %}
+        {% set groupAttributes = groupAttributes|merge({ "aria-label": label }) %}
+    {% endif %}
+
+    <div {{ attr(groupAttributes) }}>
+        {% for rawOption in options %}
+            {% set option = {
+                image: null,
+                description: "",
+                tooltip: "",
+                price: null,
+            }|merge(rawOption) %}
+
+            {% set optionId = "#{id}-#{loop.index}" %}
+            
+            {% set radioAttributes = {
+                type: "radio",
+                id: optionId,
+                class: "c-field-radioGroup-input",
+                name: name,
+                value: option.value,
+                ":checked": "value === #{option.value|json_encode}",
+                "@change": "value = #{option.value|json_encode}; #{validate}",
+            } %}
+
+            <label class="c-field-radioGroup-option" for="{{ optionId }}">
+                <input {{ attr(radioAttributes) }}>
+                <span class="c-field-radioGroup-radio" aria-hidden="true"></span>
+
+                {% if option.image %}
+                    <span class="c-field-radioGroup-image">
+                        {% include "_components/icon" with { icon: option.image } only %}
+                    </span>
+                {% endif %}
+
+                <span class="c-field-radioGroup-content">
+                    <span class="c-field-radioGroup-heading">
+                        <span class="c-field-radioGroup-title">{{ option.title }}</span>
+
+                        {% if option.tooltip %}
+                            <span
+                                class="c-field-radioGroup-tooltip"
+                                tabindex="0"
+                                title="{{ option.tooltip }}"
+                                aria-label="{{ option.tooltip }}"
+                            >
+                                {% include "_components/icon" with { icon: "info" } only %}
+                            </span>
+                        {% endif %}
+                    </span>
+
+                    {% if option.description %}
+                        <span class="c-field-radioGroup-description">{{ option.description }}</span>
+                    {% endif %}
+                </span>
+
+                <span class="c-field-radioGroup-price">
+                    {{ option.price ? "€ #{option.price}" : "Free"|t }}
+                </span>
+            </label>
+        {% endfor %}
+    </div>
+{% endblock %}

@@ -13,8 +13,7 @@
 	&-label {
 		display: block;
 
-		@include typo-body-md;
-		font-weight: var(--fw-700);
+		@include typo-input-label;
 		color: var(--clr-black);
 	}
 
@@ -40,11 +39,11 @@
 
 	&-input {
 		width: 100%;
-		min-height: 52px;
+		height: 40px;
 		padding-inline: var(--space-10);
-		border: 1px solid var(--clr-grey-300);
-		border-radius: var(--border-radius-4);
-		background-color: var(--clr-grey-100);
+		border: 1px solid var(--clr-grey-500);
+		border-radius: var(--border-radius-2);
+		background-color: var(--clr-white);
 		color: var(--clr-black);
 
 		@include typo-body-lg;

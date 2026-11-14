@@ -94,3 +94,12 @@
 @mixin typo-button {
 	font-family: var(--font-primary);
 }
+
+@mixin typo-input-label {
+	font-family: var(--font-primary);
+	font-weight: var(--fw-400);
+	font-size: var(--fs-10);
+	text-transform: uppercase;
+	letter-spacing: 1px;
+	line-height: 1.6;
+}

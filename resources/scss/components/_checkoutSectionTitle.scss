@@ -1,0 +1,30 @@
+@use "../base/breakpoints" as *;
+@use "../base/typography" as *;
+
+.c-checkout-section-title {
+	display: flex;
+	align-items: center;
+	gap: var(--space-10);
+	margin-bottom: var(--space-20);
+
+	&-index {
+		width: 30px;
+		height: 30px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		border-radius: var(--border-radius-2);
+		background-color: var(--clr-yellow-500);
+
+		.c-text {
+			@include typo-body-md;
+			font-weight: var(--fw-700);
+		}
+	}
+
+	.c-title {
+		@include typo-body-md;
+		font-weight: var(--fw-700);
+		text-transform: uppercase;
+	}
+}

@@ -1,0 +1,49 @@
+@use "../base/breakpoints" as *;
+
+.b-checkout {
+	&-content {
+		display: grid;
+		grid-template-columns: 1fr 0.8fr 1fr;
+
+		@include styles-below(tablet) {
+			grid-template-columns: 1fr;
+		}
+
+		& > * {
+			padding-block: var(--space-40);
+		}
+	}
+
+	&-column {
+		&:nth-child(1) {
+			padding-right: var(--space-30);
+			border-right: 1px solid var(--clr-grey-100);
+		}
+
+		&:nth-child(2) {
+			padding-inline: var(--space-30);
+			border-right: 1px solid var(--clr-grey-100);
+		}
+
+		&:nth-child(3) {
+			position: relative;
+			padding-left: var(--space-30);
+			background-color: var(--clr-grey-100);
+
+			&::after {
+				content: "";
+				position: absolute;
+				top: 0;
+				bottom: 0;
+				left: 100%;
+				width: max(var(--container-bound), calc((100vw - var(--container-width)) / 2));
+				background-color: var(--clr-grey-100);
+			}
+
+			.c-button {
+				width: 100%;
+				margin-top: var(--space-10);
+			}
+		}
+	}
+}

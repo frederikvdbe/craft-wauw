@@ -1,0 +1,21 @@
+billingAddressCondition:
+  class: craft\commerce\elements\conditions\addresses\GatewayAddressCondition
+  elementType: null
+  fieldContext: global
+handle: mollie
+isFrontendEnabled: '1'
+name: Mollie
+orderCondition:
+  class: craft\commerce\elements\conditions\orders\GatewayOrderCondition
+  elementType: craft\commerce\elements\Order
+  fieldContext: global
+paymentType: purchase
+settings:
+  apiKey: $MOLLIE_API_KEY
+  sendCartInfo: '1'
+shippingAddressCondition:
+  class: craft\commerce\elements\conditions\addresses\GatewayAddressCondition
+  elementType: null
+  fieldContext: global
+sortOrder: 99
+type: craft\commerce\mollie\gateways\Gateway

@@ -1,0 +1,16 @@
+{# ======================= #}
+{# PROPERTIES              #}
+{# ======================= #}
+{% set index = index|default("") %}
+{% set title = title|default("") %}
+
+{# ======================= #}
+{# TEMPLATE                #}
+{# ======================= #}
+<div class="c-checkout-section-title">
+    <div class="c-checkout-section-title-index">
+        {% include "_components/text" with { text: index } only %}
+    </div>
+
+    {% include "_components/title" with { title, tag: "h2" } only %}
+</div>

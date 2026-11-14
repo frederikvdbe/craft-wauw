@@ -4,7 +4,7 @@
 {% set fieldHandle = fieldHandle|default("") %}
 {% set address = address ?? null %}
 {% set addressKey = address.id ?? "new1" %}
-{% set namePrefix = "fields[#{fieldHandle}][#{addressKey}]" %}
+{% set namePrefix = namePrefix is defined ? namePrefix : "fields[#{fieldHandle}][#{addressKey}]" %}
 {% set idPrefix = idPrefix|default(fieldHandle) %}
 
 {% set label = label|default("") %}
@@ -30,69 +30,139 @@
     {% endif %}
 {% endfor %}
 
+{% set customerTypeOptions = [
+    { value: "private", label: "Private"|t },
+    { value: "company", label: "Company"|t },
+] %}
+
 {# ======================= #}
 {# TEMPLATE                #}
 {# ======================= #}
-<fieldset class="c-field-address {{ class }}">
+{# The firstName / lastName / street / number / city / postal code / country fields below
+   belong to the address itself. Email, customer type and phone don't -- the design puts
+   them in this same block regardless, so they post under their own top-level names instead
+   of the address's, to keep the Craft address data clean. #}
+<fieldset class="c-field-address {{ class }}" x-data="address({{ idPrefix|json_encode }})">
     {% if label %}
         <legend class="c-field-address-label">{{ label }}</legend>
     {% endif %}
 
     {{ hiddenInput("#{namePrefix}[title]", addressTitle) }}
 
-    {% include "_components/fields/autocomplete" with {
-        id: "#{idPrefix}-countryCode",
-        name: "#{namePrefix}[countryCode]",
-        label: "Land"|t,
-        options: countryOptions,
-        value: countryCode,
-        valueLabel: countryLabel,
-        required: true,
-    } only %}
+    <div class="c-field-address-row">
+        <div class="c-field-address-row-primary">
+            {% include "_components/fields/text" with {
+                id: "#{idPrefix}-firstName",
+                name: "#{namePrefix}[firstName]",
+                label: "First name"|t,
+                autocomplete: "given-name",
+            } only %}
+        </div>
+
+        <div class="c-field-address-row-primary">
+            {% include "_components/fields/text" with {
+                id: "#{idPrefix}-lastName",
+                name: "#{namePrefix}[lastName]",
+                label: "Last name"|t,
+                autocomplete: "family-name",
+            } only %}
+        </div>
+    </div>
 
     <div class="c-field-address-row">
         <div class="c-field-address-row-primary">
             {% include "_components/fields/text" with {
-                id: "#{idPrefix}-addressLine1",
-                name: "#{namePrefix}[addressLine1]",
-                label: "Straat en nummer"|t,
-                required: "addressLine1" in requiredFields,
-                autocomplete: "address-line1",
+                id: "#{idPrefix}-email",
+                name: "email",
+                type: "email",
+                label: "E-mail"|t,
+                autocomplete: "email",
             } only %}
         </div>
 
         <div class="c-field-address-row-secondary">
+            {% include "_components/fields/autocomplete" with {
+                id: "#{idPrefix}-customerType",
+                name: "customerType",
+                label: "Customer type"|t,
+                options: customerTypeOptions,
+                value: customerTypeOptions[0].value,
+                valueLabel: customerTypeOptions[0].label,
+            } only %}
+        </div>
+    </div>
+
+    <div class="c-field-address-row">
+        <div class="c-field-address-row-primary">
+            {% embed "_components/fields/field" with {
+                fieldType: "text",
+                label: "Street name"|t,
+                labelFor: "#{idPrefix}-streetName",
+            } %}
+                {% block input %}
+                    <input
+                        type="text"
+                        id="{{ idPrefix }}-streetName"
+                        class="c-field-input"
+                        autocomplete="address-line1"
+                        x-model="streetName"
+                        {{ "addressLine1" in requiredFields ? "required" : "" }}
+                    >
+                {% endblock %}
+            {% endembed %}
+        </div>
+
+        <div class="c-field-address-row-secondary">
+            {% embed "_components/fields/field" with {
+                fieldType: "text",
+                label: "Number"|t,
+                labelFor: "#{idPrefix}-number",
+            } %}
+                {% block input %}
+                    <input
+                        type="text"
+                        id="{{ idPrefix }}-number"
+                        class="c-field-input"
+                        x-model="number"
+                    >
+                {% endblock %}
+            {% endembed %}
+        </div>
+
+        <div class="c-field-address-row-secondary">
             {% include "_components/fields/text" with {
-                id: "#{idPrefix}-addressLine2",
+                id: "#{idPrefix}-bus",
                 name: "#{namePrefix}[addressLine2]",
-                label: "Toevoeging"|t,
+                label: "Bus"|t,
                 autocomplete: "address-line2",
             } only %}
         </div>
     </div>
 
-    {% if "postalCode" in usedFields or "locality" in usedFields %}
-        <div class="c-field-address-row">
-            {% if "postalCode" in usedFields %}
-                <div class="c-field-address-row-secondary">
-                    {% include "_components/fields/text" with {
-                        id: "#{idPrefix}-postalCode",
-                        name: "#{namePrefix}[postalCode]",
-                        label: craft.app.addresses.getFieldLabel("postalCode", countryCode),
-                        required: "postalCode" in requiredFields,
-                        autocomplete: "postal-code",
-                    } only %}
-                </div>
-            {% endif %}
+    <input type="hidden" name="{{ namePrefix }}[addressLine1]" :value="addressLine1">
 
+    {% if "locality" in usedFields or "postalCode" in usedFields %}
+        <div class="c-field-address-row">
             {% if "locality" in usedFields %}
                 <div class="c-field-address-row-primary">
                     {% include "_components/fields/text" with {
                         id: "#{idPrefix}-locality",
                         name: "#{namePrefix}[locality]",
-                        label: craft.app.addresses.getFieldLabel("locality", countryCode),
+                        label: "City"|t,
                         required: "locality" in requiredFields,
                         autocomplete: "address-level2",
+                    } only %}
+                </div>
+            {% endif %}
+
+            {% if "postalCode" in usedFields %}
+                <div class="c-field-address-row-secondary">
+                    {% include "_components/fields/text" with {
+                        id: "#{idPrefix}-postalCode",
+                        name: "#{namePrefix}[postalCode]",
+                        label: "Zip / Postal code"|t,
+                        required: "postalCode" in requiredFields,
+                        autocomplete: "postal-code",
                     } only %}
                 </div>
             {% endif %}
@@ -108,4 +178,28 @@
             autocomplete: "address-level1",
         } only %}
     {% endif %}
+
+    <div class="c-field-address-row">
+        <div class="c-field-address-row-primary">
+            {% include "_components/fields/autocomplete" with {
+                id: "#{idPrefix}-countryCode",
+                name: "#{namePrefix}[countryCode]",
+                label: "Country"|t,
+                options: countryOptions,
+                value: countryCode,
+                valueLabel: countryLabel,
+                required: true,
+            } only %}
+        </div>
+
+        <div class="c-field-address-row-secondary">
+            {% include "_components/fields/text" with {
+                id: "#{idPrefix}-phone",
+                name: "phone",
+                type: "tel",
+                label: "Phone nr."|t,
+                autocomplete: "tel",
+            } only %}
+        </div>
+    </div>
 </fieldset>
