@@ -16,8 +16,11 @@
 - CP: `/launchpad`; volume Uploads = `web/uploads/files` (apart from `brands/`, `products/`)
 - Pending users are never purged (`purgePendingUsersDuration` removed: imported customers are pending)
 - Deploy: GitHub Actions `.github/workflows/deploy-staging.yml` (push `staging` → build, rsync to Combell, `craft up`). Production later, at go-live
-  - GitHub environment `Staging`: secret `DEPLOY_KEY` (own ed25519 key, **no passphrase**), vars `SSH_TARGET` (`wauwbe@ssh041.webhosting.be`), `DEPLOY_PATH`
-  - To do on Combell: cron `php craft queue/run` (Lightspeed sync jobs), check `.env` (dev mode off, admin changes off, robots off)
+  - GitHub environment `Staging`: secret `DEPLOY_KEY` (own ed25519 key, **no passphrase**), vars `SSH_TARGET` (`wauwbe@ssh041.webhosting.be`), `DEPLOY_PATH`, `SSH_KNOWN_HOSTS` (output of `ssh-keyscan ssh041.webhosting.be`; strict host check)
+  - Steps: rsync (no delete) → rsync code dirs with `--delete` → `craft up` → clear compiled templates / classes / data (not `all`: keeps image transforms)
+  - No `craft off` during deploy: it writes `system.live` to project config, and `craft up` turns the site on again anyway
+  - Not atomic (rsync into the live folder); release folders + symlink = later, if needed
+  - To do on Combell: cron `*/5 * * * * php /abs/path/craft queue/run` (Lightspeed sync + Commerce order emails), then `.env`: `CRAFT_RUN_QUEUE_AUTOMATICALLY=false`, dev mode off, admin changes off, robots off; check server PHP = 8.5 (CI builds `vendor/` with 8.5)
 - Craft **Pro** (customer accounts; Solo = 1 user) → client needs a Pro license before go-live
 - System time zone: Europe/Brussels
 - Commerce 5.7 installed (1 store, dummy gateway)

@@ -38,6 +38,9 @@ return GeneralConfig::create()
     ->cpTrigger(App::env('CRAFT_CP_TRIGGER') ?? 'launchpad')
     ->postCpLoginRedirect('entries')
 
+    // QUEUE: false when a runner (cron / daemon) runs the jobs
+    ->runQueueAutomatically(App::env('CRAFT_RUN_QUEUE_AUTOMATICALLY') ?? true)
+
     // TEMPLATE RELATED SETTINGS
     ->errorTemplatePrefix('_pages/errors/')
     ->partialTemplatesPath('_elements') 
