@@ -12,7 +12,7 @@ export function removeFromCartButton(variantId) {
 		},
 
 		async submit(event) {
-			const { message } = await submitCartForm(this, event);
+			const { message } = await submitCartForm(this, event, { scroll: false });
 
 			if (message.type === "error") {
 				toast(message.text, { kind: message.type, dismissible: false });

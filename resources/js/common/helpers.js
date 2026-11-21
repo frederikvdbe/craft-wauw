@@ -47,7 +47,7 @@ function errorText(...errorBags) {
 	return [...new Set(messages)].join(" ");
 }
 
-export async function submitForm(component, event) {
+export async function submitForm(component, event, { scroll = true } = {}) {
 	component.loading = true;
 	component.message = null;
 	component.validate?.();
@@ -89,12 +89,12 @@ export async function submitForm(component, event) {
 	} finally {
 		component.loading = false;
 		component.formErrors = {};
-		window.scrollTo({ top: 0, behavior: "smooth" });
+		if (scroll) window.scrollTo({ top: 0, behavior: "smooth" });
 	}
 }
 
-export async function submitCartForm(component, event) {
-	const { data, message, redirect } = await submitForm(component, event);
+export async function submitCartForm(component, event, options) {
+	const { data, message, redirect } = await submitForm(component, event, options);
 	const notices = data?.cart?.notices ?? [];
 
 	const cartMessage = notices.length ? { type: "error", text: notices.map((notice) => notice.message).join(" ") } : message;
