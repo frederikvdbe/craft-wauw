@@ -22,13 +22,13 @@
 	"prefer-stable": true,
 	"require": {
 		"craftcms/ckeditor": "^5.9.0",
-		"craftcms/cms": "^5.12.1",
-		"craftcms/commerce": "^5.7.8",
+		"craftcms/cms": "^5.12.2",
+		"craftcms/commerce": "^5.7.9",
 		"craftcms/commerce-mollie": "^4.4.3",
 		"digitalastronaut/craft-core-seo-geo": "*",
 		"fostercommerce/klaviyoconnect": "^7.5.0",
 		"nystudio107/craft-vite": "^5.0.2",
-		"verbb/formie": "^4.0.8",
+		"verbb/formie": "^4.0.11",
 		"verbb/social-login": "^2.0.30",
 		"vlucas/phpdotenv": "^5.4.0"
 	},

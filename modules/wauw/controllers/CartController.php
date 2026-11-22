@@ -7,7 +7,6 @@ use craft\commerce\elements\Order;
 use craft\commerce\Plugin as CommercePlugin;
 use craft\web\Controller;
 use craft\web\Response;
-use modules\wauw\shippingmethods\ShippingMethod;
 
 /**
  * Returns the current cart's totals, line items and shipping option prices as a small
@@ -15,19 +14,20 @@ use modules\wauw\shippingmethods\ShippingMethod;
  * the front-end cart store only ever needs these few fields.
  */
 class CartController extends Controller {
-    /**
-     * Payment methods aren't a Commerce concept (the gateway only learns which one was
-     * picked at the final `commerce/payments/pay` call), so their processing fees are
-     * just a fixed lookup here, keyed the same way as the front-end's payment options.
-     */
-    private const PAYMENT_OPTIONS = [
+    private const array PAYMENT_OPTIONS = [
         'bancontact' => 0,
         'ideal' => 0,
         'creditcard' => 108,
         'wire' => 0,
     ];
 
-    private const PAYMENT_METHOD_SESSION_KEY = 'wauw.cart.paymentMethodHandle';
+    private const string PAYMENT_METHOD_SESSION_KEY = 'wauw.cart.paymentMethodHandle';
+
+    private const array SHIPPING_METHOD_COPY = [
+        'whiteGlove' => ['description' => 'Delivery and ground-floor placement.', 'tooltip' => 'More info'],
+        'standardDoorstepDelivery' => ['description' => 'Careful delivery to your door.', 'tooltip' => 'More info'],
+        'galleryPickup' => ['description' => 'Pickup at WAUW by appointment.', 'tooltip' => 'More info'],
+    ];
 
     protected array|bool|int $allowAnonymous = true;
 
@@ -86,14 +86,12 @@ class CartController extends Controller {
 
         $options = [];
         foreach ($order->getAvailableShippingMethodOptions() as $option) {
-            if (!$option->shippingMethod instanceof ShippingMethod) {
-                continue;
-            }
+            $copy = self::SHIPPING_METHOD_COPY[$option->getHandle()] ?? ['description' => '', 'tooltip' => ''];
 
             $options[$option->getHandle()] = [
                 'name' => $option->getName(),
-                'description' => $option->shippingMethod->description,
-                'tooltip' => $option->shippingMethod->tooltip,
+                'description' => $copy['description'],
+                'tooltip' => $copy['tooltip'],
                 'price' => $option->price,
                 'priceAsCurrency' => $option->price > 0 ? $option->priceAsCurrency : Craft::t('site', 'Free'),
             ];

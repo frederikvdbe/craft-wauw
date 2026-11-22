@@ -1,4 +1,4 @@
-dateModified: 1794515698
+dateModified: 1795353543
 elementSources:
   craft\commerce\elements\Product:
     -
@@ -431,7 +431,7 @@ plugins:
     edition: standard
     enabled: true
     licenseKey: E5BFNQOPFUNH3W1LWMRZ20P5
-    schemaVersion: 4.0.104
+    schemaVersion: 4.0.113
     settings:
       ajaxTimeout: 10
       alertEmails: null

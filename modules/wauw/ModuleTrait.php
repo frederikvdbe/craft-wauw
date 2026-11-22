@@ -4,8 +4,6 @@ namespace modules\wauw;
 
 use Craft;
 use craft\commerce\elements\Product;
-use craft\commerce\events\RegisterAvailableShippingMethodsEvent;
-use craft\commerce\services\ShippingMethods;
 use craft\events\ModelEvent;
 use craft\events\RegisterCpNavItemsEvent;
 use craft\events\RegisterUrlRulesEvent;
@@ -16,9 +14,6 @@ use craft\web\View;
 use yii\base\Event;
 
 use modules\wauw\jobs\GenerateSpecSheet;
-use modules\wauw\shippingmethods\GalleryPickup;
-use modules\wauw\shippingmethods\StandardDoorstepDelivery;
-use modules\wauw\shippingmethods\WhiteGlove;
 use modules\wauw\web\twig\SiteTwigExtension;
 
 trait ModuleTrait {
@@ -59,22 +54,14 @@ trait ModuleTrait {
                 'siteId' => $product->siteId,
             ]));
         });
-
-        Event::on(
-            ShippingMethods::class,
-            ShippingMethods::EVENT_REGISTER_AVAILABLE_SHIPPING_METHODS,
-            function(RegisterAvailableShippingMethodsEvent $event) {
-                $event->shippingMethods[] = new GalleryPickup();
-                $event->shippingMethods[] = new StandardDoorstepDelivery();
-                $event->shippingMethods[] = new WhiteGlove();
-            }
-        );
     }
 
     protected function registerCpEvents(): void {
         $this->registerCpNavOrder();
         $this->hideUnusedCommerceNavItems();
         $this->hideUnusedCommerceSettings();
+        $this->registerShippingOverviewRoute();
+        $this->addShippingOverviewNavItem();
     }
 
     protected function registerSiteEvents(): void {
@@ -123,6 +110,48 @@ trait ModuleTrait {
             }
 
             Craft::$app->getView()->registerCss(implode(',', $selectors) . ' { display: none; }');
+        });
+    }
+
+    /**
+     * Commerce builds its Store Management -> Shipping nav from its own hard-coded array
+     * with no registration event, so the path for a plugin-provided page under that nav is
+     * a CP URL rule for the "path" Commerce's nav links to ({@see addShippingOverviewNavItem})
+     * pointing at our own controller. The method picker (one matrix per shipping method)
+     * lives inside our own template, not this nav, so there's just this one entry point and
+     * a second rule for the per-method page underneath it.
+     */
+    private function registerShippingOverviewRoute(): void {
+        Event::on(UrlManager::class, UrlManager::EVENT_REGISTER_CP_URL_RULES, function(RegisterUrlRulesEvent $event) {
+            $event->rules['commerce/store-management/<storeHandle:.+>/shipping-overview'] = 'wauw/shipping/index';
+            $event->rules['commerce/store-management/<storeHandle:.+>/shipping-overview/<methodHandle:[\w-]+>'] = 'wauw/shipping/method';
+        });
+    }
+
+    /**
+     * Inserts a single "Shipping management" item into Commerce's own Store Management nav,
+     * right below its Shipping Methods/Zones/Categories items. That nav array is only exposed
+     * as a template variable (no registration event), so this rewrites it on its way into the
+     * template. Commerce renders that nav as its own partial (not a page template), so this
+     * has to hook the generic "before render template" event rather than the page-level one.
+     */
+    private function addShippingOverviewNavItem(): void {
+        Event::on(View::class, View::EVENT_BEFORE_RENDER_TEMPLATE, function (TemplateEvent $event) {
+            if ($event->template !== 'commerce/_includes/_storeManagementNav' || !isset($event->variables['storeSettingsNav'])) return;
+
+            $nav = [];
+            foreach ($event->variables['storeSettingsNav'] as $handle => $item) {
+                $nav[$handle] = $item;
+
+                if ($handle === 'shippingcategories') {
+                    $nav['shipping-overview'] = [
+                        'label' => Craft::t('app', 'Shipping Management'),
+                        'path' => 'shipping-overview',
+                    ];
+                }
+            }
+
+            $event->variables['storeSettingsNav'] = $nav;
         });
     }
 

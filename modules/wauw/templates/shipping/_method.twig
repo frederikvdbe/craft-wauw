@@ -1,0 +1,76 @@
+{% extends '_layouts/cp' %}
+
+{% set title = method.name %}
+{% set fullPageForm = true %}
+
+{% set crumbs = [
+    { label: 'Commerce'|t('commerce'), url: url('commerce') },
+    { label: 'Store Management'|t('commerce'), url: store.getStoreSettingsUrl() },
+    { label: 'Shipping management'|t('app'), url: store.getStoreSettingsUrl('shipping-overview') },
+] %}
+
+{% import '_includes/forms' as forms %}
+
+{# Zones, categories and base rates stay editable here; anything needing order-value/weight
+   conditions or per-rule overrides still needs this method's own native settings page. #}
+{% set additionalButtons %}
+    <a class="btn" href="{{ method.getCpEditUrl() }}">{{ 'Settings'|t('app') }}</a>
+{% endset %}
+
+{% block sidebar %}
+    {% if methods|length > 1 %}
+        <nav aria-label="{{ 'Shipping methods'|t('app') }}">
+            <ul>
+                {% for m in methods %}
+                    <li>
+                        <a class="{{ m.id == method.id ? 'sel' }}" href="{{ store.getStoreSettingsUrl('shipping-overview/' ~ m.handle) }}">
+                            <span class="label">{{ m.name }}</span>
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </nav>
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    {{ actionInput('wauw/shipping/save') }}
+    {{ redirectInput(store.getStoreSettingsUrl('shipping-overview/' ~ method.handle)) }}
+    {{ hiddenInput('methodId', method.id) }}
+
+    {% if zones|length and categories|length %}
+        <table class="data fullwidth collapsible">
+            <thead>
+                <tr>
+                    <th scope="col">{{ 'Zone'|t('app') }}</th>
+                    {% for category in categories %}
+                        <th scope="col">{{ category.name }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for zone in zones %}
+                    <tr>
+                        <th scope="row" data-title="{{ 'Zone'|t('app') }}"><a href="{{ ruleUrls[zone.id] }}">{{ zone.name }}</a></th>
+                        {% for category in categories %}
+                            <td data-title="{{ category.name }}">
+                                {{ forms.moneyField({
+                                    id: 'rate-' ~ zone.id ~ '-' ~ category.id,
+                                    name: 'rates[' ~ zone.id ~ '][' ~ category.id ~ ']',
+                                    value: rates[zone.id][category.id] ?? null,
+                                    decimals: decimals,
+                                    currencyLabel: currency,
+                                    showCurrency: true,
+                                    showClear: false,
+                                    size: 8,
+                                }) }}
+                            </td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p class="error">{{ 'Add at least one shipping zone and shipping category first.'|t('app') }}</p>
+    {% endif %}
+{% endblock %}

@@ -10,7 +10,7 @@
 
 	&-content {
 		display: grid;
-		grid-template-columns: repeat(3, 1fr);
+		grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
 		gap: var(--space-30);
 		margin-block: var(--space-30);
 

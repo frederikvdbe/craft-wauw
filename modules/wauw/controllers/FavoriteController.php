@@ -20,9 +20,7 @@ class FavoriteController extends Controller {
         $productId = (int) $this->request->getRequiredBodyParam('productId');
         $product = Product::find()->id($productId)->status(null)->one();
 
-        if (!$product) {
-            throw new BadRequestHttpException();
-        }
+        if (!$product) throw new BadRequestHttpException();
 
         $user = Craft::$app->getUser()->getIdentity();
         $favoriteIds = $user->getFieldValue('favoriteProductsField')->ids();
@@ -34,9 +32,7 @@ class FavoriteController extends Controller {
 
         $user->setFieldValue('favoriteProductsField', $favoriteIds);
 
-        if (!Craft::$app->getElements()->saveElement($user)) {
-            return $this->asFailure();
-        }
+        if (!Craft::$app->getElements()->saveElement($user)) return $this->asFailure();
 
         return $this->asJson(['isFavorite' => $isFavorite]);
     }
