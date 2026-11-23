@@ -1,4 +1,4 @@
-import { positionPopover } from "../common/popover";
+import { positionPopover } from "../../common/popover";
 
 function splitRange(value) {
 	const [start = "", end = ""] = (value || "").split("/");

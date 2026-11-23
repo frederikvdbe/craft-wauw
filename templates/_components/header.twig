@@ -36,6 +36,14 @@
                         x-text="$store.cart.totalQuantity > 0 ? $store.cart.totalQuantity : ''"
                     ></div>
                 </button>
+
+                <button
+                    type="button"
+                    class="c-header-menu-toggle"
+                    aria-label="{{ "Open menu"|t }}"
+                >
+                    {% include "_components/icon" with { icon: "menu" } only %}
+                </button>
             </div>
         </div>
 

@@ -93,17 +93,6 @@
 		color: var(--clr-black);
 	}
 
-	&-tooltip {
-		display: inline-flex;
-		color: var(--clr-black);
-		cursor: help;
-
-		.c-icon {
-			width: 20px;
-			height: 20px;
-		}
-	}
-
 	&-description {
 		@include typo-body-xs;
 	}

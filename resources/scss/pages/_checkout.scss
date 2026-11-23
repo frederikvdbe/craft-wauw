@@ -4,9 +4,21 @@
 	&-content {
 		display: grid;
 		grid-template-columns: 1fr 0.8fr 1fr;
+		grid-template-areas: "address payment summary";
+
+		@include styles-below(desktopM) {
+			grid-template-columns: 1fr 1fr;
+			grid-template-areas:
+				"address summary"
+				"payment summary";
+		}
 
 		@include styles-below(tablet) {
 			grid-template-columns: 1fr;
+			grid-template-areas:
+				"address"
+				"payment"
+				"summary";
 		}
 
 		&.is-loading {
@@ -23,16 +35,30 @@
 		padding-block: var(--space-40);
 
 		&--address {
+			grid-area: address;
 			padding-right: var(--space-30);
 			border-right: 1px solid var(--clr-grey-100);
+
+			@include styles-below(desktopM) {
+				padding-bottom: var(--space-30);
+				border-right: none;
+				border-bottom: 1px solid var(--clr-grey-100);
+			}
 		}
 
 		&--payment {
+			grid-area: payment;
 			padding-inline: var(--space-30);
 			border-right: 1px solid var(--clr-grey-100);
+
+			@include styles-below(desktopM) {
+				padding-left: 0;
+				border-right: none;
+			}
 		}
 
 		&--summary {
+			grid-area: summary;
 			position: relative;
 			padding-left: var(--space-30);
 			background-color: var(--clr-grey-100);

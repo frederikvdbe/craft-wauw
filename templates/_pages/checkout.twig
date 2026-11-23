@@ -10,12 +10,12 @@
 {% set mollieGateway = craft.commerce.gateways.getGatewayByHandle('mollie') %}
 
 {% set shippingOptions = [] %}
-{% for handle, option in cart.availableShippingMethodOptions %}
+{% for handle, option in cartShippingOptions(cart, null, null) %}
     {% set shippingOptions = shippingOptions|merge([{
         title: option.name,
-        value: option.handle,
-        tooltip: option.shippingMethod.tooltip ? option.shippingMethod.tooltip|t : "",
-        description: option.shippingMethod.description ? option.shippingMethod.description|t : "",
+        value: handle,
+        tooltip: option.tooltip,
+        description: option.description,
         price: option.price,
     }]) %}
 {% endfor %}
@@ -55,17 +55,24 @@
                             fieldHandle: "shippingAddress",
                             namePrefix: "shippingAddress",
                             address: shippingAddress,
+                            onLocationBlur: "refreshShippingOptions()",
                         } only %}
 
                         {% include "_components/checkoutSectionTitle" with { index: 2, title: "Shipping options"|t } only %}
 
-                        {% include "_components/fields/radioGroup" with {
-                            id: "shipping-options",
-                            name: "shippingMethodHandle",
-                            value: cart.shippingMethodHandle ?? "",
-                            options: shippingOptions,
-                            onChange: "updateShippingMethod(value)",
-                        } only %}
+                        <div x-show="shippingOptionsLoading" x-cloak>
+                            {% include "_components/loader" with { text: "Calculating shipping options..."|t } only %}
+                        </div>
+
+                        <div x-show="!shippingOptionsLoading">
+                            {% include "_components/fields/radioGroup" with {
+                                id: "shipping-options",
+                                name: "shippingMethodHandle",
+                                value: shippingOptions[0].value ?? "",
+                                options: shippingOptions,
+                                onChange: "updateShippingMethod(value)",
+                            } only %}
+                        </div>
                     </div>
 
                     <div class="b-checkout-column b-checkout-column--payment">

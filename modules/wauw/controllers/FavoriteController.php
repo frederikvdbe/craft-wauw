@@ -8,9 +8,6 @@ use craft\web\Controller;
 use craft\web\Response;
 use yii\web\BadRequestHttpException;
 
-/**
- * Toggles a product in the current user's favorite products field.
- */
 class FavoriteController extends Controller {
     public function actionToggle(): Response {
         $this->requirePostRequest();

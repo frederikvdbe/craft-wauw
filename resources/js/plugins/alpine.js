@@ -1,8 +1,11 @@
 import Alpine from "alpinejs";
+import persist from "@alpinejs/persist";
 
 import * as components from "../components";
 
 window.Alpine = Alpine;
+
+Alpine.plugin(persist);
 
 Alpine.data("site", components.site);
 Alpine.data("address", components.address);
@@ -31,6 +34,7 @@ Alpine.data("richText", components.richText);
 Alpine.data("tagList", components.tagList);
 Alpine.data("media", components.media);
 Alpine.data("shippingCalculator", components.shippingCalculator);
+Alpine.data("tooltip", components.tooltip);
 
 Alpine.store("cart", components.cart());
 

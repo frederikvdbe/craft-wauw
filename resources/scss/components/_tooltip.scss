@@ -1,0 +1,29 @@
+@use "../base/typography" as *;
+
+.c-tooltip {
+	display: inline-flex;
+
+	&-trigger {
+		display: inline-flex;
+		color: var(--clr-black);
+		cursor: pointer;
+
+		.c-icon {
+			width: 18px;
+			height: 18px;
+		}
+	}
+
+	&-content {
+		@include typo-body-xs;
+		position: fixed;
+		z-index: 100;
+		max-width: min(320px, calc(100vw - var(--space-20)));
+		padding: var(--space-20);
+		color: var(--clr-black);
+		background-color: var(--clr-yellow-500);
+		border-radius: var(--border-radius-4);
+		box-shadow: 0 3px 6px lch(from var(--clr-black) l c h / 15%);
+		white-space: pre-line;
+	}
+}

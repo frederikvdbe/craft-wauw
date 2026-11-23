@@ -105,5 +105,6 @@ html:has(.c-modal[open]) {
 		flex-direction: column;
 		gap: var(--space-15);
 		padding: var(--space-40) var(--space-30);
+		height: 100%;
 	}
 }

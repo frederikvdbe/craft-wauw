@@ -10,7 +10,13 @@ export function autocomplete(fieldId, options = [], initialValue = "", initialLa
 		init() {
 			if (!this.value) this.value = this.findByLabel(this.query)?.value ?? "";
 
-			this.form[fieldId] = this.value;
+			if (this.form[fieldId]) {
+				this.value = this.form[fieldId];
+				this.syncQueryWithValue();
+			} else {
+				this.form[fieldId] = this.value;
+			}
+
 			this.$watch("value", (newValue) => {
 				this.form[fieldId] = newValue;
 			});

@@ -10,12 +10,12 @@
 
 	&-content {
 		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-		gap: var(--space-30);
+		gap: var(--space-10);
 		margin-block: var(--space-30);
 
-		@include styles-below(tablet) {
-			grid-template-columns: 1fr;
+		@include styles-above(tablet) {
+			gap: var(--space-30);
+			grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
 		}
 	}
 

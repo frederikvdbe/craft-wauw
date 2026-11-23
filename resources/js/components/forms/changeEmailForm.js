@@ -1,16 +1,17 @@
-import { submitForm } from "../common/helpers";
-import { required, validateRules } from "../common/validators";
+import { submitForm } from "../../common/helpers";
+import { email, required, validateRules } from "../../common/validators";
 
-export function loginForm() {
+export function changeEmailForm({ successMessage = null } = {}) {
 	return {
 		form: {},
 		formErrors: {},
 		loading: false,
 		message: null,
+		successMessage,
 
 		fieldValidators: {
-			loginName: [required()],
-			password: [required()],
+			email: [required(), email()],
+			currentPassword: [required()],
 		},
 
 		validate(name) {

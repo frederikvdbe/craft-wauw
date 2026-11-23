@@ -3,17 +3,29 @@
 .b-product-gallery {
 	&-content {
 		display: grid;
-		grid-template-columns: repeat(2, 1fr);
-		gap: var(--space-30);
+		grid-template-columns: 1fr;
+		gap: var(--space-10);
 		margin-bottom: var(--space-30);
 
-		@include styles-below(tablet) {
-			grid-template-columns: 1fr;
+		@include styles-above(tablet) {
+			gap: var(--space-30);
+			grid-template-columns: repeat(2, 1fr);
 		}
 
 		.c-image:nth-child(-n + 2),
 		.c-image:nth-child(3n + 5) {
 			grid-column: 1 / -1;
+		}
+
+		.c-image {
+			@include styles-below(tablet) {
+				aspect-ratio: 1 / 1;
+
+				img {
+					aspect-ratio: 1 / 1;
+					height: 100%;
+				}
+			}
 		}
 	}
 }

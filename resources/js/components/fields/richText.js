@@ -33,7 +33,7 @@ export function richText(preset = "full", maxlength = null) {
 		maxlength,
 
 		async init() {
-			const { createPlainTextEditor, createRichTextEditor } = await import("../plugins/ckeditor");
+			const { createPlainTextEditor, createRichTextEditor } = await import("../../plugins/ckeditor");
 
 			const createEditor = preset === "plain" ? createPlainTextEditor : createRichTextEditor;
 

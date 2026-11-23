@@ -1,6 +1,7 @@
 import { jsonRequest } from "../common/helpers";
+import toast from "../plugins/toastkit";
 
-export function favorite(productId, isFavorite = false) {
+export function favorite(productId, isFavorite = false, addedMessage = "Added to favorites", removedMessage = "Removed from favorites") {
 	return {
 		productId,
 		isFavorite,
@@ -23,6 +24,7 @@ export function favorite(productId, isFavorite = false) {
 				]);
 
 				this.isFavorite = data.isFavorite;
+				toast(this.isFavorite ? addedMessage : removedMessage, { kind: "success", dismissible: false });
 			} finally {
 				this.loading = false;
 			}

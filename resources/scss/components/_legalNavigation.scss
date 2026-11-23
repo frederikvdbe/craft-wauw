@@ -11,6 +11,10 @@
 		justify-content: center;
 		flex-wrap: wrap;
 		gap: var(--space-5) var(--space-80);
+
+		@include styles-below(tablet) {
+			gap: var(--space-5) var(--space-30);
+		}
 	}
 
 	.c-navigation-link {

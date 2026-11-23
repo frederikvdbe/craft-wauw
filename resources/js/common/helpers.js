@@ -13,6 +13,14 @@ export const templateRequest = async (url) => {
 	return { html, content, data: { ...data } };
 };
 
+const MINIMUM_LOADING_MS = 1000;
+
+export async function withMinimumDelay(promise, delay = MINIMUM_LOADING_MS) {
+	const [result] = await Promise.all([promise, new Promise((resolve) => setTimeout(resolve, delay))]);
+
+	return result;
+}
+
 export const jsonRequest = async (url, options = {}) => {
 	const response = await fetch(url, {
 		...options,
@@ -26,9 +34,6 @@ export const jsonRequest = async (url, options = {}) => {
 	return response.json();
 };
 
-// Craft/Commerce error bags (`errors`, `paymentFormErrors`, …) are an object keyed by
-// attribute name, where each value is either an array of messages or, when the attribute
-// itself is keyed by id (e.g. a line item id), a nested object of the same shape.
 function collectMessages(value, messages = []) {
 	if (typeof value === "string") {
 		if (value) messages.push(value);
@@ -47,23 +52,22 @@ function errorText(...errorBags) {
 	return [...new Set(messages)].join(" ");
 }
 
-export async function submitForm(component, event, { scroll = true } = {}) {
+export async function submitForm(component, event, { scroll = true, url: overrideUrl, method = "POST" } = {}) {
 	component.loading = true;
 	component.message = null;
 	component.validate?.();
 
 	const form = event.target;
-	const url = form.getAttribute("action") || window.location.href;
+	const url = overrideUrl ?? (form.getAttribute("action") || window.location.href);
 
 	try {
-		const [response] = await Promise.all([
+		const response = await withMinimumDelay(
 			fetch(url, {
-				method: "POST",
-				body: new FormData(form),
+				method,
+				...(method !== "GET" && { body: new FormData(form) }),
 				headers: { Accept: "application/json", "X-Craft-Site": window.site.handle },
 			}),
-			new Promise((resolve) => setTimeout(resolve, 1000)),
-		]);
+		);
 
 		const data = await response.json();
 
@@ -97,10 +101,17 @@ export async function submitCartForm(component, event, options) {
 	const { data, message, redirect } = await submitForm(component, event, options);
 	const notices = data?.cart?.notices ?? [];
 
-	const cartMessage = notices.length ? { type: "error", text: notices.map((notice) => notice.message).join(" ") } : message;
+	console.log("[helpers] submitCartForm: response", data);
+
+	const cartMessage = notices.length
+		? { type: "error", text: notices.map((notice) => notice.message).join(" ") }
+		: message;
 
 	if (cartMessage.type !== "error") {
+		console.log("[helpers] submitCartForm: dispatching wauw:cart-change");
 		window.dispatchEvent(new CustomEvent("wauw:cart-change"));
+	} else {
+		console.warn("[helpers] submitCartForm: not dispatching wauw:cart-change, cartMessage is an error", cartMessage);
 	}
 
 	return { data, message: cartMessage, redirect };

@@ -1,5 +1,5 @@
-import { submitForm } from "../common/helpers";
-import { matches, required, validateRules } from "../common/validators";
+import { submitForm } from "../../common/helpers";
+import { matches, required, validateRules } from "../../common/validators";
 
 export function changePasswordForm({ successMessage = null } = {}) {
 	const component = {

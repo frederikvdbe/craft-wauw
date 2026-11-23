@@ -7,10 +7,29 @@
 	--container-width: 1600px;
 	--container-bound: 54px;
 
+	@include styles-below(desktopM) {
+		--container-bound: var(--space-40);
+	}
+
+	@include styles-below(tablet) {
+		--container-bound: var(--space-20);
+	}
+
 	&-content {
 		padding-top: var(--space-80);
 		display: grid;
 		grid-template-columns: 1fr 1fr 2fr;
+
+		@include styles-below(desktopM) {
+			grid-template-columns: 1fr 1fr;
+			row-gap: var(--space-40);
+		}
+
+		@include styles-below(tablet) {
+			grid-template-columns: 1fr;
+			padding-top: var(--space-40);
+			row-gap: 0;
+		}
 
 		& > * {
 			padding-inline: var(--space-80);
@@ -18,6 +37,24 @@
 			&:nth-child(1),
 			&:nth-child(2) {
 				border-right: 1px solid var(--clr-black);
+
+				@include styles-below(tablet) {
+					border-right: none;
+				}
+			}
+
+			@include styles-below(desktopM) {
+				padding-inline: var(--space-40);
+			}
+
+			@include styles-below(tablet) {
+				padding-inline: var(--space-20);
+				padding-block: var(--space-30);
+				border-bottom: 1px solid var(--clr-black);
+
+				&:last-child {
+					border-bottom: none;
+				}
 			}
 		}
 	}
@@ -40,5 +77,11 @@
 	.formie-form {
 		max-width: 600px;
 		justify-self: flex-end;
+
+		@include styles-below(desktopM) {
+			grid-column: 1 / -1;
+			max-width: 100%;
+			justify-self: stretch;
+		}
 	}
 }

@@ -3,6 +3,7 @@
 namespace modules\wauw\web\twig;
 
 use Craft;
+use craft\commerce\elements\Order;
 use craft\commerce\elements\Product;
 use craft\helpers\UrlHelper;
 
@@ -10,6 +11,7 @@ use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
 
+use modules\wauw\services\ShippingPreview;
 use modules\wauw\services\SpecSheetGenerator;
 
 class SiteTwigExtension extends AbstractExtension {
@@ -18,6 +20,8 @@ class SiteTwigExtension extends AbstractExtension {
             new TwigFunction('getTransformsMap', [$this, 'getTransformsMap']),
             new TwigFunction('isActive', [$this, 'isActive']),
             new TwigFunction('specSheetUrl', [$this, 'specSheetUrl']),
+            new TwigFunction('shippingCostOptions', [$this, 'shippingCostOptions']),
+            new TwigFunction('cartShippingOptions', [$this, 'cartShippingOptions']),
         ];
     }
 
@@ -56,6 +60,22 @@ class SiteTwigExtension extends AbstractExtension {
         }
         
         return $transforms;
+    }
+
+    /**
+     * Shipping method prices for the given destination, previewed for $product's
+     * default variant alone (see ShippingPreview) -- independent of the visitor's cart.
+     */
+    public function shippingCostOptions(Product $product, ?string $country, ?string $postalCode): array {
+        return ShippingPreview::optionsForProduct($product->getDefaultVariant(), $country, $postalCode);
+    }
+
+    /**
+     * Shipping method options for $cart, previewed for the given destination
+     * (see ShippingPreview) -- used to refresh the checkout radio group on address changes.
+     */
+    public function cartShippingOptions(Order $cart, ?string $country, ?string $postalCode): array {
+        return ShippingPreview::optionsFor($cart, $country, $postalCode);
     }
 
     /**

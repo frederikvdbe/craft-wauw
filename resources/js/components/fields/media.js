@@ -1,4 +1,4 @@
-import { jsonRequest, templateRequest } from "../common/helpers";
+import { jsonRequest, templateRequest } from "../../common/helpers";
 
 export function media(initialIds = [], videoModalId = "", libraryModalId = "", ownerId = null) {
 	return {

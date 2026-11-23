@@ -14,10 +14,12 @@
 {% set class = class|default("") %}
 {% set onChange = onChange|default("") %}
 {% set showPrice = showPrice is defined ? showPrice : true %}
+{% set emptyMessage = emptyMessage|default("") %}
 
 {% set fieldType = "radioGroup" %}
 {% set labelFor = "" %}
 {% set wrapperAttributes = {
+    "id": id ? "#{id}-wrapper" : "",
     "x-data": "radioGroup(#{id|json_encode}, #{value|json_encode})",
 } %}
 
@@ -31,6 +33,10 @@
     {% endif %}
 
     <div {{ attr(groupAttributes) }}>
+        {% if options is empty and emptyMessage %}
+            <p class="c-shipping-calculator-message">{{ emptyMessage }}</p>
+        {% endif %}
+
         {% for rawOption in options %}
             {% set option = {
                 image: null,
@@ -40,7 +46,7 @@
             }|merge(rawOption) %}
 
             {% set optionId = "#{id}-#{loop.index}" %}
-            
+
             {% set radioAttributes = {
                 type: "radio",
                 id: optionId,
@@ -65,16 +71,7 @@
                     <span class="c-field-radioGroup-heading">
                         <span class="c-field-radioGroup-title">{{ option.title }}</span>
 
-                        {% if option.tooltip %}
-                            <span
-                                class="c-field-radioGroup-tooltip"
-                                tabindex="0"
-                                title="{{ option.tooltip }}"
-                                aria-label="{{ option.tooltip }}"
-                            >
-                                {% include "_components/icon" with { icon: "info" } only %}
-                            </span>
-                        {% endif %}
+                        {% include "_components/tooltip" with { text: option.tooltip } only %}
                     </span>
 
                     {% if option.description %}

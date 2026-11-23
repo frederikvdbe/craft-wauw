@@ -51,7 +51,7 @@
                         iconBefore: "heart",
                         class: "tertiary icon-only",
                         attributes: {
-                            "x-data": "favorite(#{entry.id}, #{isFavorite ? 'true' : 'false'})",
+                            "x-data": "favorite(#{entry.id}, #{isFavorite ? 'true' : 'false'}, '#{"Added to favorites"|t|e('js')}', '#{"Removed from favorites"|t|e('js')}')",
                             ":class": "{ 'is-favorite': isFavorite, 'is-loading': loading }",
                             ":disabled": "loading",
                             "@click": "toggle()",

@@ -1,6 +1,6 @@
 import toast from "@mrcs/toastkit";
-import { submitForm } from "../common/helpers";
-import { validateRules } from "../common/validators";
+import { submitForm } from "../../common/helpers";
+import { validateRules } from "../../common/validators";
 
 export function vipPreviewForm({ successMessage = null } = {}) {
 	return {

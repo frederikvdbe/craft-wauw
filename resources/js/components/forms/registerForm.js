@@ -1,7 +1,7 @@
-import { submitForm } from "../common/helpers";
-import { required, validateRules } from "../common/validators";
+import { submitForm } from "../../common/helpers";
+import { email, lettersOnly, required, validateRules } from "../../common/validators";
 
-export function forgotPasswordForm({ successMessage = null } = {}) {
+export function registerForm({ successMessage = null } = {}) {
 	return {
 		form: {},
 		formErrors: {},
@@ -10,7 +10,9 @@ export function forgotPasswordForm({ successMessage = null } = {}) {
 		successMessage,
 
 		fieldValidators: {
-			loginName: [required()],
+			firstName: [required(), lettersOnly()],
+			lastName: [required(), lettersOnly()],
+			email: [required(), email()],
 		},
 
 		validate(name) {

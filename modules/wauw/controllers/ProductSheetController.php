@@ -9,10 +9,6 @@ use craft\web\Response;
 use modules\wauw\services\SpecSheetGenerator;
 use yii\web\NotFoundHttpException;
 
-/**
- * Serves a product's specification sheet PDF at a stable URL (products/{slug}/product-sheet),
- * independent of the backing asset, whose own filename changes on every regeneration.
- */
 class ProductSheetController extends Controller {
     protected array|bool|int $allowAnonymous = true;
 

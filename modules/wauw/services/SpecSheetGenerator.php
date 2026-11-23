@@ -17,19 +17,11 @@ class SpecSheetGenerator {
 
     private const MAX_IMAGES = 4;
 
-    /**
-     * Stable key to find a product's existing specification sheet asset by: the asset's own filename is
-     * the product title + generation timestamp, so it changes on every regeneration and can't be matched
-     * on. Stored in the `productKey` field on the specificationSheets volume instead.
-     */
     public static function matchKeyFor(Product $product): string {
         $site = Craft::$app->getSites()->getSiteById($product->siteId);
         return "$product->id-$site->handle";
     }
 
-    /**
-     * The product's current specification sheet asset, or null if it hasn't been generated yet.
-     */
     public static function assetFor(Product $product): ?Asset {
         return Asset::find()->volume(self::VOLUME_HANDLE)->productKey(self::matchKeyFor($product))->one();
     }

@@ -17,6 +17,7 @@
 {% set required = required|default(false) %}
 {% set class = class|default("") %}
 {% set teleportTarget = teleportTarget|default("body") %}
+{% set onBlurChange = onBlurChange|default("") %}
 
 {% set fieldType = "autocomplete" %}
 {% set wrapperAttributes = {
@@ -46,7 +47,7 @@
             @keydown.arrow-up.prevent="moveActive(-1)"
             @keydown.enter.prevent="selectActive()"
             @keydown.escape="closeList()"
-            @blur="onBlur(); {{ validate }}"
+            @blur="onBlur(); {{ validate }}{{ onBlurChange ? '; ' ~ onBlurChange : '' }}"
         >
 
         {% include "_components/icon" with { icon: "chevron-down" } only %}

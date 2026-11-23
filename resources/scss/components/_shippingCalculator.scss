@@ -4,6 +4,7 @@
 	display: flex;
 	flex-direction: column;
 	gap: var(--space-15);
+	height: 100%;
 
 	&-label {
 		@include typo-body-xs;
@@ -27,10 +28,36 @@
 	}
 
 	&-options {
+		margin-top: var(--space-15);
+	}
+
+	&-results {
 		display: flex;
 		flex-direction: column;
 		gap: var(--space-15);
-		margin-top: var(--space-15);
+	}
+
+	&-message {
+		@include typo-body-sm;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: var(--space-10);
+		text-align: center;
+		padding: var(--space-20);
+		border: 1px solid var(--clr-grey-300);
+		border-radius: var(--border-radius-2);
+
+		&-link {
+			@include typo-body-sm;
+			font-weight: var(--fw-700);
+			text-transform: uppercase;
+			text-decoration: underline;
+		}
+	}
+
+	.c-cta-card {
+		margin-top: auto;
 	}
 }
 
@@ -64,17 +91,6 @@
 		@include typo-body-sm;
 		font-weight: var(--fw-700);
 		color: var(--clr-black);
-	}
-
-	&-tooltip {
-		display: inline-flex;
-		color: var(--clr-black);
-		cursor: help;
-
-		.c-icon {
-			width: 18px;
-			height: 18px;
-		}
 	}
 
 	&-description {

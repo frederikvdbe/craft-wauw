@@ -1,31 +1,32 @@
-import { address } from "./address";
 import { addToCartButton } from "./addToCartButton";
-import { autocomplete } from "./autocomplete";
-import { cart } from "./cart";
-import { changeEmailForm } from "./changeEmailForm";
-import { changePasswordForm } from "./changePasswordForm";
-import { checkboxGroup } from "./checkboxGroup";
-import { checkout } from "./checkout";
-import { datepicker } from "./datepicker";
-import { daterangepicker } from "./daterangepicker";
 import { favorite } from "./favorite";
-import { forgotPasswordForm } from "./forgotPasswordForm";
-import { invoicingForm } from "./invoicingForm";
-import { loginForm } from "./loginForm";
-import { media } from "./media";
+import { address } from "./fields/address";
+import { autocomplete } from "./fields/autocomplete";
+import { checkboxGroup } from "./fields/checkboxGroup";
+import { datepicker } from "./fields/datepicker";
+import { daterangepicker } from "./fields/daterangepicker";
+import { media } from "./fields/media";
+import { radioGroup } from "./fields/radioGroup";
+import { richText } from "./fields/richText";
+import { tagList } from "./fields/tagList";
+import { changeEmailForm } from "./forms/changeEmailForm";
+import { changePasswordForm } from "./forms/changePasswordForm";
+import { checkout } from "./forms/checkout";
+import { forgotPasswordForm } from "./forms/forgotPasswordForm";
+import { invoicingForm } from "./forms/invoicingForm";
+import { loginForm } from "./forms/loginForm";
+import { myDetailsForm } from "./forms/myDetailsForm";
+import { registerForm } from "./forms/registerForm";
+import { setPasswordForm } from "./forms/setPasswordForm";
+import { vipPreviewForm } from "./forms/vipPreviewForm";
 import { modal } from "./modal";
-import { myDetailsForm } from "./myDetailsForm";
-import { radioGroup } from "./radioGroup";
-import { registerForm } from "./registerForm";
 import { removeFromCartButton } from "./removeFromCartButton";
-import { richText } from "./richText";
 import { search } from "./search";
-import { setPasswordForm } from "./setPasswordForm";
 import { share } from "./share";
 import { shippingCalculator } from "./shippingCalculator";
 import { site } from "./site";
-import { tagList } from "./tagList";
-import { vipPreviewForm } from "./vipPreviewForm";
+import { cart } from "./stores/cart";
+import { tooltip } from "./tooltip";
 
 export {
 	address,
@@ -55,5 +56,6 @@ export {
 	shippingCalculator,
 	site,
 	tagList,
+	tooltip,
 	vipPreviewForm,
 };

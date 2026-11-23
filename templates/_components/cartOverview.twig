@@ -18,8 +18,9 @@
             <div class="c-cart-overview-line">
                 <p>
                     {{ "Shipping cost"|t }}
-                    <span x-show="$store.cart.shippingOptions[$store.cart.shippingMethodHandle]"
-                        x-text="'  -  ' + ($store.cart.shippingOptions[$store.cart.shippingMethodHandle]?.name ?? '')"
+                    <span 
+                        x-show="$store.cart.selectedShippingOption"
+                        x-text="'  -  ' + ($store.cart.selectedShippingOption?.name ?? '')"
                     ></span>
                 </p>
                 <p class="c-cart-overview-line-price" x-text="$store.cart.shippingPrice"></p>

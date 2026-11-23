@@ -1,6 +1,6 @@
 import toast from "@mrcs/toastkit";
-import { submitForm } from "../common/helpers";
-import { email, lettersOnly, phone, required, validateRules } from "../common/validators";
+import { submitForm } from "../../common/helpers";
+import { email, lettersOnly, phone, required, validateRules } from "../../common/validators";
 
 export function myDetailsForm({ successMessage = null, initialData = {} } = {}) {
 	return {

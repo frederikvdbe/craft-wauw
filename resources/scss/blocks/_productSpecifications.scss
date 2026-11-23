@@ -6,14 +6,15 @@
 
 	&-content {
 		display: grid;
-		padding: var(--space-80);
+		padding: var(--space-20);
 		border: 1px solid var(--clr-grey-300);
-		grid-template-columns: 2fr 1fr;
+		grid-template-columns: 1fr;
 		gap: var(--space-30);
 		align-items: start;
 
-		@include styles-below(tablet) {
-			grid-template-columns: 1fr;
+		@include styles-above(desktopS) {
+			padding: var(--space-80);
+			grid-template-columns: 2fr 1fr;
 		}
 	}
 
@@ -30,8 +31,10 @@
 	}
 
 	&-left {
-		border-right: 1px solid var(--clr-grey-300);
-		padding-right: var(--space-80);
+		@include styles-above(desktopS) {
+			border-right: 1px solid var(--clr-grey-300);
+			padding-right: var(--space-80);
+		}
 
 		.c-title {
 			@include typo-h6;
@@ -54,8 +57,12 @@
 	&-actions {
 		margin-top: 60px;
 		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-		gap: var(--space-30);
+		grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+		gap: var(--space-10);
+
+		@include styles-above(tablet) {
+			gap: var(--space-30);
+		}
 	}
 
 	&-dimensions {
