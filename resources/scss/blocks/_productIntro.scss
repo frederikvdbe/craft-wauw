@@ -2,24 +2,37 @@
 @use "../base/typography" as *;
 
 .b-product-intro {
-	margin-bottom: var(--space-30);
+	margin-bottom: var(--space-10);
+
+	@include styles-above(tablet) {
+		margin-bottom: var(--space-30);
+	}
 
 	&-content {
 		display: grid;
-		grid-template-columns: repeat(2, 1fr);
-		gap: var(--space-30);
+		grid-template-columns: 1fr;
+		gap: var(--space-10);
 		align-items: center;
 
-		@include styles-below(tablet) {
-			grid-template-columns: 1fr;
+		@include styles-above(tablet) {
+			gap: var(--space-30);
+			grid-template-columns: repeat(2, 1fr);
 		}
 	}
 
 	&-main {
-		padding: var(--space-60) var(--space-80);
+		padding: var(--space-20);
 		border: 1px solid var(--clr-grey-300);
 		border-radius: var(--border-radius-2);
 		height: 100%;
+
+		@include styles-above(desktopS) {
+			padding: var(--space-60) var(--space-80);
+		}
+
+		@include styles-below(tablet) {
+			order: -1;
+		}
 
 		& > * {
 			max-width: 440px;

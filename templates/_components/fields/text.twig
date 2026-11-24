@@ -16,6 +16,7 @@
 {% set autocomplete = autocomplete|default("") %}
 {% set class = class|default("") %}
 {% set attributes = attributes|default({}) %}
+{% set onBlurChange = onBlurChange|default("") %}
 
 {% set fieldType = "text" %}
 
@@ -36,7 +37,8 @@
 {% endif %}
 
 {% block input %}
-    {% set baseAttributes = validate ? baseAttributes|merge({ "@blur": validate }) : baseAttributes %}
-    
+    {% set blurExpression = "#{validate}#{onBlurChange ? (validate ? '; ' : '') ~ onBlurChange : ''}" %}
+    {% set baseAttributes = blurExpression ? baseAttributes|merge({ "@blur": blurExpression }) : baseAttributes %}
+
     <input class="c-field-input" {{ attr(baseAttributes|merge(attributes)) }}>
 {% endblock %}

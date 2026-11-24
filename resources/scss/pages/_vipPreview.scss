@@ -1,0 +1,40 @@
+@use "../base/typography" as *;
+
+.b-vip-preview {
+	.c-title {
+		@include typo-body-sm;
+		font-weight: var(--fw-700);
+	}
+
+	&-text {
+		@include typo-body-sm;
+		max-width: 32rem;
+		margin-block-end: var(--space-30);
+	}
+
+	.c-field-radioGroup-options {
+		gap: var(--space-20);
+	}
+
+	.c-field-radioGroup-option {
+		min-height: auto;
+		padding: var(--space-20);
+		border: 1px solid var(--clr-grey-300);
+		border-radius: var(--border-radius-4);
+	}
+
+	.c-field-radioGroup-content {
+		flex-direction: row;
+		flex-wrap: wrap;
+		align-items: baseline;
+		gap: var(--space-5);
+	}
+
+	.c-field-radioGroup-title::after {
+		content: ",";
+	}
+
+	.c-field-radioGroup-description {
+		@include typo-body-sm;
+	}
+}

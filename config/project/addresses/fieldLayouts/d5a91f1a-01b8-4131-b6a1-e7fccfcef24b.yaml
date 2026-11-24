@@ -119,41 +119,7 @@ tabs:
         userCondition: null
         warning: null
       -
-        dateAdded: '2026-11-08T15:34:56+00:00'
-        editCondition: null
-        elementCondition: null
-        elementEditCondition: null
-        fieldUid: 3c92137f-80db-453b-ab81-b93722ac4ab2
-        handle: null
-        instructions: null
-        label: null
-        oldFieldUid: null
-        required: false
-        tip: null
-        type: craft\fieldlayoutelements\CustomField
-        uid: 7599ef78-5a8b-4ccf-a597-79b46390dfcb
-        userCondition: null
-        warning: null
-        width: 100
-      -
-        dateAdded: '2026-11-08T15:34:56+00:00'
-        editCondition: null
-        elementCondition: null
-        elementEditCondition: null
-        fieldUid: af60e1a9-5a4f-44f7-bddd-9cd08c16a81a
-        handle: null
-        instructions: null
-        label: null
-        oldFieldUid: null
-        required: false
-        tip: null
-        type: craft\fieldlayoutelements\CustomField
-        uid: c098824a-929b-4557-8cfa-e8a25b844cf6
-        userCondition: null
-        warning: null
-        width: 100
-      -
-        dateAdded: null
+        dateAdded: '2026-11-12T19:35:11+00:00'
         editCondition: null
         elementCondition: null
         elementEditCondition: null
@@ -170,7 +136,7 @@ tabs:
         warning: null
         width: 100
       -
-        dateAdded: null
+        dateAdded: '2026-11-12T19:35:11+00:00'
         editCondition: null
         elementCondition: null
         elementEditCondition: null

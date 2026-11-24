@@ -12,6 +12,8 @@
 {% set defaultCountryCode = defaultCountryCode|default("BE") %}
 {% set countryCode = address.countryCode ?? defaultCountryCode %}
 
+{% set onLocationBlur = onLocationBlur|default("") %}
+
 {% set addressTitle = addressTitle|default("") %}
 {% set addressTitle = addressTitle != "" ? addressTitle : (label != "" ? label : "Adres"|t) %}
 
@@ -38,11 +40,7 @@
 {# ======================= #}
 {# TEMPLATE                #}
 {# ======================= #}
-{# The firstName / lastName / street / number / city / postal code / country fields below
-   belong to the address itself. Email, customer type and phone don't -- the design puts
-   them in this same block regardless, so they post under their own top-level names instead
-   of the address's, to keep the Craft address data clean. #}
-<fieldset class="c-field-address {{ class }}" x-data="address({{ idPrefix|json_encode }})">
+<fieldset class="c-field-address {{ class }}" x-data="address({{ idPrefix|json_encode }}, {{ (address.addressLine1 ?? "")|json_encode }})">
     {% if label %}
         <legend class="c-field-address-label">{{ label }}</legend>
     {% endif %}
@@ -55,6 +53,7 @@
                 id: "#{idPrefix}-firstName",
                 name: "#{namePrefix}[firstName]",
                 label: "First name"|t,
+                placeholder: "John"|t,
                 autocomplete: "given-name",
             } only %}
         </div>
@@ -64,6 +63,7 @@
                 id: "#{idPrefix}-lastName",
                 name: "#{namePrefix}[lastName]",
                 label: "Last name"|t,
+                placeholder: "Doe"|t,
                 autocomplete: "family-name",
             } only %}
         </div>
@@ -76,6 +76,7 @@
                 name: "email",
                 type: "email",
                 label: "E-mail"|t,
+                placeholder: "john.doe@example.com",
                 autocomplete: "email",
             } only %}
         </div>
@@ -104,6 +105,7 @@
                         type="text"
                         id="{{ idPrefix }}-streetName"
                         class="c-field-input"
+                        placeholder="{{ "Main Street"|t }}"
                         autocomplete="address-line1"
                         x-model="streetName"
                         {{ "addressLine1" in requiredFields ? "required" : "" }}
@@ -123,6 +125,7 @@
                         type="text"
                         id="{{ idPrefix }}-number"
                         class="c-field-input"
+                        placeholder="12"
                         x-model="number"
                     >
                 {% endblock %}
@@ -134,6 +137,7 @@
                 id: "#{idPrefix}-bus",
                 name: "#{namePrefix}[addressLine2]",
                 label: "Bus"|t,
+                placeholder: "2B"|t,
                 autocomplete: "address-line2",
             } only %}
         </div>
@@ -149,6 +153,7 @@
                         id: "#{idPrefix}-locality",
                         name: "#{namePrefix}[locality]",
                         label: "City"|t,
+                        placeholder: "Brussels"|t,
                         required: "locality" in requiredFields,
                         autocomplete: "address-level2",
                     } only %}
@@ -161,8 +166,10 @@
                         id: "#{idPrefix}-postalCode",
                         name: "#{namePrefix}[postalCode]",
                         label: "Zip / Postal code"|t,
+                        placeholder: "1000",
                         required: "postalCode" in requiredFields,
                         autocomplete: "postal-code",
+                        onBlurChange: onLocationBlur,
                     } only %}
                 </div>
             {% endif %}
@@ -189,15 +196,17 @@
                 value: countryCode,
                 valueLabel: countryLabel,
                 required: true,
+                onBlurChange: onLocationBlur,
             } only %}
         </div>
 
         <div class="c-field-address-row-secondary">
             {% include "_components/fields/text" with {
                 id: "#{idPrefix}-phone",
-                name: "phone",
+                name: "#{namePrefix}[fields][mobileField]",
                 type: "tel",
                 label: "Phone nr."|t,
+                placeholder: "+32 470 12 34 56",
                 autocomplete: "tel",
             } only %}
         </div>

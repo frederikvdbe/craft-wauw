@@ -1,0 +1,37 @@
+{# ======================= #}
+{# PROPERTIES              #}
+{# ======================= #}
+{% set country = craft.app.request.getQueryParam('country') %}
+{% set postalCode = craft.app.request.getQueryParam('postalCode') %}
+{% set hasLocation = country is not empty or postalCode is not empty %}
+
+{% set cart = craft.commerce.carts.cart %}
+
+{% set options = [] %}
+{% if hasLocation %}
+    {% for handle, option in cartShippingOptions(cart, country, postalCode) %}
+        {% set options = options|merge([{
+            title: option.name,
+            value: handle,
+            tooltip: option.tooltip,
+            description: option.description,
+            price: option.price,
+        }]) %}
+    {% endfor %}
+{% endif %}
+
+{% set emptyMessage = hasLocation
+    ? "We don't have a standard shipping rate for this destination yet."|t
+    : "Enter your shipping address to see delivery options."|t %}
+
+{# ======================= #}
+{# TEMPLATE                #}
+{# ======================= #}
+{% include "_components/fields/radioGroup" with {
+    id: "shipping-options",
+    name: "shippingMethodHandle",
+    value: options[0].value ?? "",
+    options: options,
+    onChange: "updateShippingMethod(value)",
+    emptyMessage: emptyMessage,
+} only %}

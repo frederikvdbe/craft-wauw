@@ -11,6 +11,16 @@
 		align-items: center;
 		justify-content: space-between;
 		min-height: 110px;
+
+		@include styles-below(tablet) {
+			grid-column: 1 / 6;
+			flex-direction: column-reverse;
+			align-items: center;
+			justify-content: center;
+			gap: var(--space-20);
+			min-height: unset;
+			padding-bottom: var(--space-20);
+		}
 	}
 
 	&-logo {
@@ -22,6 +32,10 @@
 		align-self: flex-start;
 		display: flex;
 		align-items: center;
+
+		@include styles-below(tablet) {
+			align-self: flex-end;
+		}
 	}
 
 	&-important-actions {
@@ -34,9 +48,13 @@
 			display: flex;
 			align-items: center;
 			justify-content: center;
-			width: 90px;
+			width: 70px;
 			height: 50px;
 			cursor: pointer;
+
+			@include styles-above(tablet) {
+				width: 90px;
+			}
 
 			&:not(:last-child)::after {
 				content: "";
@@ -48,10 +66,18 @@
 		}
 	}
 
+	&-menu-toggle {
+		display: none;
+
+		@include styles-below(desktopM) {
+			display: flex;
+		}
+	}
+
 	&-cart-badge {
 		position: absolute;
 		top: 8px;
-		right: 24px;
+		right: 14px;
 		display: flex;
 		align-items: center;
 		justify-content: center;
@@ -64,6 +90,10 @@
 
 		@include typo-body-xs;
 		font-weight: var(--fw-700);
+
+		@include styles-above(tablet) {
+			right: 24px;
+		}
 
 		&:empty {
 			display: none;

@@ -2,6 +2,7 @@
 {# PROPERTIES              #}
 {# ======================= #}
 {% set pageClass = pageClass|default("") %}
+{% set showFooter = showFooter is defined ? showFooter : true %}
 
 {% set hero = entry.heroField.one|default(null) %}
 {% set body = entry.blocksField.all|default([]) %}
@@ -29,7 +30,9 @@
 
     {% endllmContent %}
 
-    {% include "_components/footer" %}
+    {% if showFooter %}
+        {% include "_components/footer" %}
+    {% endif %}
 
     {% include "_base/scripts" %}
 </body>

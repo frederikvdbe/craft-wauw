@@ -20,7 +20,7 @@
             {% include "_components/localization" %}
 
             <div class="c-header-important-actions">
-                <a class="c-header-account" href="">
+                <a class="c-header-account" href="{{ currentUser ? url('member-zone') : url('login') }}">
                     {% include "_components/icon" with { icon: "account" } only %}
                 </a>
 
@@ -35,6 +35,14 @@
                         class="c-header-cart-badge"
                         x-text="$store.cart.totalQuantity > 0 ? $store.cart.totalQuantity : ''"
                     ></div>
+                </button>
+
+                <button
+                    type="button"
+                    class="c-header-menu-toggle"
+                    aria-label="{{ "Open menu"|t }}"
+                >
+                    {% include "_components/icon" with { icon: "menu" } only %}
                 </button>
             </div>
         </div>

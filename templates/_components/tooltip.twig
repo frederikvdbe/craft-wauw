@@ -1,0 +1,38 @@
+{# ======================= #}
+{# PROPERTIES              #}
+{# ======================= #}
+{% set text = text|default("") %}
+{% set icon = icon|default("info") %}
+{% set class = class|default("") %}
+
+{# ======================= #}
+{# TEMPLATE                #}
+{# ======================= #}
+{% if text %}
+    <span class="c-tooltip {{ class }}" x-data="tooltip()">
+        <span
+            class="c-tooltip-trigger"
+            x-ref="trigger"
+            aria-label="{{ text }}"
+            @mouseenter="show()"
+            @mouseleave="scheduleClose()"
+            @focus="show()"
+            @blur="scheduleClose()"
+            @keydown.escape="close()"
+        >
+            {% include "_components/icon" with { icon: icon } only %}
+        </span>
+
+        <template x-teleport="body">
+            <div
+                x-ref="content"
+                x-show="open"
+                x-cloak
+                class="c-tooltip-content"
+                role="tooltip"
+                @mouseenter="show()"
+                @mouseleave="scheduleClose()"
+            >{{ text }}</div>
+        </template>
+    </span>
+{% endif %}

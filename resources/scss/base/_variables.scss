@@ -64,6 +64,14 @@
 }
 
 // =======================
+// LAYOUT
+// =======================
+:root {
+	// .c-header-content's min-height (110px) + .c-header's border-bottom (1px)
+	--header-height: 111px;
+}
+
+// =======================
 // EXTRA
 // =======================
 

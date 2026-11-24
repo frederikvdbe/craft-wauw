@@ -1,5 +1,6 @@
 .b-product-actions {
 	display: flex;
+	flex-wrap: wrap;
 	gap: var(--space-10);
 
 	.c-form {

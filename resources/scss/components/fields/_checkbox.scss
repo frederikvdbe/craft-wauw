@@ -22,38 +22,39 @@
 		align-items: center;
 		justify-content: center;
 		flex-shrink: 0;
-		width: 24px;
-		height: 24px;
-		border: 1px solid var(--clr-grey-300);
-		border-radius: var(--border-radius-4);
+		width: 20px;
+		height: 20px;
+		border: 1px solid var(--clr-grey-500);
+		border-radius: 50%;
 		background-color: var(--clr-white);
-		transition:
-			background-color 0.15s ease,
-			border-color 0.15s ease;
+		transition: border-color 0.15s ease;
 
 		&::after {
 			content: "";
-			width: 10px;
-			height: 6px;
-			margin-bottom: 2px;
-			border-left: 2px solid var(--clr-white);
-			border-bottom: 2px solid var(--clr-white);
-			transform: rotate(-45deg) scale(0);
+			width: 14px;
+			height: 14px;
+			border-radius: 50%;
+			background-color: var(--clr-green-700);
+			transform: scale(0);
 			transition: transform 0.15s ease;
 		}
 	}
 
 	&-text {
-		@include typo-body-md;
-		color: var(--clr-black);
+		max-width: 300px;
+
+		.c-rich-text {
+			@include typo-body-xs;
+			color: var(--clr-black);
+			font-family: var(--font-primary);
+		}
 	}
 
 	&-input:checked + &-box {
 		border-color: var(--clr-black);
-		background-color: var(--clr-black);
 
 		&::after {
-			transform: rotate(-45deg) scale(1);
+			transform: scale(1);
 		}
 	}
 

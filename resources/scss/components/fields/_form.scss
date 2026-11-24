@@ -8,25 +8,25 @@
 		opacity: 0.4;
 		pointer-events: none;
 	}
-}
 
-.c-form-message {
-	display: flex;
-	align-items: center;
-	gap: var(--space-10);
-	max-width: 800px;
-	margin-block: 0 var(--space-20);
-	padding: var(--space-10) var(--space-15);
-	border: 1px solid var(--clr-black);
-	border-radius: var(--border-radius-4);
-	background-color: color-mix(in srgb, var(--clr-black) 10%, var(--clr-white));
-	color: var(--clr-black);
+	&-message {
+		display: flex;
+		align-items: center;
+		gap: var(--space-10);
+		max-width: 800px;
+		margin-block: 0 var(--space-20);
+		padding: var(--space-10) var(--space-15);
+		border: 1px solid var(--clr-black);
+		border-radius: var(--border-radius-4);
+		background-color: color-mix(in srgb, var(--clr-black) 10%, var(--clr-white));
+		color: var(--clr-black);
 
-	@include typo-body-md;
+		@include typo-body-md;
 
-	&.is-error {
-		border-color: var(--clr-red-500);
-		background-color: color-mix(in srgb, var(--clr-red-500) 10%, var(--clr-white));
-		color: var(--clr-red-500);
+		&.is-error {
+			border-color: var(--clr-red-500);
+			background-color: color-mix(in srgb, var(--clr-red-500) 10%, var(--clr-white));
+			color: var(--clr-red-500);
+		}
 	}
 }

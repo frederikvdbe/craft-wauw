@@ -1,0 +1,48 @@
+{# ======================= #}
+{# PROPERTIES              #}
+{# ======================= #}
+{% set country = craft.app.request.getQueryParam('country') %}
+{% set postalCode = craft.app.request.getQueryParam('postalCode') %}
+{% set productId = craft.app.request.getQueryParam('productId') %}
+{% set product = craft.products.id(productId).one() %}
+{% set options = product ? shippingCostOptions(product, country, postalCode) : [] %}
+{% set hasLocation = country is not empty %}
+{% set contactEmail = craft.entries().section("contactInfo").one().emailField ?? "" %}
+
+{# ======================= #}
+{# TEMPLATE                #}
+{# ======================= #}
+<div class="c-shipping-calculator-results">
+    {% if hasLocation and options is empty %}
+        <div class="c-shipping-calculator-message">
+            <p>{{ "We don't have a standard shipping rate for this destination yet."|t }}</p>
+
+            {% if contactEmail %}
+                <a
+                    class="c-shipping-calculator-message-link"
+                    href="mailto:{{ contactEmail }}?subject={{ ("Shipping request: " ~ product.title)|url_encode }}"
+                >
+                    {{ "Request a shipping quote"|t }}
+                </a>
+            {% endif %}
+        </div>
+    {% endif %}
+
+    {% for handle, option in options %}
+        <div class="c-shipping-option">
+            <div class="c-shipping-option-content">
+                <span class="c-shipping-option-heading">
+                    <span class="c-shipping-option-title">{{ option.name }}</span>
+
+                    {% include "_components/tooltip" with { text: option.tooltip } only %}
+                </span>
+
+                {% if option.description %}
+                    <span class="c-shipping-option-description">{{ option.description }}</span>
+                {% endif %}
+            </div>
+
+            <span class="c-shipping-option-price">{{ hasLocation ? option.priceAsCurrency : "_" }}</span>
+        </div>
+    {% endfor %}
+</div>

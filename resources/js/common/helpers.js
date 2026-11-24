@@ -13,6 +13,14 @@ export const templateRequest = async (url) => {
 	return { html, content, data: { ...data } };
 };
 
+const MINIMUM_LOADING_MS = 1000;
+
+export async function withMinimumDelay(promise, delay = MINIMUM_LOADING_MS) {
+	const [result] = await Promise.all([promise, new Promise((resolve) => setTimeout(resolve, delay))]);
+
+	return result;
+}
+
 export const jsonRequest = async (url, options = {}) => {
 	const response = await fetch(url, {
 		...options,
@@ -26,65 +34,87 @@ export const jsonRequest = async (url, options = {}) => {
 	return response.json();
 };
 
-export async function submitForm(component, event) {
+function collectMessages(value, messages = []) {
+	if (typeof value === "string") {
+		if (value) messages.push(value);
+	} else if (value && typeof value === "object") {
+		for (const item of Object.values(value)) {
+			collectMessages(item, messages);
+		}
+	}
+
+	return messages;
+}
+
+function errorText(...errorBags) {
+	const messages = errorBags.flatMap((bag) => collectMessages(bag));
+
+	return [...new Set(messages)].join(" ");
+}
+
+export async function submitForm(component, event, { scroll = true, url: overrideUrl, method = "POST" } = {}) {
 	component.loading = true;
 	component.message = null;
 	component.validate?.();
 
 	const form = event.target;
-	const url = form.getAttribute("action") || window.location.href;
+	const url = overrideUrl ?? (form.getAttribute("action") || window.location.href);
 
 	try {
-		const [response] = await Promise.all([
+		const response = await withMinimumDelay(
 			fetch(url, {
-				method: "POST",
-				body: new FormData(form),
+				method,
+				...(method !== "GET" && { body: new FormData(form) }),
 				headers: { Accept: "application/json", "X-Craft-Site": window.site.handle },
 			}),
-			new Promise((resolve) => setTimeout(resolve, 1000)),
-		]);
+		);
 
 		const data = await response.json();
-
-		if (response.ok && data.redirect) {
-			window.location.assign(new URL(data.redirect, `${window.location.origin}/`));
-			return data;
-		}
 
 		if (data.csrfTokenValue) {
 			window.site.csrfTokenValue = data.csrfTokenValue;
 			form.querySelector(`[name="${window.site.csrfTokenName}"]`)?.setAttribute("value", data.csrfTokenValue);
 		}
 
-		const errorList = data.errors ? Object.values(data.errors).flat().join(" ") : null;
+		const errorList = errorText(data.errors, data.paymentFormErrors);
 		const successMessage = response.ok ? component.successMessage : null;
 
-		component.message = {
+		const message = {
 			type: response.ok ? "success" : "error",
 			text: errorList || successMessage || data.message || "Er ging iets mis. Probeer het later opnieuw.",
 		};
 
-		return data;
+		const redirect = response.ok && data.redirect ? new URL(data.redirect, `${window.location.origin}/`) : null;
+
+		return { data, message, redirect };
 	} catch {
-		component.message = { type: "error", text: "Er ging iets mis. Probeer het later opnieuw." };
+		const message = { type: "error", text: "Er ging iets mis. Probeer het later opnieuw." };
+		return { data: null, message, redirect: null };
 	} finally {
 		component.loading = false;
 		component.formErrors = {};
-		window.scrollTo({ top: 0, behavior: "smooth" });
+		if (scroll) window.scrollTo({ top: 0, behavior: "smooth" });
 	}
 }
 
-export async function submitCartForm(component, event) {
-	const data = await submitForm(component, event);
+export async function submitCartForm(component, event, options) {
+	const { data, message, redirect } = await submitForm(component, event, options);
 	const notices = data?.cart?.notices ?? [];
 
-	if (notices.length) {
-		component.message = { type: "error", text: notices.map((notice) => notice.message).join(" ") };
+	console.log("[helpers] submitCartForm: response", data);
+
+	const cartMessage = notices.length
+		? { type: "error", text: notices.map((notice) => notice.message).join(" ") }
+		: message;
+
+	if (cartMessage.type !== "error") {
+		console.log("[helpers] submitCartForm: dispatching wauw:cart-change");
+		window.dispatchEvent(new CustomEvent("wauw:cart-change"));
+	} else {
+		console.warn("[helpers] submitCartForm: not dispatching wauw:cart-change, cartMessage is an error", cartMessage);
 	}
 
-	if (component.message?.type !== "error") {
-		window.dispatchEvent(new CustomEvent("wauw:cart-change"));
-	}
+	return { data, message: cartMessage, redirect };
 }
 
 export function buildQueryString(params) {

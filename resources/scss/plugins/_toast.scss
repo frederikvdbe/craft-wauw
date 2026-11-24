@@ -1,0 +1,36 @@
+@use "../base/typography" as *;
+
+.tk {
+	--tk-shadow: none !important;
+	--tk-width: 550px !important;
+}
+
+.tk-toast {
+	gap: var(--space-10) !important;
+	padding: var(--space-10) var(--space-15) !important;
+	border-color: var(--clr-green-700) !important;
+	border-radius: var(--border-radius-4) !important;
+	background-color: color-mix(in srgb, var(--clr-green-700) 10%, var(--clr-white)) !important;
+	color: var(--clr-green-700) !important;
+
+	@include typo-body-md;
+
+	&[data-kind="error"] {
+		border-color: var(--clr-red-500) !important;
+		background-color: color-mix(in srgb, var(--clr-red-500) 10%, var(--clr-white)) !important;
+		color: var(--clr-red-500) !important;
+	}
+}
+
+.tk-title {
+	font-weight: inherit !important;
+}
+
+.tk-desc,
+.tk-close {
+	color: inherit !important;
+}
+
+.tk-icon {
+	display: none !important;
+}

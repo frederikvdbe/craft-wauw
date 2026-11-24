@@ -13,6 +13,15 @@
 	.c-image {
 		clip-path: inset(0px 0px 0px 0px);
 		will-change: clip-path;
+
+		@include styles-below(tablet) {
+			aspect-ratio: 1 / 1;
+
+			img {
+				aspect-ratio: 1 / 1;
+				height: 100%;
+			}
+		}
 	}
 
 	.c-title {
@@ -24,6 +33,7 @@
 		inset: 0;
 		text-shadow: 0 3px 6px lch(from var(--clr-black) l c h / 15%);
 		will-change: transform;
+		padding-inline: var(--space-20);
 
 		@include typo-h2;
 		color: var(--clr-white);

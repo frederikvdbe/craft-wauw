@@ -103,6 +103,23 @@ tabs:
         userCondition: null
         width: 100
       -
+        dateAdded: '2026-11-12T20:33:47+00:00'
+        editCondition: null
+        elementCondition: null
+        elementEditCondition: null
+        fieldUid: 4381ddb2-8940-4d25-8e42-5a770b533b71 # Single line text
+        handle: phoneField
+        instructions: null
+        label: 'Phone number'
+        oldFieldUid: null
+        required: false
+        tip: null
+        type: craft\fieldlayoutelements\CustomField
+        uid: b39d3ed8-df9c-4db8-9674-a64d90440d94
+        userCondition: null
+        warning: null
+        width: 100
+      -
         dateAdded: '2026-11-10T17:14:49+00:00'
         editCondition: null
         elementCondition: null
@@ -116,40 +133,6 @@ tabs:
         tip: null
         type: craft\fieldlayoutelements\CustomField
         uid: 9d0b47ff-f3d5-4ed7-ab54-9ad1e7c1710f
-        userCondition: null
-        warning: null
-        width: 100
-      -
-        dateAdded: '2026-11-10T17:14:49+00:00'
-        editCondition: null
-        elementCondition: null
-        elementEditCondition: null
-        fieldUid: 9da47733-7d57-41a1-a8d2-21647c21bf1d # Company number
-        handle: null
-        instructions: null
-        label: null
-        oldFieldUid: null
-        required: false
-        tip: null
-        type: craft\fieldlayoutelements\CustomField
-        uid: 8f496d53-18aa-42fc-8095-a7b72624d471
-        userCondition: null
-        warning: null
-        width: 100
-      -
-        dateAdded: '2026-11-10T17:14:49+00:00'
-        editCondition: null
-        elementCondition: null
-        elementEditCondition: null
-        fieldUid: 33d8854e-fe4a-4f83-a6b1-57cc2f3125a0 # Birthdate
-        handle: null
-        instructions: null
-        label: null
-        oldFieldUid: null
-        required: false
-        tip: null
-        type: craft\fieldlayoutelements\CustomField
-        uid: 49dd01c9-78e3-40fb-b745-13e03725e9d7
         userCondition: null
         warning: null
         width: 100
@@ -175,23 +158,6 @@ tabs:
         editCondition: null
         elementCondition: null
         elementEditCondition: null
-        fieldUid: 1ecf5792-e5a0-4ab8-b08b-4e305679144a
-        handle: null
-        instructions: null
-        label: null
-        oldFieldUid: null
-        required: false
-        tip: null
-        type: craft\fieldlayoutelements\CustomField
-        uid: 96537950-6653-4a95-8063-a3336b37b6f6
-        userCondition: null
-        warning: null
-        width: 100
-      -
-        dateAdded: '2026-11-10T17:14:49+00:00'
-        editCondition: null
-        elementCondition: null
-        elementEditCondition: null
         fieldUid: 505e28a0-aaf1-43d3-bf84-fce0f6aea14b # Lightspeed ID
         handle: null
         instructions: null
@@ -205,7 +171,7 @@ tabs:
         warning: null
         width: 100
       -
-        dateAdded: null
+        dateAdded: '2026-11-12T20:33:47+00:00'
         editCondition: null
         elementCondition: null
         elementEditCondition: null
@@ -222,7 +188,7 @@ tabs:
         warning: null
         width: 100
       -
-        dateAdded: null
+        dateAdded: '2026-11-12T20:33:47+00:00'
         editCondition: null
         elementCondition: null
         elementEditCondition: null
@@ -239,7 +205,7 @@ tabs:
         warning: null
         width: 100
       -
-        dateAdded: null
+        dateAdded: '2026-11-12T20:33:47+00:00'
         editCondition: null
         elementCondition: null
         elementEditCondition: null
@@ -252,6 +218,23 @@ tabs:
         tip: null
         type: craft\fieldlayoutelements\CustomField
         uid: 666965d9-2c81-498e-9cae-7871d1671fe7
+        userCondition: null
+        warning: null
+        width: 100
+      -
+        dateAdded: null
+        editCondition: null
+        elementCondition: null
+        elementEditCondition: null
+        fieldUid: 1383796c-c497-4943-94f8-10173287ff1c # Lightswitch
+        handle: subscribedToVipPreviewField
+        instructions: null
+        label: 'Subscribed to VIP preview'
+        oldFieldUid: null
+        required: false
+        tip: null
+        type: craft\fieldlayoutelements\CustomField
+        uid: 1fe3cef1-4fbf-40b3-976d-e7066a92fe13
         userCondition: null
         warning: null
         width: 100
@@ -270,7 +253,7 @@ tabs:
         handle: favoriteProductsField
         instructions: null
         label: 'Favorite products'
-        oldFieldUid: 28fb50aa-e48c-45b4-b2ad-78a1d6255801 # Products
+        oldFieldUid: null
         required: false
         tip: null
         type: craft\fieldlayoutelements\CustomField

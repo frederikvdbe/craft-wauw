@@ -1,0 +1,15 @@
+{# ======================= #}
+{# PROPERTIES              #}
+{# ======================= #}
+{% set text = text|default("") %}
+
+{# ======================= #}
+{# TEMPLATE                #}
+{# ======================= #}
+<div class="c-loader">
+    <span class="c-loader-spinner" aria-hidden="true"></span>
+
+    {% if text %}
+        <span class="c-loader-text">{{ text }}</span>
+    {% endif %}
+</div>

@@ -3,8 +3,7 @@
 use craft\helpers\App;
 use modules\lightspeed\Module as Lightspeed;
 use modules\docs\Module as Docs;
-use modules\ecom\Module as Ecom;
-use modules\site\Site;
+use modules\wauw\Wauw;
 
 return [
     'id' => App::env('CRAFT_APP_ID') ?: 'CraftCMS',
@@ -17,19 +16,17 @@ return [
             return Craft::createObject($config);
         },
         'queue' => [
-            'ttr' => 300, // Increase for long running queue jobs
+            'ttr' => 300,
         ]
     ],
     'modules' => [
-        'site' => Site::class,
+        'wauw' => Wauw::class,
         'lightspeed' => Lightspeed::class,
-        'ecom' => Ecom::class,
         'docs' => Docs::class,
     ],
     'bootstrap' => [
-        'site',
+        'wauw',
         'lightspeed',
-        'ecom',
         'docs',
     ],
 ];

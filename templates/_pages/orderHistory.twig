@@ -1,0 +1,70 @@
+{# ======================= #}
+{# PROPERTIES              #}
+{# ======================= #}
+{% set user = currentUser %}
+{% set orders = user.orders %}
+
+{# ======================= #}
+{# TEMPLATE                #}
+{# ======================= #}
+{% extends "_base/memberZoneLayout" %}
+
+{% set pageClass = "member-zone-order-history" %}
+
+{% block memberContent %}
+    {% include "_components/title" with { title: "Order history"|t, tag: "h2" } only %}
+
+    {% if orders|length %}
+        <div class="b-order-history">
+            {% for order in orders %}
+                <div class="b-order-history-order">
+                    <div class="b-order-history-date-row">
+                        <span>{{ "Order date"|t }}</span>
+                        <span>{{ order.dateOrdered|date("d/m/Y") }}</span>
+                    </div>
+
+                    {% for lineItem in order.lineItems %}
+                        {% set product = lineItem.purchasable.owner ?? null %}
+                        {% set image = product ? product.productImagesField.one() : null %}
+                        {% set specSheetUrl = product ? specSheetUrl(product) : null %}
+
+                        <div class="b-order-history-item">
+                            <div class="b-order-history-item-media">
+                                {% include "_components/image" with {
+                                    image,
+                                    targetWidths: [800, 400],
+                                    sizes: "(min-width: 768px) 25vw, 50vw",
+                                    aspectRatio: 3 / 2,
+                                } only %}
+                            </div>
+
+                            <span class="b-order-history-item-title">{{ lineItem.description }}</span>
+
+                            <span class="b-order-history-item-price">{{ lineItem.subtotalAsCurrency }}</span>
+                        </div>
+
+                        <div class="b-order-history-item-actions">
+                            {% if specSheetUrl %}
+                                <a class="c-button secondary" href="{{ specSheetUrl }}" download>
+                                    {{ "Download Specification sheet"|t }}
+                                </a>
+                            {% endif %}
+
+                            {% include "_components/button" with {
+                                label: "Download invoice"|t,
+                                class: "secondary",
+                            } only %}
+
+                            {% include "_components/button" with {
+                                label: "Withdraw product"|t,
+                                class: "danger",
+                            } only %}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>{{ "You haven't placed any orders yet."|t }}</p>
+    {% endif %}
+{% endblock %}

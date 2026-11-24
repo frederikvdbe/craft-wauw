@@ -6,6 +6,13 @@
 		min-height: 60vh;
 	}
 
+	&.auth {
+		.c-header,
+		.c-footer {
+			display: none;
+		}
+	}
+
 	a.skip-link {
 		position: fixed;
 		top: var(--space-12);

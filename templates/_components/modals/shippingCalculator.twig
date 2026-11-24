@@ -4,7 +4,71 @@
 {# PROPERTIES              #}
 {# ======================= #}
 {% set title = "Shipping calculator"|t %}
+{% set entry = entry|default(null) %}
+
+{% set modalId = id %}
 
 {# ======================= #}
 {# TEMPLATE                #}
 {# ======================= #}
+{% block content %}
+    <div class="c-shipping-calculator" x-data="shippingCalculator()">
+        <input type="hidden" name="productId" value="{{ entry.id }}">
+
+        <span class="c-shipping-calculator-label">{{ "Your location"|t }}</span>
+
+        <div class="c-shipping-calculator-location">
+            {% set defaultCountryCode = "BE" %}
+            {% set countryOptions = [] %}
+            {% set countryLabel = "" %}
+
+            {% for code, name in craft.app.addresses.getCountryList() %}
+                {% set countryOptions = countryOptions|merge([{ value: code, label: name }]) %}
+
+                {% if code == defaultCountryCode %} {% set countryLabel = name %} {% endif %}
+            {% endfor %}
+
+            {% include "_components/fields/autocomplete" with {
+                id: "countryCode",
+                name: "countryCode",
+                options: countryOptions,
+                value: defaultCountryCode,
+                valueLabel: countryLabel,
+                teleportTarget: "[data-modal-id='#{modalId}']",
+                placeholder: "Country"|t
+            } only %}
+
+            {% include "_components/fields/text" with { 
+                id: "postalCode", 
+                name: "postalCode",
+                placeholder: "Postal code"|t
+            } only %}
+        </div>
+
+        {% include "_components/button" with {
+            label: "Calculate"|t,
+            class: "safe",
+            attributes: {
+                "@click": "calculate()",
+                ":class": "{ 'is-loading': loading }",
+                ":disabled": "loading",
+            },
+        } only %}
+
+        <div class="c-shipping-calculator-options">
+            <div x-show="loading" x-cloak>
+                {% include "_components/loader" with { text: "Calculating shipping costs..."|t } only %}
+            </div>
+
+            <div x-show="!loading" x-html="resultsHtml"></div>
+        </div>
+
+        {% include "_components/ctaCard" with {
+            icon: "globe",
+            title: "Worldwide shipping"|t,
+            description: "We deliver safely to your door, wherever you are in the world."|t,
+            linkLabel: "Learn more"|t,
+            linkUrl: "#",
+        } only %}
+    </div>
+{% endblock %}

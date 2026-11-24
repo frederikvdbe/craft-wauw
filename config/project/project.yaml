@@ -1,4 +1,4 @@
-dateModified: 1794650780
+dateModified: 1795353543
 elementSources:
   craft\commerce\elements\Product:
     -
@@ -250,12 +250,8 @@ email:
   replyToEmail: null
   template: _emails/system.twig
   transportSettings:
-    host: $SMTP_HOST
-    password: $SMTP_PASSWORD
-    port: $SMTP_PORT
-    useAuthentication: $SMTP_AUTH
-    username: $SMTP_USERNAME
-  transportType: craft\mail\transportadapters\Smtp
+    command: '/usr/local/bin/mailpit sendmail -t --smtp-addr 127.0.0.1:1025'
+  transportType: craft\mail\transportadapters\Sendmail
 fs:
   brandImages:
     hasUrls: true
@@ -435,7 +431,7 @@ plugins:
     edition: standard
     enabled: true
     licenseKey: E5BFNQOPFUNH3W1LWMRZ20P5
-    schemaVersion: 4.0.104
+    schemaVersion: 4.0.113
     settings:
       ajaxTimeout: 10
       alertEmails: null
@@ -540,6 +536,27 @@ plugins:
       useQueueForIntegrations: true
       useQueueForNotifications: true
       validateCustomTemplates: true
+  klaviyoconnect:
+    edition: standard
+    enabled: true
+    schemaVersion: 1.0.0
+  social-login:
+    edition: standard
+    enabled: true
+    licenseKey: STA5WPD48D7FOMX87S0UXPL7
+    schemaVersion: 1.0.3
+    settings:
+      cpLoginTemplate: ''
+      enableCpLogin: false
+      enableLogin: true
+      enableRegistration: true
+      forceActivate: true
+      populateProfile: true
+      redirectUri: null
+      sendActivationEmail: true
+      syncProfile: false
+      userGroups:
+        - 3a4636ce-ae5f-41b6-a380-04d42765f6a7 # Customers
   vite:
     edition: standard
     enabled: true

@@ -5,7 +5,7 @@
 // =======================
 @mixin typo-h1 {
 	font-family: var(--font-primary);
-	font-size: var(--fs-120);
+	font-size: clamp(3.75rem, 5.106vw + 2.394rem, 7.5rem);
 	font-weight: var(--fw-700);
 	text-transform: uppercase;
 	letter-spacing: 1px;
@@ -14,7 +14,7 @@
 
 @mixin typo-h2 {
 	font-family: var(--font-primary);
-	font-size: var(--fs-80);
+	font-size: clamp(2.5rem, 3.404vw + 1.596rem, 5rem);
 	font-weight: var(--fw-700);
 	text-transform: uppercase;
 	letter-spacing: 1px;
@@ -85,7 +85,7 @@
 	font-family: var(--font-primary);
 	font-weight: var(--fw-400);
 	font-size: var(--fs-12);
-	line-height: 1.6;
+	line-height: 1.4;
 }
 
 // =======================

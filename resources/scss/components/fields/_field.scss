@@ -6,7 +6,7 @@
 	&-label-row {
 		display: inline-flex;
 		align-items: center;
-		gap: var(--space-10);
+		gap: var(--space-5);
 		margin-block: 0 var(--space-10);
 	}
 
@@ -20,8 +20,8 @@
 	.c-icon.exclamation-circle,
 	.c-icon.check-circle {
 		display: none;
-		width: 20px;
-		height: 20px;
+		width: 14px;
+		height: 14px;
 	}
 
 	.c-icon.exclamation-circle {
